@@ -71,7 +71,7 @@ class Game {
 		const currentFrameTime = Date.now();
 
 		if(!this.hero.processMovement(currentFrameTime)) {
-			if(this.hero.fromTile.x !== this.hero.lastTile.x || this.hero.fromTile.y !== this.hero.lastTile.y) {
+			if(this.hero.currentTile.x !== this.hero.lastTile.x || this.hero.currentTile.y !== this.hero.lastTile.y) {
 				console.log(currentFrameTime);
 				this.hero.timeMoved = currentFrameTime;
 			}
@@ -99,7 +99,7 @@ class Game {
 };
 
 class Character {
-	constructor(toTile, characterWidth, characterHeight, gameConfig) {
+	constructor(initialTile, characterWidth, characterHeight, gameConfig) {
 		const {tileWidth, tileHeight, gameSpeed} = gameConfig;
 
 		this.timeMoved = 0;
@@ -113,13 +113,11 @@ class Character {
 
 		this.path = [];
 		this.lastTile = {};
-		this.placeAt(toTile);
+		this.placeAt(initialTile);
 	}
 
 	placeAt = ({x, y}) => {
-		console.log("placed", x, y);
-		this.fromTile = {x, y};
-		this.toTile = {x, y};
+		this.currentTile = {x, y};
 		this.position = {
 			x: (this.tileWidth * x) + ((this.tileWidth - this.characterWidth) / 2),
 			y: (this.tileHeight * y) + ((this.tileHeight - this.characterHeight) / 2) // offset
@@ -133,30 +131,30 @@ class Character {
 
 	processMovement = time => {
 		if(!this.path.length) return false;
-		const nextPath = this.path[0];
+		const nextTile = this.path[0];
 
-		if(this.fromTile.x === this.lastTile.x && this.fromTile.y === this.lastTile.y) {
+		if(this.currentTile.x === this.lastTile.x && this.currentTile.y === this.lastTile.y) {
 			return false;
 		}
 
 		if((time - this.timeMoved) >= this.gameSpeed) {
-			this.placeAt(this.path[0]);
+			this.placeAt(nextTile);
 			this.path.shift();
 			this.timeMoved = Date.now();
 		} else {
 			this.position = {
-				x: (this.fromTile.x * this.tileWidth) + ((this.tileWidth - this.characterWidth) / 2),
-				y: (this.fromTile.y * this.tileHeight) + ((this.tileHeight - this.characterHeight) / 2) // offset
+				x: (this.currentTile.x * this.tileWidth) + ((this.tileWidth - this.characterWidth) / 2),
+				y: (this.currentTile.y * this.tileHeight) + ((this.tileHeight - this.characterHeight) / 2) // offset
 			};
 
-			if(nextPath.x !== this.fromTile.x) {
+			if(nextTile.x !== this.currentTile.x) {
 				const walked = (this.tileWidth / this.gameSpeed) * (time - this.timeMoved);
-				this.position.x += (nextPath.x < this.fromTile.x ? 0 - walked : walked);
+				this.position.x += (nextTile.x < this.currentTile.x ? 0 - walked : walked);
 			}
 
-			if(nextPath.y != this.fromTile.y) {
+			if(nextTile.y != this.currentTile.y) {
 				const walked = (this.tileHeight / this.gameSpeed) * (time - this.timeMoved);
-				this.position.y += (nextPath.y < this.fromTile.y ? 0 - walked : walked);
+				this.position.y += (nextTile.y < this.currentTile.y ? 0 - walked : walked);
 			}
 		}
 
