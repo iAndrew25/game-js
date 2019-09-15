@@ -20,8 +20,8 @@ class Game {
 
 	init = () => {
 		// loading assets
-		console.log('init');
 		this.startGame();
+		// temp
 		this.hero.setPath([{
 			x: 1,
 			y: 2
@@ -32,14 +32,23 @@ class Game {
 			x: 2,
 			y: 3
 		}, {
-			x: 2,
-			y: 2
-		}, {
-			x: 3,
-			y: 2
-		}, {
 			x: 3,
 			y: 3
+		}, {
+			x: 3,
+			y: 4
+		}, {
+			x: 3,
+			y: 5
+		}, {
+			x: 3,
+			y: 6
+		}, {
+			x: 4,
+			y: 6
+		}, {
+			x: 5,
+			y: 6
 		}]);
 	}
 
@@ -51,17 +60,17 @@ class Game {
 	}
 
 	drawMap = () => {
-		for(let y = 0; y < this.mapHeight; ++y) {
-			for(let x = 0; x < this.mapWidth; ++x) {
+		for(let x = 0; x < this.mapHeight; ++x) {
+			for(let y = 0; y < this.mapWidth; ++y) {
 				switch(this.gameMap[x][y]) {
 					case 0:
-						this.context.fillStyle = "#685b48";
+						this.context.fillStyle = "#5aa457";
 						break;
 					default:
-						this.context.fillStyle = "#5aa457";
+						this.context.fillStyle = "#685b48";
 				}
 
-				this.context.fillRect( x*this.tileWidth, y*this.tileHeight, this.tileWidth, this.tileHeight);
+				this.context.fillRect(y*this.tileWidth, x*this.tileHeight, this.tileWidth, this.tileHeight);
 			}
 		}
 	}	
