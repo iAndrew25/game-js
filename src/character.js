@@ -1,6 +1,7 @@
 class Character {
-	constructor(initialTile, characterWidth, characterHeight, gameConfig) {
-		const {tileWidth, tileHeight, gameSpeed} = gameConfig;
+	constructor(initialTile, characterWidth, characterHeight, mapConfig, gameConfig) {
+		const {tileWidth, tileHeight} = mapConfig;
+		const {gameSpeed} = gameConfig;
 
 		this.timeMoved = 0;
 		this.gameSpeed = gameSpeed;

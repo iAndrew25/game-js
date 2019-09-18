@@ -1,26 +1,29 @@
 class Game {
-	constructor(context, map, hero, gameConfig) {
-		const {gameSpeed} = gameConfig;
-		const {gameMap, tileWidth, tileHeight} = map;
-
+	constructor(context, mapConfig, gameConfig) {
 		this.context = context;
-		this.gameMap = gameMap;
-		this.hero = hero;
 
-		this.tileWidth = tileWidth;
-		this.tileHeight = tileHeight;
+		this.assets = new Assets();
 
-		this.mapHeight = gameMap.length;
-		this.mapWidth = gameMap[0].length;
+		this.hero = new Character({
+			x: 1,
+			y: 1
+		}, 30, 30, mapConfig, gameConfig);
 
-		this.gameSpeed = gameSpeed;
+		this.map = new Map(mapConfig);
 
 		this.init();
 	}
 
-	init = () => {
-		// loading assets
-		this.startGame();
+	load = () => {
+		return [
+			this.assets.setImage('mapTiles', './src/tiles.png')
+		];
+	}
+
+	init = async () => {
+		await Promise.all(this.load());
+
+		this.run();
 		// temp
 		this.hero.setPath([{
 			x: 1,
@@ -52,26 +55,10 @@ class Game {
 		}]);
 	}
 
-	startGame = () => {
-		this.drawMap();
+	run = () => {
+		this.map.draw(this.context, this.assets.getImage('mapTiles'));
 		this.hero.draw(this.context);		
 
-		requestAnimationFrame(this.startGame);
+		requestAnimationFrame(this.run);
 	}
-
-	drawMap = () => {
-		for(let x = 0; x < this.mapHeight; ++x) {
-			for(let y = 0; y < this.mapWidth; ++y) {
-				switch(this.gameMap[x][y]) {
-					case 0:
-						this.context.fillStyle = "#5aa457";
-						break;
-					default:
-						this.context.fillStyle = "#685b48";
-				}
-
-				this.context.fillRect(y*this.tileWidth, x*this.tileHeight, this.tileWidth, this.tileHeight);
-			}
-		}
-	}	
 };
