@@ -4,12 +4,12 @@ class Game {
 
 		this.assets = new Assets();
 
-		this.hero = new Character({
+		this.hero = new Character(context, {
 			x: 1,
 			y: 1
 		}, 30, 30, mapConfig, gameConfig);
 
-		this.map = new Map(mapConfig);
+		this.map = new Map(context, mapConfig);
 
 		this.init();
 	}
@@ -56,8 +56,8 @@ class Game {
 	}
 
 	run = () => {
-		this.map.draw(this.context, this.assets.getImage('mapTiles'));
-		this.hero.draw(this.context);		
+		this.map.draw(this.assets.getImage('mapTiles'));
+		this.hero.draw();
 
 		requestAnimationFrame(this.run);
 	}

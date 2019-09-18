@@ -1,7 +1,9 @@
 class Character {
-	constructor(initialTile, characterWidth, characterHeight, mapConfig, gameConfig) {
+	constructor(context, initialTile, characterWidth, characterHeight, mapConfig, gameConfig) {
 		const {tileWidth, tileHeight} = mapConfig;
 		const {gameSpeed} = gameConfig;
+
+		this.context = context;
 
 		this.timeMoved = 0;
 		this.gameSpeed = gameSpeed;
@@ -36,7 +38,7 @@ class Character {
 		this.lastTile = path[path.length - 1];
 	}
 
-	draw = context => {
+	draw = () => {
 		const currentFrameTime = Date.now();
 
 		if(!this.move(currentFrameTime)) {
@@ -45,8 +47,8 @@ class Character {
 			}
 		}
 
-		context.fillStyle = "#0000ff";
-		context.fillRect(this.position.x, this.position.y, this.characterWidth, this.characterHeight);
+		this.context.fillStyle = "#0000ff";
+		this.context.fillRect(this.position.x, this.position.y, this.characterWidth, this.characterHeight);
 	}
 
 	move = time => {

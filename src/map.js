@@ -1,5 +1,7 @@
 class Map {
-	constructor({tileWidth, tileHeight, mapWidth, mapHeight, gameMap, legend}) {
+	constructor(context, {tileWidth, tileHeight, mapWidth, mapHeight, gameMap, legend}) {
+		this.context = context;
+
 		this.tileWidth = tileWidth;
 		this.tileHeight = tileHeight;
 		this.mapWidth = mapWidth;
@@ -8,17 +10,19 @@ class Map {
 		this.legend = legend;
 	}
 
-	draw = (context, mapTiles) => {
-		for(let x = 0; x < this.mapHeight; x++) {
-			for(let y = 0; y < this.mapWidth; y++) {
-				context.drawImage(
+	draw = (mapTiles) => {
+		for(let row = 0; row < this.mapHeight; row++) {
+			for(let column = 0; column < this.mapWidth; column++) {
+				const {x, y} = this.legend[this.gameMap[row][column]];
+
+				this.context.drawImage(
 					mapTiles,
-					this.legend[this.gameMap[x][y]].x,
-					this.legend[this.gameMap[x][y]].y,
+					x,
+					y,
 					this.tileWidth,
 					this.tileHeight,
-					this.tileWidth * x,
-					this.tileHeight * y,
+					this.tileHeight * column,
+					this.tileWidth * row,
 					this.tileWidth,
 					this.tileHeight
 				);
