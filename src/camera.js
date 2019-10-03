@@ -56,8 +56,56 @@ class Camera {
 		this.startRow = 0;
 		this.endRow = 0;
 
+		this.dirx = this.diry = 0;
+		this.xStart = this.yStart = 0;
+		this.xEnd = this.yEnd = 0;
 		    Keyboard.listenForEvents(
         [Keyboard.LEFT, Keyboard.RIGHT, Keyboard.UP, Keyboard.DOWN]);
+		    this.init();
+	}
+
+	init = () => {
+		this.isMoving = false;
+
+		const contextElement = document.getElementsByTagName('canvas')[0];
+		contextElement.addEventListener('mousedown', event => {
+
+   		   this.xStart = event.pageX - contextElement.offsetLeft;
+   		   this.yStart = event.pageY - contextElement.offsetTop;
+
+			this.isMoving = true;
+		});
+
+		contextElement.addEventListener('mousemove', event => {
+			if(this.isMoving) {
+			// console.log("event", event);
+
+	   		   this.xEnd = event.pageX - contextElement.offsetLeft;
+	   		   this.yEnd = event.pageY - contextElement.offsetTop;
+
+				this.y -= Math.round((this.xEnd - this.xStart));
+				//console.log("this.x", this.x);
+				this.x -= Math.round((this.yEnd - this.yStart));
+				console.log("this.y", this.y);
+
+//this.xStart = this.xEnd;
+//this.yStart = this.yEnd;
+
+				this.isMoving = true;
+				this.xStart = this.xEnd;
+				this.yStart = this.yEnd;
+				console.log('ismoving', this.isMoving);
+			}
+		});
+
+		contextElement.addEventListener('mouseup', () => {
+			this.isMoving = false;
+			this.dirx = 0;
+this.diry = 0;
+this.xStart = this.xEnd;
+this.yStart = this.yEnd;
+
+		});	
 	}
 
 	follow = hero => {
@@ -66,18 +114,18 @@ class Camera {
 
 	update = () => {
 	    // handle camera movement with arrow keys
-	    var dirx = 0;
-	    var diry = 0;
-	    if (Keyboard.isDown(Keyboard.LEFT)) { diry = -1; }
-	    if (Keyboard.isDown(Keyboard.RIGHT)) { diry = 1; }
-	    if (Keyboard.isDown(Keyboard.UP)) { dirx = -1; }
-	    if (Keyboard.isDown(Keyboard.DOWN)) { dirx = 1; }
+	   //var dirx = 0;
+	   //var diry = 0;
+	   //if (Keyboard.isDown(Keyboard.LEFT)) { diry = -1; }
+	   //if (Keyboard.isDown(Keyboard.RIGHT)) { diry = 1; }
+	   //if (Keyboard.isDown(Keyboard.UP)) { dirx = -1; }
+	   //if (Keyboard.isDown(Keyboard.DOWN)) { dirx = 1; }
 
 
 		// if(this.following) {
-			// const {position} = this.following;
-    		this.x += dirx * 4;
-    		this.y += diry * 4;
+			//// const {position} = this.following;
+    		//this.x += this.dirx * 0.02;
+    		//this.y += this.diry * 0.02;
 
 			this.x = Math.max(0, Math.min(this.x, this.maxX));
 			this.y = Math.max(0, Math.min(this.y, this.maxY));
