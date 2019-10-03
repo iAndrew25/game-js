@@ -13,6 +13,33 @@ class Map {
 
 		this.hero = hero;
 		this.camera.follow(hero);
+
+		this.contextElement = document.getElementsByTagName('canvas')[0];
+
+		this.init();
+	}
+
+	init = () => {
+		this.contextElement.addEventListener('mousemove', event => {
+			console.log("event.pageX", event.pageX);
+			this.xStart = event.pageX - this.contextElement.offsetLeft;
+			this.yStart = event.pageY - this.contextElement.offsetTop;
+		});
+
+		this.contextElement.addEventListener('mouseout', event => {
+			console.log("event.pageX", event.pageX);
+			this.xStart = null;
+			this.yStart = null;
+		});
+	}
+
+	isTileHovered = ({xPosition, yPosition}) => {
+		return this.xStart && 
+			this.yStart &&
+			this.xStart >= xPosition && 
+			this.xStart <= xPosition + this.tileWidth &&
+			this.yStart >= yPosition &&
+			this.yStart <= yPosition + this.tileHeight;
 	}
 
 	draw = (mapTiles) => {
@@ -27,15 +54,15 @@ class Map {
 
 				this.context.drawImage(
 					mapTiles,
-					x,
-					y,
+					this.isTileHovered({xPosition, yPosition}) ? 200 : x,
+					this.isTileHovered({xPosition, yPosition}) ? 0 : y,
 					this.tileWidth,
 					this.tileHeight,
 					xPosition,
 					yPosition,
 					this.tileWidth,
 					this.tileHeight
-				);
+				);				
 			}
 		}
 

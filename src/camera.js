@@ -1,6 +1,6 @@
 class Camera {
 	constructor({canvasWidth, canvasHeight, tileWidth, tileHeight, mapWidth, mapHeight}) {
-		this.isCameraFixed = true;
+		this.isCameraFixed = false;
 		this.following;
 
 		this.isMoving = false;
@@ -30,6 +30,8 @@ class Camera {
 		this.yEnd = 0;
 
 		this.contextElement = document.getElementsByTagName('canvas')[0];
+
+		this.unlockFixedCamera();
 	}
 
 	changeCameraMode = () => {
@@ -42,9 +44,17 @@ class Camera {
 		}
 	}
 
+	unlockFixedCamera = () => {
+		this.contextElement.addEventListener('mousedown', this.handleMouseDown);
+		this.contextElement.addEventListener('mousemove', this.handleMouseMove);
+		this.contextElement.addEventListener('mouseout', this.handleMouseUp);
+		this.contextElement.addEventListener('mouseup', this.handleMouseUp);
+	}
+
 	lockFixedCamera = () => {
 		this.contextElement.removeEventListener('mousedown', this.handleMouseDown);
 		this.contextElement.removeEventListener('mousemove', this.handleMouseMove);
+		this.contextElement.removeEventListener('mouseout', this.handleMouseUp);
 		this.contextElement.removeEventListener('mouseup', this.handleMouseUp);
 	}
 
@@ -75,12 +85,6 @@ class Camera {
 
 		this.xStart = this.xEnd;
 		this.yStart = this.yEnd;
-	}
-
-	unlockFixedCamera = () => {
-		this.contextElement.addEventListener('mousedown', this.handleMouseDown);
-		this.contextElement.addEventListener('mousemove', this.handleMouseMove);
-		this.contextElement.addEventListener('mouseup', this.handleMouseUp);
 	}
 
 	follow = character => {
