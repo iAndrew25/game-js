@@ -1,5 +1,5 @@
 class Map {
-	constructor(context, {tileWidth, tileHeight, mapWidth, mapHeight, gameMap, legend}) {
+	constructor(context, hero, {tileWidth, tileHeight, mapWidth, mapHeight, gameMap, legend, canvasWidth, canvasHeight}) {
 		this.context = context;
 
 		this.tileWidth = tileWidth;
@@ -8,12 +8,26 @@ class Map {
 		this.mapHeight = mapHeight;
 		this.gameMap = gameMap;
 		this.legend = legend;
+
+		this.camera = new Camera({canvasWidth, canvasHeight, tileWidth, tileHeight, mapWidth, mapHeight})
+
+		this.hero = hero;
+		this.camera.follow(hero);
 	}
 
 	draw = (mapTiles) => {
-		for(let row = 0; row < this.mapHeight; row++) {
-			for(let column = 0; column < this.mapWidth; column++) {
+		this.camera.update();
+		const {startCol, endCol, startRow, endRow, offsetX, offsetY, x, y} = this.camera;
+		console.log("startRow", startRow);
+		console.log("startCol", startCol);
+
+			//console.log("this.camera.startTile", this.camera.startTile);
+			//console.log("this.camera.endTile", this.camera.endTile);
+		for(let row = startRow; row < endRow; row++) {
+			for(let column = startCol; column < endCol; column++) {
 				const {x, y} = this.legend[this.gameMap[row][column]];
+				const rightX = ((row - startRow) * 50) + offsetX;
+				const rightY = ((column - startCol) * 50) + offsetY;
 
 				this.context.drawImage(
 					mapTiles,
@@ -21,12 +35,15 @@ class Map {
 					y,
 					this.tileWidth,
 					this.tileHeight,
-					this.tileHeight * column,
-					this.tileWidth * row,
+					Math.round(rightY),
+					Math.round(rightX),
 					this.tileWidth,
 					this.tileHeight
 				);
 			}
 		}
+
+		this.hero.draw(x + offsetX, y + offsetY);
+
 	}
 }

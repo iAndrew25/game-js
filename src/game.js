@@ -9,7 +9,7 @@ class Game {
 			y: 1
 		}, 30, 30, mapConfig, gameConfig);
 
-		this.map = new Map(context, mapConfig);
+		this.map = new Map(context, this.hero, {...mapConfig, ...gameConfig});
 
 		this.init();
 	}
@@ -52,12 +52,21 @@ class Game {
 		}, {
 			x: 5,
 			y: 6
+		}, {
+			x: 6,
+			y: 6
+		}, {
+			x: 7,
+			y: 6
+		}, {
+			x: 8,
+			y: 6
 		}]);
 	}
 
 	run = () => {
+		this.context.clearRect(0, 0, 400, 400);
 		this.map.draw(this.assets.getImage('mapTiles'));
-		this.hero.draw();
 
 		requestAnimationFrame(this.run);
 	}

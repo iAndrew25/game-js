@@ -47,6 +47,6 @@ window.onload = () => {
 	new Game(contextElement.getContext('2d'), map, {
 		canvasWidth: 400,
 		canvasHeight: 400,
-		gameSpeed: 700
+		gameSpeed: 300
 	});
 };
