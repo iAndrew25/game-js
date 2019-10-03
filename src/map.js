@@ -17,13 +17,13 @@ class Map {
 
 	draw = (mapTiles) => {
 		this.camera.update();
-		const {startCol, endCol, startRow, endRow, offsetX, offsetY, x, y, hiddenX, hiddenY} = this.camera;
+		const {startColumn, endColumn, startRow, endRow, offsetX, offsetY, x, y} = this.camera;
 
 		for(let row = startRow; row < endRow; row++) {
-			for(let column = startCol; column < endCol; column++) {
+			for(let column = startColumn; column < endColumn; column++) {
 				const {x, y} = this.legend[this.gameMap[row][column]];
-				const rightX = ((row - startRow) * 50) + offsetX;
-				const rightY = ((column - startCol) * 50) + offsetY;
+				const xPosition = Math.round(((column - startColumn) * this.tileWidth) + offsetX);
+				const yPosition = Math.round(((row - startRow) * this.tileHeight) + offsetY);
 
 				this.context.drawImage(
 					mapTiles,
@@ -31,14 +31,14 @@ class Map {
 					y,
 					this.tileWidth,
 					this.tileHeight,
-					Math.round(rightY),
-					Math.round(rightX),
+					xPosition,
+					yPosition,
 					this.tileWidth,
 					this.tileHeight
 				);
 			}
 		}
 
-		this.hero.draw(y, x);
+		this.hero.draw({x, y});
 	}
 }

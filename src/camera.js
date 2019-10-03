@@ -8,13 +8,19 @@ class Camera {
 		this.x = 0;
 		this.y = 0;
 
+		this.tileWidth = tileWidth;
+		this.tileHeight = tileHeight;
+
+ 		this.mapWidth = mapWidth;
+ 		this.mapHeight = mapHeight;
+
 		this.maxX = (mapWidth * tileWidth) - canvasWidth;
 		this.maxY = (mapHeight * tileHeight) - canvasHeight;
 		this.canvasWidth = canvasWidth;
 		this.canvasHeight = canvasHeight;
 
-		this.startCol = 0;
-		this.endCol = 0;
+		this.startColumn = 0;
+		this.endColumn = 0;
 		this.startRow = 0;
 		this.endRow = 0;
 
@@ -46,8 +52,8 @@ class Camera {
 			this.xEnd = event.pageX - this.contextElement.offsetLeft;
 			this.yEnd = event.pageY - this.contextElement.offsetTop;
 
-			this.y -= Math.round(this.xEnd - this.xStart);
-			this.x -= Math.round(this.yEnd - this.yStart);
+			this.y -= Math.round(this.yEnd - this.yStart);
+			this.x -= Math.round(this.xEnd - this.xStart);
 
 			this.xStart = this.xEnd;
 			this.yStart = this.yEnd;
@@ -70,7 +76,7 @@ class Camera {
 	}
 
 	init = () => {
-		this.lockFixedCamera();
+		this.unlockFixedCamera();
 	}
 
 	follow = hero => {
@@ -78,25 +84,26 @@ class Camera {
 	}
 
 	update = () => {
-		if(this.following) {
-			const {position} = this.following;
-			// todo switch x and y
-    		this.y = position.x - this.canvasWidth / 2 - 15;
-    		this.x = position.y - this.canvasHeight / 2 - 15;
-    	} 
+		//if(this.following) {
+		//	const {position} = this.following;
+		//	// todo switch x and y
+    	//	this.y = position.y - this.canvasHeight / 2 - this.following.characterHeight / 2;
+    	//	this.x = position.x - this.canvasWidth / 2 - this.following.characterWidth / 2;
+    	//} 
 
 		this.x = Math.max(0, Math.min(this.x, this.maxX));
 		this.y = Math.max(0, Math.min(this.y, this.maxY));
 
-		this.startCol = Math.floor(this.y / 50);
-		this.endCol = this.startCol + (this.canvasWidth / 50) + 1;
-		this.startRow = Math.floor(this.x / 50);
-		this.endRow = this.startRow + (this.canvasHeight / 50) + 1;
-		
-		this.endCol = Math.min(this.startCol + (this.canvasWidth / 50) + 1, 20);
-		this.endRow = Math.min(this.startRow + (this.canvasHeight / 50) + 1, 20);
+		this.startColumn = Math.floor(this.x / this.tileWidth);
+		this.endColumn = this.startColumn + (this.canvasWidth / this.tileWidth) + 1;
 
- 		this.offsetX = -this.x + (this.startRow * 50);
- 		this.offsetY = -this.y + (this.startCol * 50);
+		this.startRow = Math.floor(this.y / this.tileHeight);
+		this.endRow = this.startRow + (this.canvasHeight / this.tileHeight) + 1;
+		
+		this.endColumn = Math.min(this.startColumn + (this.canvasWidth / this.tileWidth) + 1, this.mapWidth);
+		this.endRow = Math.min(this.startRow + (this.canvasHeight / this.tileHeight) + 1, this.mapHeight);
+
+ 		this.offsetX = -this.x + (this.startColumn * this.tileWidth);
+ 		this.offsetY = -this.y + (this.startRow * this.tileHeight);
 	}
 }

@@ -1,3 +1,6 @@
+// ROW - HEIGHT - Y
+// COLUMN - WIDTH - X
+
 class Game {
 	constructor(context, mapConfig, gameConfig) {
 		this.context = context;
@@ -7,7 +10,7 @@ class Game {
 		this.hero = new Character(context, {
 			x: 1,
 			y: 1
-		}, 30, 30, mapConfig, gameConfig);
+		}, 50, 25, mapConfig, gameConfig);
 
 		this.map = new Map(context, this.hero, {...mapConfig, ...gameConfig});
 
@@ -59,7 +62,7 @@ class Game {
 	}
 
 	run = () => {
-		this.context.clearRect(0, 0, 400, 400);
+		this.context.clearRect(0, 0, 600, 300);
 		this.map.draw(this.assets.getImage('mapTiles'));
 
 		requestAnimationFrame(this.run);

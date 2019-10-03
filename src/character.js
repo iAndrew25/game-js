@@ -38,7 +38,7 @@ class Character {
 		this.lastTile = path[path.length - 1];
 	}
 
-	draw = (x, y) => {
+	draw = ({x, y}) => {
 		const currentFrameTime = Date.now();
 
 		if(!this.move(currentFrameTime)) {
