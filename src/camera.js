@@ -76,8 +76,8 @@ class Camera {
 
 		// if(this.following) {
 			// const {position} = this.following;
-    		this.x += dirx * 2;
-    		this.y += diry * 2;
+    		this.x += dirx * 4;
+    		this.y += diry * 4;
 
 			this.x = Math.max(0, Math.min(this.x, this.maxX));
 			this.y = Math.max(0, Math.min(this.y, this.maxY));

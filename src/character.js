@@ -48,7 +48,7 @@ class Character {
 		}
 
 		this.context.fillStyle = "#0000ff";
-		this.context.fillRect(this.position.x - y, this.position.y - x, this.characterWidth, this.characterHeight);
+		this.context.fillRect(this.position.x - x, this.position.y - y, this.characterWidth, this.characterHeight);
 		console.log("this.position.x", this.position.x);
 	}
 

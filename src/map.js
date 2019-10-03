@@ -17,12 +17,8 @@ class Map {
 
 	draw = (mapTiles) => {
 		this.camera.update();
-		const {startCol, endCol, startRow, endRow, offsetX, offsetY, x, y} = this.camera;
-		console.log("startRow", startRow);
-		console.log("startCol", startCol);
+		const {startCol, endCol, startRow, endRow, offsetX, offsetY, x, y, hiddenX, hiddenY} = this.camera;
 
-			//console.log("this.camera.startTile", this.camera.startTile);
-			//console.log("this.camera.endTile", this.camera.endTile);
 		for(let row = startRow; row < endRow; row++) {
 			for(let column = startCol; column < endCol; column++) {
 				const {x, y} = this.legend[this.gameMap[row][column]];
@@ -43,7 +39,6 @@ class Map {
 			}
 		}
 
-		this.hero.draw(x + offsetX, y + offsetY);
-
+		this.hero.draw(y, x);
 	}
 }
