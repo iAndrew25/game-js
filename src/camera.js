@@ -81,8 +81,8 @@ class Camera {
 		if(this.following) {
 			const {position} = this.following;
 			// todo switch x and y
-    		this.y = position.x - this.canvasWidth / 2;
-    		this.x = position.y - this.canvasHeight / 2;
+    		this.y = position.x - this.canvasWidth / 2 - 15;
+    		this.x = position.y - this.canvasHeight / 2 - 15;
     	} 
 
 		this.x = Math.max(0, Math.min(this.x, this.maxX));
