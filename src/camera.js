@@ -1,7 +1,7 @@
 class Camera {
 	constructor({canvasWidth, canvasHeight, tileWidth, tileHeight, mapWidth, mapHeight}) {
+		this.isCameraFixed = true;
 		this.following;
-		this.fixedCamera;
 
 		this.isMoving = false;
 
@@ -30,8 +30,16 @@ class Camera {
 		this.yEnd = 0;
 
 		this.contextElement = document.getElementsByTagName('canvas')[0];
+	}
 
-		this.init();
+	changeCameraMode = () => {
+		this.isCameraFixed = !this.isCameraFixed;
+
+		if(this.isCameraFixed) {
+			this.lockFixedCamera();
+		} else {
+			this.unlockFixedCamera();
+		}
 	}
 
 	lockFixedCamera = () => {
@@ -75,21 +83,17 @@ class Camera {
 		this.contextElement.addEventListener('mouseup', this.handleMouseUp);
 	}
 
-	init = () => {
-		this.unlockFixedCamera();
-	}
-
-	follow = hero => {
-		this.following = hero;
+	follow = character => {
+		this.following = character;
 	}
 
 	update = () => {
-		//if(this.following) {
-		//	const {position} = this.following;
-		//	// todo switch x and y
-    	//	this.y = position.y - this.canvasHeight / 2 - this.following.characterHeight / 2;
-    	//	this.x = position.x - this.canvasWidth / 2 - this.following.characterWidth / 2;
-    	//} 
+		if(this.isCameraFixed) {
+			const {position} = this.following;
+
+			this.y = position.y - this.canvasHeight / 2 - this.following.characterHeight / 2;
+			this.x = position.x - this.canvasWidth / 2 - this.following.characterWidth / 2;
+		} 
 
 		this.x = Math.max(0, Math.min(this.x, this.maxX));
 		this.y = Math.max(0, Math.min(this.y, this.maxY));
@@ -103,7 +107,7 @@ class Camera {
 		this.endColumn = Math.min(this.startColumn + (this.canvasWidth / this.tileWidth) + 1, this.mapWidth);
 		this.endRow = Math.min(this.startRow + (this.canvasHeight / this.tileHeight) + 1, this.mapHeight);
 
- 		this.offsetX = -this.x + (this.startColumn * this.tileWidth);
- 		this.offsetY = -this.y + (this.startRow * this.tileHeight);
+ 		this.offsetX = (this.startColumn * this.tileWidth) - this.x;
+ 		this.offsetY = (this.startRow * this.tileHeight) - this.y;
 	}
 }
