@@ -37,9 +37,9 @@ class Map {
 		return this.xStart && 
 			this.yStart &&
 			this.xStart >= xPosition && 
-			this.xStart <= xPosition + this.tileWidth &&
+			this.xStart < xPosition + this.tileWidth &&
 			this.yStart >= yPosition &&
-			this.yStart <= yPosition + this.tileHeight;
+			this.yStart < yPosition + this.tileHeight;
 	}
 
 	draw = (mapTiles) => {
