@@ -1,18 +1,15 @@
 import GAME_CONFIG from './game-config.js';
-
-const {CONTEXT, CANVAS_WIDTH, CANVAS_HEIGHT} = GAME_CONFIG;
-
 import Assets from './assets-loader.js';
-import Character from './character.js'
-import Map from './map.js'
+import Character from './character.js';
+import Map from './map.js';
+
+const {CANVAS, CONTEXT, CANVAS_WIDTH, CANVAS_HEIGHT} = GAME_CONFIG;
+
 // ROW - HEIGHT - Y
 // COLUMN - WIDTH - X
 
 export default class Game {
-	constructor(mapConfig, gameConfig) {
-		this.mapConfig = mapConfig; // temp
-		this.gameConfig = gameConfig; // temp
-
+	constructor() {
 		this.init();
 	}
 
@@ -23,6 +20,9 @@ export default class Game {
 	}
 
 	init = async () => {
+		CANVAS.height = CANVAS_HEIGHT;
+		CANVAS.width = CANVAS_WIDTH;
+
 		await Promise.all(this.load());
 
 		this.hero = new Character({
@@ -30,7 +30,7 @@ export default class Game {
 			y: 1
 		}, 50, 25);
 
-		this.map = new Map(this.hero, this.mapConfig);
+		this.map = new Map(this.hero);
 
 		this.run();
 		// temp

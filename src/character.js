@@ -1,3 +1,4 @@
+import Camera from './camera.js';
 import GAME_CONFIG from './game-config.js';
 
 const {
@@ -6,7 +7,6 @@ const {
 	TILE_HEIGHT,
 	GAME_SPEED
 } = GAME_CONFIG;
-
 
 export default class Character {
 	constructor(initialTile, characterWidth, characterHeight) {
@@ -39,7 +39,14 @@ export default class Character {
 		this.lastTile = path[path.length - 1];
 	}
 
-	draw = ({x, y}) => {
+	shouldBeDrawn = () => {
+		return this.currentTile.x >= Camera.startColumn &&
+			this.currentTile.x <= Camera.endColumn &&
+			this.currentTile.y >= Camera.startRow &&
+			this.currentTile.y <= Camera.endRow;
+	}
+
+	draw = () => {
 		const currentFrameTime = Date.now();
 
 		if(!this.move(currentFrameTime)) {
@@ -48,8 +55,10 @@ export default class Character {
 			}
 		}
 
+		if(!this.shouldBeDrawn()) return;
+
 		CONTEXT.fillStyle = "#0000ff";
-		CONTEXT.fillRect(this.position.x - x, this.position.y - y, this.characterWidth, this.characterHeight);
+		CONTEXT.fillRect(this.position.x - Camera.x, this.position.y - Camera.y, this.characterWidth, this.characterHeight);
 	}
 
 	move = time => {

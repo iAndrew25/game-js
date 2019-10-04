@@ -2,7 +2,7 @@ import GAME_CONFIG from './game-config.js';
 
 const {TILE_WIDTH, TILE_HEIGHT, MAP_HEIGHT, MAP_WIDTH, CANVAS_WIDTH, CANVAS_HEIGHT, CANVAS} = GAME_CONFIG;
 
-export default class Camera {
+export default new class Camera {
 	constructor() {
 		this.isCameraFixed = false;
 		this.following;
@@ -56,7 +56,7 @@ export default class Camera {
 		this.xStart = event.pageX - CANVAS.offsetLeft;
 		this.yStart = event.pageY - CANVAS.offsetTop;
 
-		this.isMoving = true;		
+		this.isMoving = true;
 	}
 
 	handleMouseMove =  event => {
