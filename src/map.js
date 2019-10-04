@@ -58,23 +58,32 @@ export default class Map {
 
 	handleTileClick = () => {
 		if(Camera.hasNotMoved) {
-			const newPath = this.currentMap(this.hero.currentTile, {
-				x: this.columnHovered,
-				y: this.rowHovered
-			});
+			try {
+				console.log('heroo', this.hero.currentTile)
 
 
-			console.log("this.hero.currentTile", this.hero.currentTile);
-			console.log("coords", this.columnHovered, this.rowHovered);
+				console.log("this.hero.currentTile", this.hero.currentTile);
+				console.log("coords", this.columnHovered, this.rowHovered);
 
-			console.log('tile value', GAME_MAPS['MAP_1'].layers[0][this.columnHovered][this.rowHovered]);
+				console.log('tile value', GAME_MAPS['MAP_1'].layers[0][this.columnHovered][this.rowHovered]);
 
 
-			console.log("newPath", newPath);
 
-			//if(newPath) {
-			//	this.hero.setPath(newPath);
-			//}
+				const newPath = aStar({
+					grid: GAME_MAPS['MAP_1'].layers[0],
+					legend: LEGEND
+				})(this.hero.currentTile, {
+					x: this.columnHovered,
+					y: this.rowHovered
+				});
+				console.log("newPath", newPath);
+				if(Array.isArray(newPath)) {
+					this.hero.setPath([this.hero.currentTile, ...newPath]);
+				}
+
+			} catch (err) {
+				console.log('err', err)
+			}
 		} else {
 			//console.log('moving');
 		}

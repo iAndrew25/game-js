@@ -23,6 +23,7 @@ export default class Character {
 
 	placeAt = ({x, y}) => {
 		this.currentTile = {x, y};
+		console.log("this.currentTile", this.currentTile);
 		this.position = {
 			x: (TILE_WIDTH * x) + ((TILE_WIDTH - this.characterWidth) / 2),
 			y: (TILE_HEIGHT * y) + ((TILE_HEIGHT - this.characterHeight) / 2) // offset
