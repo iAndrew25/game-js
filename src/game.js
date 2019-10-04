@@ -1,11 +1,12 @@
+import Assets from './assets-loader.js';
+import Character from './character.js'
+import Map from './map.js'
 // ROW - HEIGHT - Y
 // COLUMN - WIDTH - X
 
-class Game {
+export default class Game {
 	constructor(context, mapConfig, gameConfig) {
 		this.context = context;
-
-		this.assets = new Assets();
 
 		this.hero = new Character(context, {
 			x: 1,
@@ -19,7 +20,7 @@ class Game {
 
 	load = () => {
 		return [
-			this.assets.setImage('mapTiles', './src/tiles.png')
+			Assets.setImage('mapTiles', './src/tiles.png')
 		];
 	}
 
@@ -63,7 +64,7 @@ class Game {
 
 	run = () => {
 		this.context.clearRect(0, 0, 600, 300);
-		this.map.draw(this.assets.getImage('mapTiles'));
+		this.map.draw(Assets.getImage('mapTiles'));
 
 		requestAnimationFrame(this.run);
 	}

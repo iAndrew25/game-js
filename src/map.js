@@ -1,4 +1,6 @@
-class Map {
+import Camera from './camera.js';
+
+export default class Map {
 	constructor(context, hero, {tileWidth, tileHeight, mapWidth, mapHeight, gameMap, legend, canvasWidth, canvasHeight}) {
 		this.context = context;
 

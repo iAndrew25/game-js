@@ -1,4 +1,4 @@
-class Character {
+export default class Character {
 	constructor(context, initialTile, characterWidth, characterHeight, mapConfig, gameConfig) {
 		const {tileWidth, tileHeight} = mapConfig;
 		const {gameSpeed} = gameConfig;

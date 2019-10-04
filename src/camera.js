@@ -1,4 +1,4 @@
-class Camera {
+export default class Camera {
 	constructor({canvasWidth, canvasHeight, tileWidth, tileHeight, mapWidth, mapHeight}) {
 		this.isCameraFixed = false;
 		this.following;

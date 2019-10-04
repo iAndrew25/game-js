@@ -1,3 +1,5 @@
+import Game from './src/game.js';
+
 // TODO: Create Map class
 const map = {
 	tileWidth: 100,

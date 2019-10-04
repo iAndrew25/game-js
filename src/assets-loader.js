@@ -1,7 +1,5 @@
-class Assets {
-	constructor() {
-		this.images = {};
-	}
+export default new class Assets {
+	images = {};
 
 	getImage = key => this.images[key]
 
