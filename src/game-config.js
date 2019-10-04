@@ -20,12 +20,14 @@ const GAME_MAPS = {
 
 const LEGEND = {
 	1: {
-		x: 0,
-		y: 0
+		spriteX: 0,
+		spriteY: 0,
+		isWalkable: false
 	},
 	0: {
-		x: 100,
-		y: 0
+		spriteX: 100,
+		spriteY: 0,
+		isWalkable: true
 	}
 }
 

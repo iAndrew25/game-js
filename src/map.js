@@ -2,11 +2,14 @@ import Camera from './camera.js';
 import GAME_CONFIG from './game-config.js';
 import Assets from './assets-loader.js';
 
+import aStar from './util/a-star.js';
+
 const {CANVAS, CONTEXT, TILE_WIDTH, TILE_HEIGHT, GAME_MAPS, LEGEND} = GAME_CONFIG;
 
 export default class Map {
 	constructor(hero) {
-		this.currentMap = 'MAP_1';
+		this.currentMapName;;
+		this.currentMap;
 
 		this.rowHovered = null;
 		this.columnHovered = null;
@@ -16,6 +19,7 @@ export default class Map {
 
 		this.hero = hero;
 
+
 		Camera.follow(hero);
 
 		this.mapTiles = Assets.getImage('mapTiles');
@@ -24,9 +28,19 @@ export default class Map {
 	}
 
 	init = () => {
+		this.setMap('MAP_1');
+
 		CANVAS.addEventListener('mousemove', this.handleMouseMove);
 		CANVAS.addEventListener('mouseout', this.handleMouseOut);
 		CANVAS.addEventListener('click', this.handleTileClick);
+	}
+
+	setMap = mapName => {
+		this.currentMapName = mapName;
+		this.currentMap = aStar({
+			grid: GAME_MAPS[mapName].layers[0],
+			legend: LEGEND
+		});
 	}
 
 	handleMouseMove = event => {
@@ -44,9 +58,25 @@ export default class Map {
 
 	handleTileClick = () => {
 		if(Camera.hasNotMoved) {
-			console.log('clicked');
+			const newPath = this.currentMap(this.hero.currentTile, {
+				x: this.columnHovered,
+				y: this.rowHovered
+			});
+
+
+			console.log("this.hero.currentTile", this.hero.currentTile);
+			console.log("coords", this.columnHovered, this.rowHovered);
+
+			console.log('tile value', GAME_MAPS['MAP_1'].layers[0][this.columnHovered][this.rowHovered]);
+
+
+			console.log("newPath", newPath);
+
+			//if(newPath) {
+			//	this.hero.setPath(newPath);
+			//}
 		} else {
-			console.log('moving');
+			//console.log('moving');
 		}
 	}
 
@@ -67,12 +97,12 @@ export default class Map {
 	}
 
 	drawLayer = (layer, row, column, xPosition, yPosition) => {
-		const {x, y} = LEGEND[layer[row][column]];
+		const {spriteX, spriteY} = LEGEND[layer[row][column]];
 
 		CONTEXT.drawImage(
 			this.mapTiles,
-			this.isTileHovered({xPosition, yPosition, row, column}) ? 200 : x,
-			this.isTileHovered({xPosition, yPosition, row, column}) ? 0 : y,
+			this.isTileHovered({xPosition, yPosition, row, column}) ? 200 : spriteX,
+			this.isTileHovered({xPosition, yPosition, row, column}) ? 0 : spriteY,
 			TILE_WIDTH,
 			TILE_HEIGHT,
 			xPosition,
@@ -90,7 +120,7 @@ export default class Map {
 				const xPosition = Math.round(((column - startColumn) * TILE_WIDTH) + offsetX);
 				const yPosition = Math.round(((row - startRow) * TILE_HEIGHT) + offsetY);
 			
-				GAME_MAPS[this.currentMap].layers.forEach(layer => this.drawLayer(layer, row, column, xPosition, yPosition));
+				GAME_MAPS[this.currentMapName].layers.forEach(layer => this.drawLayer(layer, row, column, xPosition, yPosition));
 			}
 		}		
 	}
