@@ -1,6 +1,8 @@
 import Game from './src/game.js';
+import GAME_CONFIG from './src/game-config.js';
 
-// TODO: Create Map class
+const {CANVAS, CANVAS_HEIGHT, CANVAS_WIDTH} = GAME_CONFIG;
+
 const map = {
 	tileWidth: 100,
 	tileHeight: 50,
@@ -31,55 +33,9 @@ const map = {
 	}
 };
 
-const GAME_MAPS = {
-	MAP_1: {
-		layers: [[
-			[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-			[1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1],
-			[1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1],
-			[1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1],
-			[1, 0, 1, 0, 1, 1, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1],
-			[1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1],
-			[1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1],
-			[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 1],
-			[1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1],
-			[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-		]]
-	}
-};
-
-const LEGEND = {
-	1: {
-		x: 0,
-		y: 0
-	},
-	0: {
-		x: 100,
-		y: 0
-	}
-}
-
-const GAME_CONFIG = {
-	GAME_MAPS,
-	LEGEND,
-	TILE_WIDTH: 100,
-	TILE_HEIGHT: 50,
-	MAP_HEIGHT: 10,
-	MAP_WIDTH: 20,
-	CANVAS_WIDTH: 600,
-	CANVAS_HEIGHT: 300,
-	GAME_SPEED: 300
-};
-
 window.onload = () => {
-	const contextElement = document.createElement('canvas');
-	contextElement.width = 600;
-	contextElement.height = 300;
-	document.body.appendChild(contextElement);
+	CANVAS.height = CANVAS_HEIGHT;
+	CANVAS.width = CANVAS_WIDTH;
 
-	new Game(contextElement.getContext('2d'), map, {
-		canvasWidth: 600,
-		canvasHeight: 300,
-		gameSpeed: 300
-	});
+	new Game(map.gameMap);
 };

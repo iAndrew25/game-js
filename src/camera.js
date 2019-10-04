@@ -1,5 +1,9 @@
+import GAME_CONFIG from './game-config.js';
+
+const {TILE_WIDTH, TILE_HEIGHT, MAP_HEIGHT, MAP_WIDTH, CANVAS_WIDTH, CANVAS_HEIGHT, CANVAS} = GAME_CONFIG;
+
 export default class Camera {
-	constructor({canvasWidth, canvasHeight, tileWidth, tileHeight, mapWidth, mapHeight}) {
+	constructor() {
 		this.isCameraFixed = false;
 		this.following;
 
@@ -8,16 +12,8 @@ export default class Camera {
 		this.x = 0;
 		this.y = 0;
 
-		this.tileWidth = tileWidth;
-		this.tileHeight = tileHeight;
-
- 		this.mapWidth = mapWidth;
- 		this.mapHeight = mapHeight;
-
-		this.maxX = (mapWidth * tileWidth) - canvasWidth;
-		this.maxY = (mapHeight * tileHeight) - canvasHeight;
-		this.canvasWidth = canvasWidth;
-		this.canvasHeight = canvasHeight;
+		this.maxX = (MAP_WIDTH * TILE_WIDTH) - CANVAS_WIDTH;
+		this.maxY = (MAP_HEIGHT * TILE_HEIGHT) - CANVAS_HEIGHT;
 
 		this.startColumn = 0;
 		this.endColumn = 0;
@@ -28,8 +24,6 @@ export default class Camera {
 		this.yStart = 0;
 		this.xEnd = 0;
 		this.yEnd = 0;
-
-		this.contextElement = document.getElementsByTagName('canvas')[0];
 
 		this.unlockFixedCamera();
 	}
@@ -45,30 +39,30 @@ export default class Camera {
 	}
 
 	unlockFixedCamera = () => {
-		this.contextElement.addEventListener('mousedown', this.handleMouseDown);
-		this.contextElement.addEventListener('mousemove', this.handleMouseMove);
-		this.contextElement.addEventListener('mouseout', this.handleMouseUp);
-		this.contextElement.addEventListener('mouseup', this.handleMouseUp);
+		CANVAS.addEventListener('mousedown', this.handleMouseDown);
+		CANVAS.addEventListener('mousemove', this.handleMouseMove);
+		CANVAS.addEventListener('mouseout', this.handleMouseUp);
+		CANVAS.addEventListener('mouseup', this.handleMouseUp);
 	}
 
 	lockFixedCamera = () => {
-		this.contextElement.removeEventListener('mousedown', this.handleMouseDown);
-		this.contextElement.removeEventListener('mousemove', this.handleMouseMove);
-		this.contextElement.removeEventListener('mouseout', this.handleMouseUp);
-		this.contextElement.removeEventListener('mouseup', this.handleMouseUp);
+		CANVAS.removeEventListener('mousedown', this.handleMouseDown);
+		CANVAS.removeEventListener('mousemove', this.handleMouseMove);
+		CANVAS.removeEventListener('mouseout', this.handleMouseUp);
+		CANVAS.removeEventListener('mouseup', this.handleMouseUp);
 	}
 
 	handleMouseDown = event => {
-		this.xStart = event.pageX - this.contextElement.offsetLeft;
-		this.yStart = event.pageY - this.contextElement.offsetTop;
+		this.xStart = event.pageX - CANVAS.offsetLeft;
+		this.yStart = event.pageY - CANVAS.offsetTop;
 
 		this.isMoving = true;		
 	}
 
 	handleMouseMove =  event => {
 		if(this.isMoving) {
-			this.xEnd = event.pageX - this.contextElement.offsetLeft;
-			this.yEnd = event.pageY - this.contextElement.offsetTop;
+			this.xEnd = event.pageX - CANVAS.offsetLeft;
+			this.yEnd = event.pageY - CANVAS.offsetTop;
 
 			this.y -= Math.round(this.yEnd - this.yStart);
 			this.x -= Math.round(this.xEnd - this.xStart);
@@ -95,23 +89,23 @@ export default class Camera {
 		if(this.isCameraFixed) {
 			const {position} = this.following;
 
-			this.y = position.y - this.canvasHeight / 2 - this.following.characterHeight / 2;
-			this.x = position.x - this.canvasWidth / 2 - this.following.characterWidth / 2;
+			this.y = position.y - CANVAS_HEIGHT / 2 - this.following.characterHeight / 2;
+			this.x = position.x - CANVAS_WIDTH / 2 - this.following.characterWidth / 2;
 		} 
 
 		this.x = Math.max(0, Math.min(this.x, this.maxX));
 		this.y = Math.max(0, Math.min(this.y, this.maxY));
 
-		this.startColumn = Math.floor(this.x / this.tileWidth);
-		this.endColumn = this.startColumn + (this.canvasWidth / this.tileWidth) + 1;
+		this.startColumn = Math.floor(this.x / TILE_WIDTH);
+		this.endColumn = this.startColumn + (CANVAS_WIDTH / TILE_WIDTH) + 1;
 
-		this.startRow = Math.floor(this.y / this.tileHeight);
-		this.endRow = this.startRow + (this.canvasHeight / this.tileHeight) + 1;
+		this.startRow = Math.floor(this.y / TILE_HEIGHT);
+		this.endRow = this.startRow + (CANVAS_HEIGHT / TILE_HEIGHT) + 1;
 		
-		this.endColumn = Math.min(this.startColumn + (this.canvasWidth / this.tileWidth) + 1, this.mapWidth);
-		this.endRow = Math.min(this.startRow + (this.canvasHeight / this.tileHeight) + 1, this.mapHeight);
+		this.endColumn = Math.min(this.startColumn + (CANVAS_WIDTH / TILE_WIDTH) + 1, MAP_WIDTH);
+		this.endRow = Math.min(this.startRow + (CANVAS_HEIGHT / TILE_HEIGHT) + 1, MAP_HEIGHT);
 
- 		this.offsetX = (this.startColumn * this.tileWidth) - this.x;
- 		this.offsetY = (this.startRow * this.tileHeight) - this.y;
+ 		this.offsetX = (this.startColumn * TILE_WIDTH) - this.x;
+ 		this.offsetY = (this.startRow * TILE_HEIGHT) - this.y;
 	}
 }

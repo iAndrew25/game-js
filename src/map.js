@@ -1,35 +1,31 @@
 import Camera from './camera.js';
+import GAME_CONFIG from './game-config.js';
+import Assets from './assets-loader.js';
+
+const {CANVAS, CONTEXT, TILE_WIDTH, TILE_HEIGHT, LEGEND} = GAME_CONFIG;
 
 export default class Map {
-	constructor(context, hero, {tileWidth, tileHeight, mapWidth, mapHeight, gameMap, legend, canvasWidth, canvasHeight}) {
-		this.context = context;
-
-		this.tileWidth = tileWidth;
-		this.tileHeight = tileHeight;
-		this.mapWidth = mapWidth;
-		this.mapHeight = mapHeight;
+	constructor(hero, gameMap) {
 		this.gameMap = gameMap;
-		this.legend = legend;
 
-		this.camera = new Camera({canvasWidth, canvasHeight, tileWidth, tileHeight, mapWidth, mapHeight})
 
+		this.camera = new Camera();
 		this.hero = hero;
+
 		this.camera.follow(hero);
 
-		this.contextElement = document.getElementsByTagName('canvas')[0];
+		this.mapTiles = Assets.getImage('mapTiles');
 
 		this.init();
 	}
 
 	init = () => {
-		this.contextElement.addEventListener('mousemove', event => {
-			console.log("event.pageX", event.pageX);
-			this.xStart = event.pageX - this.contextElement.offsetLeft;
-			this.yStart = event.pageY - this.contextElement.offsetTop;
+		CANVAS.addEventListener('mousemove', event => {
+			this.xStart = event.pageX - CANVAS.offsetLeft;
+			this.yStart = event.pageY - CANVAS.offsetTop;
 		});
 
-		this.contextElement.addEventListener('mouseout', event => {
-			console.log("event.pageX", event.pageX);
+		CANVAS.addEventListener('mouseout', event => {
 			this.xStart = null;
 			this.yStart = null;
 		});
@@ -39,31 +35,31 @@ export default class Map {
 		return this.xStart && 
 			this.yStart &&
 			this.xStart >= xPosition && 
-			this.xStart < xPosition + this.tileWidth &&
+			this.xStart < xPosition + TILE_WIDTH &&
 			this.yStart >= yPosition &&
-			this.yStart < yPosition + this.tileHeight;
+			this.yStart < yPosition + TILE_HEIGHT;
 	}
 
-	draw = (mapTiles) => {
+	draw = () => {
 		this.camera.update();
 		const {startColumn, endColumn, startRow, endRow, offsetX, offsetY, x, y} = this.camera;
 
 		for(let row = startRow; row < endRow; row++) {
 			for(let column = startColumn; column < endColumn; column++) {
-				const {x, y} = this.legend[this.gameMap[row][column]];
-				const xPosition = Math.round(((column - startColumn) * this.tileWidth) + offsetX);
-				const yPosition = Math.round(((row - startRow) * this.tileHeight) + offsetY);
+				const {x, y} = LEGEND[this.gameMap[row][column]];
+				const xPosition = Math.round(((column - startColumn) * TILE_WIDTH) + offsetX);
+				const yPosition = Math.round(((row - startRow) * TILE_HEIGHT) + offsetY);
 
-				this.context.drawImage(
-					mapTiles,
+				CONTEXT.drawImage(
+					this.mapTiles,
 					this.isTileHovered({xPosition, yPosition}) ? 200 : x,
 					this.isTileHovered({xPosition, yPosition}) ? 0 : y,
-					this.tileWidth,
-					this.tileHeight,
+					TILE_WIDTH,
+					TILE_HEIGHT,
 					xPosition,
 					yPosition,
-					this.tileWidth,
-					this.tileHeight
+					TILE_WIDTH,
+					TILE_HEIGHT
 				);				
 			}
 		}
