@@ -8,6 +8,7 @@ export default new class Camera {
 		this.following;
 
 		this.isMoving = false;
+		this.hasNotMoved = true;
 
 		this.x = 0;
 		this.y = 0;
@@ -71,6 +72,9 @@ export default new class Camera {
 			this.yStart = this.yEnd;
 
 			this.isMoving = true;
+			this.hasNotMoved = false;
+		} else {
+			this.hasNotMoved = true;
 		}
 	}
 

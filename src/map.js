@@ -8,6 +8,12 @@ export default class Map {
 	constructor(hero) {
 		this.currentMap = 'MAP_1';
 
+		this.rowHovered = null;
+		this.columnHovered = null;
+
+		this.xStart = null;
+		this.yStart = null;
+
 		this.hero = hero;
 
 		Camera.follow(hero);
@@ -18,24 +24,46 @@ export default class Map {
 	}
 
 	init = () => {
-		CANVAS.addEventListener('mousemove', event => {
-			this.xStart = event.pageX - CANVAS.offsetLeft;
-			this.yStart = event.pageY - CANVAS.offsetTop;
-		});
-
-		CANVAS.addEventListener('mouseout', event => {
-			this.xStart = null;
-			this.yStart = null;
-		});
+		CANVAS.addEventListener('mousemove', this.handleMouseMove);
+		CANVAS.addEventListener('mouseout', this.handleMouseOut);
+		CANVAS.addEventListener('click', this.handleTileClick);
 	}
 
-	isTileHovered = ({xPosition, yPosition}) => {
-		return this.xStart && 
+	handleMouseMove = event => {
+		this.xStart = event.pageX - CANVAS.offsetLeft;
+		this.yStart = event.pageY - CANVAS.offsetTop;		
+	}
+
+	handleMouseOut = event => {
+		this.xStart = null;
+		this.yStart = null;
+
+		this.rowHovered = null;
+		this.columnHovered = null;
+	}
+
+	handleTileClick = () => {
+		if(Camera.hasNotMoved) {
+			console.log('clicked');
+		} else {
+			console.log('moving');
+		}
+	}
+
+	isTileHovered = ({xPosition, yPosition, row, column}) => {
+		if(this.xStart && 
 			this.yStart &&
 			this.xStart >= xPosition && 
 			this.xStart < xPosition + TILE_WIDTH &&
 			this.yStart >= yPosition &&
-			this.yStart < yPosition + TILE_HEIGHT;
+			this.yStart < yPosition + TILE_HEIGHT) {
+
+			this.rowHovered = row;
+			this.columnHovered = column;
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	drawLayer = (layer, row, column, xPosition, yPosition) => {
@@ -43,8 +71,8 @@ export default class Map {
 
 		CONTEXT.drawImage(
 			this.mapTiles,
-			this.isTileHovered({xPosition, yPosition}) ? 200 : x,
-			this.isTileHovered({xPosition, yPosition}) ? 0 : y,
+			this.isTileHovered({xPosition, yPosition, row, column}) ? 200 : x,
+			this.isTileHovered({xPosition, yPosition, row, column}) ? 0 : y,
 			TILE_WIDTH,
 			TILE_HEIGHT,
 			xPosition,
