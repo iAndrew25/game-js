@@ -10,17 +10,23 @@ const {
 
 export default new class Enemies {
 	constructor() {
-		this.enemies = []; 
+		this.currentMap;
+		this.enemies = {}; 
 	}
 
-	generateEnemies = () => {
-		console.log('generate');
-		GAME_MAPS['MAP_1'].enemies.types.forEach(enemy => {
-			this.enemies.push(new Character(generatePositionForNewEnemies(GAME_MAPS['MAP_1'].enemies.spawnArea[enemy][0]), enemy));
-		});
+	generateEnemies = map => {
+		this.currentMap = map;
+		this.enemies[map] = GAME_MAPS[map].enemies.types.reduce((enemies, enemy) => {
+			const {x, y} = generatePositionForNewEnemies(GAME_MAPS[map].enemies.spawnArea[enemy][0]);
+
+			return {
+				...enemies,
+				[`${x}_${y}`]: new Character({x, y}, enemy)
+			}
+		}, {});
 	}
 
 	draw = () => {
-		this.enemies.forEach(enemy => enemy.draw());
+		Object.values(this.enemies[this.currentMap]).forEach(enemy => enemy.draw());
 	}
 }

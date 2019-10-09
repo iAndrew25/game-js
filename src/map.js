@@ -34,7 +34,7 @@ export default class Map {
 	init = () => {
 		this.setMap('MAP_1');
 		console.log("Enemies", Enemies);
-		//Enemies.generateEnemies();
+		Enemies.generateEnemies('MAP_1');
 
 		CANVAS.addEventListener('mousemove', this.handleMouseMove);
 		CANVAS.addEventListener('mouseout', this.handleMouseOut);
@@ -135,6 +135,6 @@ export default class Map {
 
 		this.drawMap();
 		this.hero.draw();
-	//	Enemies.draw();
+		Enemies.draw();
 	}
 }
