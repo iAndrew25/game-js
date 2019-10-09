@@ -33,7 +33,7 @@ export default class Map {
 
 	init = () => {
 		this.setMap('MAP_1');
-		console.log("Enemies", Enemies);
+
 		Enemies.generateEnemies('MAP_1');
 
 		CANVAS.addEventListener('mousemove', this.handleMouseMove);
@@ -64,21 +64,27 @@ export default class Map {
 
 	handleTileClick = () => {
 		if(Camera.hasNotMoved) {
-			try {
-				const newPath = aStar({
-					grid: GAME_MAPS[this.currentMapName].layers[0],
-					legend: LEGEND
-				})(this.hero.currentTile, {
-					x: this.columnHovered,
-					y: this.rowHovered
-				});
+			const destination = {
+				x: this.columnHovered,
+				y: this.rowHovered
+			};
 
-				if(Array.isArray(newPath)) {
-					this.hero.setPath([this.hero.currentTile, ...newPath]);
+			const newPath = aStar({// refactor
+				grid: GAME_MAPS[this.currentMapName].layers[0],
+				legend: LEGEND
+			})(this.hero.currentTile, {
+				x: this.columnHovered,
+				y: this.rowHovered
+			});
+
+			if(Array.isArray(newPath)) {
+				const enemy = Enemies.isEnemyHere(destination, this.currentMapName);
+				if(enemy) {
+					Enemies.atackEnemy(destination, this.currentMapName)
+					newPath.pop();
 				}
 
-			} catch (err) {
-				console.log('err', err)
+				this.hero.setPath([this.hero.currentTile, ...newPath]);
 			}
 		} else {
 			//console.log('moving');
