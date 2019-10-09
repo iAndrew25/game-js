@@ -4,6 +4,7 @@ import GAME_CONFIG from './game-config.js';
 import Assets from './assets-loader.js';
 
 import aStar from './util/a-star.js';
+import {generatePositionForNewEnemies} from './util/helpers.js';
 
 const {CANVAS, CONTEXT, TILE_WIDTH, TILE_HEIGHT, GAME_MAPS, LEGEND} = GAME_CONFIG;
 
@@ -25,6 +26,8 @@ export default class Map {
 
 		this.mapTiles = Assets.getImage('mapTiles');
 
+		this.enemies = [];
+
 		this.init();
 	}
 
@@ -40,16 +43,12 @@ export default class Map {
 	}
 
 	placeMobsOnMap = () => {
-		GAME_MAPS[this.currentMapName].mobSpawnArea.forEach(area => {
-			const [startRow, startColumn, endRow, endColumn] = area;
+		GAME_MAPS[this.currentMapName].enemies.types.forEach(enemy => {
 
+			this.enemies.push(new Character(generatePositionForNewEnemies(GAME_MAPS[this.currentMapName].enemies.spawnArea[enemy][0]), enemy));
 			
 		});
-
-		//this.mob = new Character({
-		//	x: 3,
-		//	y: 3
-		//}, 50, 25);
+			console.log("this.enemies", this.enemies);
 	}
 
 	setMap = mapName => {
@@ -146,6 +145,8 @@ export default class Map {
 
 		this.drawMap();
 		this.hero.draw();
-	//	this.mob.draw();
+		this.enemies.forEach(enemy => {
+			enemy.draw()
+		});
 	}
 }

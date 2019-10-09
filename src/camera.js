@@ -12,7 +12,7 @@ const {
 
 export default new class Camera {
 	constructor() {
-		this.isCameraFixed = true;
+		this.isCameraFixed = false;
 		this.following;
 
 		this.isMoving = false;

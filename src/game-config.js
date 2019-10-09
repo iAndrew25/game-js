@@ -15,15 +15,21 @@ const GAME_MAPS = {
 			[1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1],
 			[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 		]],
-		mobSpawnArea: [[1, 1, 3, 3]]
+		enemies: {
+			types: ['black', 'blue', 'green'],
+			spawnArea: {
+				black: [[1, 1, 3, 3]],
+				blue: [[1, 10, 3, 14]],
+				green: [[6, 1, 8, 3]],
+			}
+		}
 	}
 };
 
 const LEGEND = {
 	0: {
 		spriteX: 0,
-		spriteY: 0,
-		isWalkable: true
+		spriteY: 0
 	},
 	1: {
 		spriteX: 60,
@@ -34,8 +40,25 @@ const LEGEND = {
 		spriteX: 30,
 		spriteY: 30,
 		tileWidth: 30,
-		tileHeight: 15,
-		isWalkable: false		
+		tileHeight: 15
+	},
+	black: {
+		spriteX: 0,
+		spriteY: 30,
+		tileWidth: 30,
+		tileHeight: 15
+	},
+	blue: {
+		spriteX: 60,
+		spriteY: 30,
+		tileWidth: 30,
+		tileHeight: 15
+	},
+	green: {
+		spriteX: 90,
+		spriteY: 30,
+		tileWidth: 30,
+		tileHeight: 15
 	}
 };
 

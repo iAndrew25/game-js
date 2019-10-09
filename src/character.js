@@ -33,7 +33,7 @@ export default class Character {
 		this.placeAt(initialTile);
 
 
-		this.shouldDisplayHealthBar = false;
+		this.shouldDisplayHealthBar = true;
 		this.fullHealth = 200;
 		this.currentHealth = 160;
 	}
