@@ -1,3 +1,4 @@
+import Enemies from './enemies.js';
 import Camera from './camera.js';
 import Character from './character.js';
 import GAME_CONFIG from './game-config.js';
@@ -21,7 +22,6 @@ export default class Map {
 
 		this.hero = hero;
 
-
 		Camera.follow(hero);
 
 		this.mapTiles = Assets.getImage('mapTiles');
@@ -33,22 +33,12 @@ export default class Map {
 
 	init = () => {
 		this.setMap('MAP_1');
-		this.placeMobsOnMap();
+		console.log("Enemies", Enemies);
+		//Enemies.generateEnemies();
 
 		CANVAS.addEventListener('mousemove', this.handleMouseMove);
 		CANVAS.addEventListener('mouseout', this.handleMouseOut);
 		CANVAS.addEventListener('click', this.handleTileClick);
-
-
-	}
-
-	placeMobsOnMap = () => {
-		GAME_MAPS[this.currentMapName].enemies.types.forEach(enemy => {
-
-			this.enemies.push(new Character(generatePositionForNewEnemies(GAME_MAPS[this.currentMapName].enemies.spawnArea[enemy][0]), enemy));
-			
-		});
-			console.log("this.enemies", this.enemies);
 	}
 
 	setMap = mapName => {
@@ -145,8 +135,6 @@ export default class Map {
 
 		this.drawMap();
 		this.hero.draw();
-		this.enemies.forEach(enemy => {
-			enemy.draw()
-		});
+	//	Enemies.draw();
 	}
 }
