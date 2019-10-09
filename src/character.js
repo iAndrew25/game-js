@@ -16,7 +16,7 @@ export default class Character {
 			spriteX,
 			spriteY,
 			tileWidth,
-			tileHeight,
+			tileHeight
 		} = LEGEND[character];
 		this.mapTiles = Assets.getImage('mapTiles');
 
@@ -31,6 +31,11 @@ export default class Character {
 		this.lastTile = {};
 		this.isMoving = false;
 		this.placeAt(initialTile);
+
+
+		this.shouldDisplayHealthBar = false;
+		this.fullHealth = 200;
+		this.currentHealth = 160;
 	}
 
 	placeAt = ({x, y}) => {
@@ -58,6 +63,31 @@ export default class Character {
 			this.currentTile.y <= Camera.endRow;
 	}
 
+	drawHealthBar = () => {
+		const healthBarHeight = 3;
+
+		const healthMissingPercent = (this.currentHealth / this.fullHealth) * 100;
+
+		const widthHealth = (healthMissingPercent * this.characterWidth) / 100;
+		const widthMissingHealth = this.characterWidth - widthHealth;
+
+		CONTEXT.fillStyle = '#5BEC6E';
+		CONTEXT.fillRect(
+			this.position.x - Camera.x,
+			this.position.y - Camera.y - 5,
+			widthHealth,
+			healthBarHeight
+		);
+
+		CONTEXT.fillStyle = '#FF5E62';
+		CONTEXT.fillRect(
+			this.position.x - Camera.x + widthHealth,
+			this.position.y - Camera.y - 5,
+			this.characterWidth - widthHealth,
+			healthBarHeight
+		);	
+	}
+
 	draw = () => {
 		const currentFrameTime = Date.now();
 
@@ -68,7 +98,6 @@ export default class Character {
 		}
 
 		if(!this.shouldBeDrawn()) return;
-
 
 		CONTEXT.drawImage(
 			this.mapTiles,
@@ -81,6 +110,8 @@ export default class Character {
 			this.characterWidth,
 			this.characterHeight
 		);
+		
+		this.shouldDisplayHealthBar && this.drawHealthBar();
 	}
 
 	move = time => {

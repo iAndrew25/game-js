@@ -1,6 +1,14 @@
 import GAME_CONFIG from './game-config.js';
 
-const {TILE_WIDTH, TILE_HEIGHT, MAP_HEIGHT, MAP_WIDTH, CANVAS_WIDTH, CANVAS_HEIGHT, CANVAS} = GAME_CONFIG;
+const {
+	TILE_WIDTH,
+	TILE_HEIGHT,
+	MAP_HEIGHT,
+	MAP_WIDTH,
+	CANVAS_WIDTH,
+	CANVAS_HEIGHT,
+	CANVAS
+} = GAME_CONFIG;
 
 export default new class Camera {
 	constructor() {

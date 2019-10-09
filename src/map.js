@@ -40,7 +40,11 @@ export default class Map {
 	}
 
 	placeMobsOnMap = () => {
-		// GAME_MAPS[this.currentMapName].mobSpawnArea
+		GAME_MAPS[this.currentMapName].mobSpawnArea.forEach(area => {
+			const [startRow, startColumn, endRow, endColumn] = area;
+
+			
+		});
 
 		//this.mob = new Character({
 		//	x: 3,
