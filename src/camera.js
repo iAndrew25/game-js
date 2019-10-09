@@ -4,7 +4,7 @@ const {TILE_WIDTH, TILE_HEIGHT, MAP_HEIGHT, MAP_WIDTH, CANVAS_WIDTH, CANVAS_HEIG
 
 export default new class Camera {
 	constructor() {
-		this.isCameraFixed = false;
+		this.isCameraFixed = true;
 		this.following;
 
 		this.isMoving = false;

@@ -3,7 +3,7 @@ import Assets from './assets-loader.js';
 import Character from './character.js';
 import Map from './map.js';
 
-const {CANVAS, CONTEXT, CANVAS_WIDTH, CANVAS_HEIGHT} = GAME_CONFIG;
+const {CANVAS, CONTEXT, CANVAS_WIDTH, CANVAS_HEIGHT, LEGEND} = GAME_CONFIG;
 
 // ROW - HEIGHT - Y
 // COLUMN - WIDTH - X
@@ -15,7 +15,7 @@ export default class Game {
 
 	load = () => {
 		return [
-			Assets.setImage('mapTiles', './src/tiles.png')
+			Assets.setImage('mapTiles', './src/rpg-tiles.png')
 		];
 	}
 
@@ -28,7 +28,7 @@ export default class Game {
 		this.hero = new Character({
 			x: 1,
 			y: 1
-		}, 50, 25);
+		}, 'hero');
 
 		this.map = new Map(this.hero);
 

@@ -1,4 +1,5 @@
 import Camera from './camera.js';
+import Character from './character.js';
 import GAME_CONFIG from './game-config.js';
 import Assets from './assets-loader.js';
 
@@ -8,7 +9,7 @@ const {CANVAS, CONTEXT, TILE_WIDTH, TILE_HEIGHT, GAME_MAPS, LEGEND} = GAME_CONFI
 
 export default class Map {
 	constructor(hero) {
-		this.currentMapName;;
+		this.currentMapName;
 		this.currentMap;
 
 		this.rowHovered = null;
@@ -29,10 +30,22 @@ export default class Map {
 
 	init = () => {
 		this.setMap('MAP_1');
+		this.placeMobsOnMap();
 
 		CANVAS.addEventListener('mousemove', this.handleMouseMove);
 		CANVAS.addEventListener('mouseout', this.handleMouseOut);
 		CANVAS.addEventListener('click', this.handleTileClick);
+
+
+	}
+
+	placeMobsOnMap = () => {
+		// GAME_MAPS[this.currentMapName].mobSpawnArea
+
+		//this.mob = new Character({
+		//	x: 3,
+		//	y: 3
+		//}, 50, 25);
 	}
 
 	setMap = mapName => {
@@ -121,7 +134,7 @@ export default class Map {
 			
 				GAME_MAPS[this.currentMapName].layers.forEach(layer => this.drawLayer(layer, row, column, xPosition, yPosition));
 			}
-		}		
+		}
 	}
 
 	draw = () => {
@@ -129,5 +142,6 @@ export default class Map {
 
 		this.drawMap();
 		this.hero.draw();
+	//	this.mob.draw();
 	}
 }

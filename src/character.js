@@ -1,3 +1,4 @@
+import Assets from './assets-loader.js';
 import Camera from './camera.js';
 import GAME_CONFIG from './game-config.js';
 
@@ -5,15 +6,26 @@ const {
 	CONTEXT,
 	TILE_WIDTH,
 	TILE_HEIGHT,
-	GAME_SPEED
+	GAME_SPEED,
+	LEGEND
 } = GAME_CONFIG;
 
 export default class Character {
-	constructor(initialTile, characterWidth, characterHeight) {
+	constructor(initialTile, character) {
+		const {
+			spriteX,
+			spriteY,
+			tileWidth,
+			tileHeight,
+		} = LEGEND[character];
+		this.mapTiles = Assets.getImage('mapTiles');
+
 		this.timeMoved = 0;
 
-		this.characterWidth = characterWidth;
-		this.characterHeight = characterHeight;
+		this.characterWidth = tileWidth;
+		this.characterHeight = tileHeight;
+		this.spriteX = spriteX;
+		this.spriteY = spriteY;
 
 		this.path = [];
 		this.lastTile = {};
@@ -57,8 +69,18 @@ export default class Character {
 
 		if(!this.shouldBeDrawn()) return;
 
-		CONTEXT.fillStyle = "#0000ff";
-		CONTEXT.fillRect(this.position.x - Camera.x, this.position.y - Camera.y, this.characterWidth, this.characterHeight);
+
+		CONTEXT.drawImage(
+			this.mapTiles,
+			this.spriteX,
+			this.spriteY,
+			this.characterWidth,
+			this.characterHeight,
+			this.position.x - Camera.x,
+			this.position.y - Camera.y,
+			this.characterWidth,
+			this.characterHeight
+		);
 	}
 
 	move = time => {
