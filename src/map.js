@@ -1,8 +1,10 @@
 import Enemies from './enemies.js';
 import Camera from './camera.js';
 import Character from './character.js';
+import Hero from './hero.js';
 import GAME_CONFIG from './game-config.js';
 import Assets from './assets-loader.js';
+import CombatSystem from './combat-system.js';
 
 import aStar from './util/a-star.js';
 import {generatePositionForNewEnemies} from './util/helpers.js';
@@ -10,7 +12,7 @@ import {generatePositionForNewEnemies} from './util/helpers.js';
 const {CANVAS, CONTEXT, TILE_WIDTH, TILE_HEIGHT, GAME_MAPS, LEGEND} = GAME_CONFIG;
 
 export default class Map {
-	constructor(hero) {
+	constructor() {
 		this.currentMapName;
 		this.currentMap;
 
@@ -20,9 +22,7 @@ export default class Map {
 		this.xStart = null;
 		this.yStart = null;
 
-		this.hero = hero;
-
-		Camera.follow(hero);
+		Camera.follow(Hero);
 
 		this.mapTiles = Assets.getImage('mapTiles');
 
@@ -34,7 +34,7 @@ export default class Map {
 	init = () => {
 		this.setMap('MAP_1');
 
-//		Enemies.generateEnemies('MAP_1');
+		Enemies.generateEnemies('MAP_1');
 
 		CANVAS.addEventListener('mousemove', this.handleMouseMove);
 		CANVAS.addEventListener('mouseout', this.handleMouseOut);
@@ -72,19 +72,20 @@ export default class Map {
 			const newPath = aStar({// refactor
 				grid: GAME_MAPS[this.currentMapName].layers[0],
 				legend: LEGEND
-			})(this.hero.currentTile, {
+			})(Hero.currentTile, {
 				x: this.columnHovered,
 				y: this.rowHovered
 			});
 
 			if(Array.isArray(newPath)) {
-				//const enemy = Enemies.isEnemyHere(destination, this.currentMapName);
-				//if(enemy) {
-				//	Enemies.atackEnemy(destination, this.currentMapName)
-				//	newPath.pop();
-				//}
+				const enemy = Enemies.isEnemyHere(destination, this.currentMapName);
+				if(enemy) {
+					CombatSystem.startFighting(enemy);
+					//Enemies.atackEnemy(destination, this.currentMapName)
+					newPath.pop();
+				}
 
-				this.hero.setPath([this.hero.currentTile, ...newPath]);
+				Hero.setPath([Hero.currentTile, ...newPath]);
 			}
 		} else {
 			//console.log('moving');
@@ -140,7 +141,7 @@ export default class Map {
 		Camera.update();
 
 		this.drawMap();
-		this.hero.draw();
-		//Enemies.draw();
+		Hero.draw();
+		Enemies.draw();
 	}
 }

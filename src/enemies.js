@@ -1,5 +1,5 @@
 import Map from './map.js';
-import Character from './character.js';
+import Enemy from './enemy.js';
 import Assets from './assets-loader.js';
 
 import {generatePositionForNewEnemies} from './util/helpers.js';
@@ -22,7 +22,7 @@ export default new class Enemies {
 
 			return {
 				...enemies,
-				[`${x}_${y}`]: new Character({x, y}, enemy, Assets.getImage('mapTiles'))
+				[`${x}_${y}`]: new Enemy({x, y}, enemy)
 			}
 		}, {});
 	}
@@ -31,9 +31,9 @@ export default new class Enemies {
 		return this.enemies[map][`${x}_${y}`];
 	}
 
-	atackEnemy = ({x, y}, map) => {
-		this.enemies[map][`${x}_${y}`].attacked(20);
-	}
+	//atackEnemy = ({x, y}, map) => {
+	//	this.enemies[map][`${x}_${y}`].attacked(20);
+	//}
 
 	draw = () => {
 		Object.values(this.enemies[this.currentMap]).forEach(enemy => enemy.draw());

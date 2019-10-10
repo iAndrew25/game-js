@@ -1,9 +1,10 @@
 import Assets from './assets-loader.js';
 import Camera from './camera.js';
 import GAME_CONFIG from './game-config.js';
-import {getCardinalPoint} from './util/helpers.js';
+import {getCardinalPoint, getRandomNumber} from './util/helpers.js';
 
 const {
+	CHARACTER_STATS,
 	CONTEXT,
 	TILE_WIDTH,
 	TILE_HEIGHT,
@@ -13,8 +14,7 @@ const {
 
 export default class Character {
 
-	init = (initialTile, characterType, characterSprite, characterWidth, characterHeight) => {
-		console.log("initialTile", initialTile);
+	characterInit = (initialTile, characterType, characterSprite, characterWidth, characterHeight) => {
 		this.characterLegend = LEGEND[characterType];
 		this.characterSprite = characterSprite;
 
@@ -30,14 +30,47 @@ export default class Character {
 		this.path = [];
 		this.lastTile = {};
 		this.isMoving = false;
-		this.placeAt(initialTile);
-
+		this.isCharacterAlive = true;
 
 		this.shouldDisplayHealthBar = true;
-		this.fullHealth = 200;
-		this.currentHealth = 160;
 
+		this.placeAt(initialTile);
 		this.setCharacterMode('IDLE');		
+		this.setCharacterStats(CHARACTER_STATS[characterType]);
+
+		this.currentHealth = this.stats.healthPoints;
+	}
+
+	setCharacterStats = stats => {
+		this.stats = stats;
+	}
+
+	attack = character => {
+		const attackDamage = getRandomNumber(this.stats.attackDamage);
+
+		if(this.stats.criticalChance >= getRandomNumber([this.stats.criticalChance, 100])) {
+			character.takeDamage(attackDamage * 2);
+		} else {
+			character.takeDamage(attackDamage);
+		}
+	}
+
+	takeDamage = damage => {
+		const {armor} = this.stats;
+
+		if(damage > armor) {
+			const healthLeft = this.currentHealth + armor - damage;
+
+			if(healthLeft <= 0) {
+				this.currentHealth = 0;
+				this.isCharacterAlive = false;
+				//killed
+			} else {
+				this.currentHealth -= (damage - armor);
+			}		
+		} else {
+			console.log('miss');
+		}
 	}
 
 	setCharacterMode = mode => {
@@ -68,25 +101,16 @@ export default class Character {
 	}
 
 	shouldBeDrawn = () => {
-		return this.currentTile.x >= Camera.startColumn &&
+		return !this.isCharacterAlive || (this.currentTile.x >= Camera.startColumn &&
 			this.currentTile.x <= Camera.endColumn &&
 			this.currentTile.y >= Camera.startRow &&
-			this.currentTile.y <= Camera.endRow;
-	}
-
-	attacked = damage => {
-		if(this.currentHealth - damage < 0) {
-			this.currentHealth = 0;
-			//killed
-		} else {
-			this.currentHealth -= damage;
-		}
+			this.currentTile.y <= Camera.endRow);
 	}
 
 	drawHealthBar = () => {
 		const healthBarHeight = 3;
 
-		const healthMissingPercent = (this.currentHealth / this.fullHealth) * 100;
+		const healthMissingPercent = (this.currentHealth / this.stats.healthPoints) * 100;
 
 		const widthHealth = (healthMissingPercent * this.characterWidth) / 100;
 		const widthMissingHealth = this.characterWidth - widthHealth;
@@ -135,7 +159,7 @@ export default class Character {
 	}
 
 	move = time => {
-		if(!this.path.length || (this.currentTile.x === this.lastTile.x && this.currentTile.y === this.lastTile.y)) {
+		if(!this.isCharacterAlive || !this.path.length || (this.currentTile.x === this.lastTile.x && this.currentTile.y === this.lastTile.y)) {
 			return false;
 		}
 

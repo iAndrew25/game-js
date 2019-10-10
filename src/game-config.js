@@ -94,16 +94,49 @@ const LEGEND = {
 	}
 };
 
+const CHARACTER_STATS = {
+	hero: {
+		healthPoints: 200,
+		healthPointsRegenration: 3,
+		attackDamage: [8, 12],
+		criticalChance: 0,
+		attackSpeed: 5,
+		armor: 0
+	},
+	green: {
+		healthPoints: 100,
+		attackDamage: [2, 4],
+		criticalChance: 0,
+		attackSpeed: 0,
+		armor: 1
+	},
+	blue: {
+		healthPoints: 70,
+		attackDamage: [3, 6],
+		criticalChance: 0,
+		attackSpeed: 5,
+		armor: 2
+	},
+	black: {
+		healthPoints: 80,
+		attackDamage: [4, 5],
+		criticalChance: 0,
+		attackSpeed: 20,
+		armor: 0
+	}
+};
+
 export default {
 	CANVAS,
 	CONTEXT,
 	GAME_MAPS,
 	LEGEND,
+	CHARACTER_STATS,
 	TILE_WIDTH: 60,
 	TILE_HEIGHT: 30,
 	MAP_HEIGHT: 10,
 	MAP_WIDTH: 20,
 	CANVAS_WIDTH: 600,
 	CANVAS_HEIGHT: 300,
-	GAME_SPEED: 300
+	GAME_SPEED: 500
 };
