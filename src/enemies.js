@@ -1,5 +1,6 @@
 import Map from './map.js';
 import Character from './character.js';
+import Assets from './assets-loader.js';
 
 import {generatePositionForNewEnemies} from './util/helpers.js';
 import GAME_CONFIG from './game-config.js';
@@ -21,7 +22,7 @@ export default new class Enemies {
 
 			return {
 				...enemies,
-				[`${x}_${y}`]: new Character({x, y}, enemy)
+				[`${x}_${y}`]: new Character({x, y}, enemy, Assets.getImage('mapTiles'))
 			}
 		}, {});
 	}

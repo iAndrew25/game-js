@@ -12,14 +12,14 @@ const {
 } = GAME_CONFIG;
 
 export default class Character {
-	constructor(initialTile, character) {
+	constructor(initialTile, characterType, characterSprite) {
 		const {
 			tileWidth,
 			tileHeight
-		} = LEGEND[character];
+		} = LEGEND[characterType];
 
-		this.characterLegend = LEGEND[character];
-		this.mapTiles = Assets.getImage('playerTiles');
+		this.characterLegend = LEGEND[characterType];
+		this.characterSprite = characterSprite;
 
 		this.timeMoved = 0;
 
@@ -123,7 +123,7 @@ export default class Character {
 		if(!this.shouldBeDrawn()) return;
 
 		CONTEXT.drawImage(
-			this.mapTiles,
+			this.characterSprite,
 			this.spriteX,
 			this.spriteY,
 			this.characterWidth,

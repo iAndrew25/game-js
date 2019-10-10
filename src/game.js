@@ -29,7 +29,7 @@ export default class Game {
 		this.hero = new Character({
 			x: 1,
 			y: 1
-		}, 'hero');
+		}, 'hero', Assets.getImage('playerTiles'));
 
 		this.map = new Map(this.hero);
 

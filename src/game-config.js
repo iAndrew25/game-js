@@ -37,8 +37,8 @@ const LEGEND = {
 		isWalkable: false
 	},
 	hero: {
-		spriteX: 30,
-		spriteY: 30,
+		tileWidth: 30,
+		tileHeight: 15,
 		mode: {
 			IDLE: {
 				spriteX: 0,
@@ -61,26 +61,36 @@ const LEGEND = {
 				spriteY: 45
 			}
 		},
-		tileWidth: 30,
-		tileHeight: 15
 	},
 	black: {
-		spriteX: 0,
-		spriteY: 30,
 		tileWidth: 30,
-		tileHeight: 15
+		tileHeight: 15,
+		mode: {
+			IDLE: {
+				spriteX: 0,
+				spriteY: 30,
+			}
+		}
 	},
 	blue: {
-		spriteX: 60,
-		spriteY: 30,
 		tileWidth: 30,
-		tileHeight: 15
+		tileHeight: 15,
+		mode: {
+			IDLE: {
+				spriteX: 60,
+				spriteY: 30,
+			}
+		}
 	},
 	green: {
-		spriteX: 90,
-		spriteY: 30,
 		tileWidth: 30,
-		tileHeight: 15
+		tileHeight: 15,
+		mode: {
+			IDLE: {
+				spriteX: 90,
+				spriteY: 30,
+			}
+		}
 	}
 };
 
