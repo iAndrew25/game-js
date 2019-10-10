@@ -2,6 +2,7 @@ import GAME_CONFIG from './game-config.js';
 import Assets from './assets-loader.js';
 import Character from './character.js';
 import Map from './map.js';
+import Hero from './hero.js';
 
 const {CANVAS, CONTEXT, CANVAS_WIDTH, CANVAS_HEIGHT, LEGEND} = GAME_CONFIG;
 
@@ -25,47 +26,45 @@ export default class Game {
 		CANVAS.width = CANVAS_WIDTH;
 
 		await Promise.all(this.load());
-
-		this.hero = new Character({
-			x: 1,
-			y: 1
-		}, 'hero', Assets.getImage('playerTiles'));
-
-		this.map = new Map(this.hero);
+Hero.inits({
+	x: 1,
+	y: 1
+})
+		this.map = new Map(Hero);
 
 		this.run();
 		// temp
-		this.hero.setPath([{
-			x: 1,
-			y: 2
-		}, {
-			x: 1,
-			y: 3
-		}, {
-			x: 2,
-			y: 3
-		}, {
-			x: 3,
-			y: 3
-		}, {
-			x: 3,
-			y: 4
-		}, {
-			x: 3,
-			y: 5
-		}, {
-			x: 3,
-			y: 6
-		}, {
-			x: 4,
-			y: 6
-		}, {
-			x: 5,
-			y: 6
-		}, {
-			x: 5,
-			y: 5
-		}]);
+	//this.hero.setPath([{
+	//	x: 1,
+	//	y: 2
+	//}, {
+	//	x: 1,
+	//	y: 3
+	//}, {
+	//	x: 2,
+	//	y: 3
+	//}, {
+	//	x: 3,
+	//	y: 3
+	//}, {
+	//	x: 3,
+	//	y: 4
+	//}, {
+	//	x: 3,
+	//	y: 5
+	//}, {
+	//	x: 3,
+	//	y: 6
+	//}, {
+	//	x: 4,
+	//	y: 6
+	//}, {
+	//	x: 5,
+	//	y: 6
+	//}, {
+	//	x: 5,
+	//	y: 5
+	//}]);
 	}
 
 	run = () => {

@@ -12,12 +12,9 @@ const {
 } = GAME_CONFIG;
 
 export default class Character {
-	constructor(initialTile, characterType, characterSprite) {
-		const {
-			tileWidth,
-			tileHeight
-		} = LEGEND[characterType];
 
+	init = (initialTile, characterType, characterSprite, characterWidth, characterHeight) => {
+		console.log("initialTile", initialTile);
 		this.characterLegend = LEGEND[characterType];
 		this.characterSprite = characterSprite;
 
@@ -27,8 +24,8 @@ export default class Character {
 		this.spriteX;
 		this.spriteY;
 
-		this.characterWidth = tileWidth;
-		this.characterHeight = tileHeight;
+		this.characterWidth = characterWidth;
+		this.characterHeight = characterHeight;
 
 		this.path = [];
 		this.lastTile = {};
@@ -40,7 +37,7 @@ export default class Character {
 		this.fullHealth = 200;
 		this.currentHealth = 160;
 
-		this.setCharacterMode('IDLE');
+		this.setCharacterMode('IDLE');		
 	}
 
 	setCharacterMode = mode => {
