@@ -34,7 +34,7 @@ export default class Map {
 	init = () => {
 		this.setMap('MAP_1');
 
-		Enemies.generateEnemies('MAP_1');
+		//Enemies.generateEnemies('MAP_1');
 
 		CANVAS.addEventListener('mousemove', this.handleMouseMove);
 		CANVAS.addEventListener('mouseout', this.handleMouseOut);
@@ -78,11 +78,11 @@ export default class Map {
 			});
 
 			if(Array.isArray(newPath)) {
-				const enemy = Enemies.isEnemyHere(destination, this.currentMapName);
-				if(enemy) {
-					Enemies.atackEnemy(destination, this.currentMapName)
-					newPath.pop();
-				}
+				// const enemy = Enemies.isEnemyHere(destination, this.currentMapName);
+				// if(enemy) {
+				// 	Enemies.atackEnemy(destination, this.currentMapName)
+				// 	newPath.pop();
+				// }
 
 				this.hero.setPath([this.hero.currentTile, ...newPath]);
 			}
@@ -141,6 +141,6 @@ export default class Map {
 
 		this.drawMap();
 		this.hero.draw();
-		Enemies.draw();
+		//Enemies.draw();
 	}
 }

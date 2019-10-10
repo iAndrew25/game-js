@@ -15,7 +15,8 @@ export default class Game {
 
 	load = () => {
 		return [
-			Assets.setImage('mapTiles', './src/rpg-tiles.png')
+			Assets.setImage('mapTiles', './src/rpg-tiles.png'),
+			Assets.setImage('playerTiles', './src/player-tiles.png'),
 		];
 	}
 

@@ -39,6 +39,28 @@ const LEGEND = {
 	hero: {
 		spriteX: 30,
 		spriteY: 30,
+		mode: {
+			IDLE: {
+				spriteX: 0,
+				spriteY: 0,
+			},
+			EAST: {
+				spriteX: 90, //temp
+				spriteY: 0
+			},
+			WEST: {
+				spriteX: 90, //temp
+				spriteY: 15
+			},
+			NORTH: {
+				spriteX: 90, //temp
+				spriteY: 30
+			},
+			SOUTH: {
+				spriteX: 90, //temp
+				spriteY: 45
+			}
+		},
 		tileWidth: 30,
 		tileHeight: 15
 	},
@@ -73,5 +95,5 @@ export default {
 	MAP_WIDTH: 20,
 	CANVAS_WIDTH: 600,
 	CANVAS_HEIGHT: 300,
-	GAME_SPEED: 300
+	GAME_SPEED: 900
 };

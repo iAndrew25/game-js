@@ -6,3 +6,23 @@ export const generatePositionForNewEnemies = ([startRow, endRow, startColumn, en
 		y: getRandomNumber([startColumn, endColumn])
 	};
 };
+
+export const getCardinalPoint = (start, end) => {
+	if(!start || !end) return 'IDLE';
+
+	if(start.x === end.x) {
+		if(start.y > end.y) {
+			return 'NORTH';
+		} else {
+			return 'SOUTH';
+		}
+	} else if(start.y === end.y) {
+		if(start.x > end.x) {
+			return 'WEST';
+		} else {
+			return 'EAST';
+		}
+	} else {
+		return 'IDLE';
+	}
+}

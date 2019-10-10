@@ -1,31 +1,34 @@
 import Assets from './assets-loader.js';
 import Camera from './camera.js';
 import GAME_CONFIG from './game-config.js';
+import {getCardinalPoint} from './util/helpers.js';
 
 const {
 	CONTEXT,
 	TILE_WIDTH,
 	TILE_HEIGHT,
 	GAME_SPEED,
-	LEGEND
+	LEGEND,
 } = GAME_CONFIG;
 
 export default class Character {
 	constructor(initialTile, character) {
 		const {
-			spriteX,
-			spriteY,
 			tileWidth,
 			tileHeight
 		} = LEGEND[character];
-		this.mapTiles = Assets.getImage('mapTiles');
+
+		this.characterLegend = LEGEND[character];
+		this.mapTiles = Assets.getImage('playerTiles');
 
 		this.timeMoved = 0;
 
+		this.mode;
+		this.spriteX;
+		this.spriteY;
+
 		this.characterWidth = tileWidth;
 		this.characterHeight = tileHeight;
-		this.spriteX = spriteX;
-		this.spriteY = spriteY;
 
 		this.path = [];
 		this.lastTile = {};
@@ -36,6 +39,17 @@ export default class Character {
 		this.shouldDisplayHealthBar = true;
 		this.fullHealth = 200;
 		this.currentHealth = 160;
+
+		this.setCharacterMode('IDLE');
+	}
+
+	setCharacterMode = mode => {
+		const {spriteX, spriteY} = this.characterLegend.mode[mode];
+
+		this.mode = mode;
+
+		this.spriteX = spriteX;
+		this.spriteY = spriteY;
 	}
 
 	placeAt = ({x, y}) => {
@@ -124,12 +138,7 @@ export default class Character {
 	}
 
 	move = time => {
-		if(!this.path.length) {
-			this.isMoving = false;
-			return false;
-		}
-
-		if(this.currentTile.x === this.lastTile.x && this.currentTile.y === this.lastTile.y) {
+		if(!this.path.length || (this.currentTile.x === this.lastTile.x && this.currentTile.y === this.lastTile.y)) {
 			return false;
 		}
 
@@ -139,7 +148,12 @@ export default class Character {
 
 			this.nextTile = this.path[0];
 			this.timeMoved = Date.now();
+
+			if(!this.path.length) {
+				this.isMoving = false;				
+			}
 		} else {
+
 			this.position = {
 				x: (this.currentTile.x * TILE_WIDTH) + ((TILE_WIDTH - this.characterWidth) / 2),
 				y: (this.currentTile.y * TILE_HEIGHT) + ((TILE_HEIGHT - this.characterHeight) / 2) // offset
@@ -154,9 +168,11 @@ export default class Character {
 				const moved = (TILE_HEIGHT / GAME_SPEED) * (time - this.timeMoved);
 				this.position.y += (this.nextTile.y < this.currentTile.y ? 0 - moved : moved);
 			}
+		
+			this.isMoving = true;
 		}
 
-		this.isMoving = true;
+		this.setCharacterMode(getCardinalPoint(this.currentTile, this.nextTile));
 		return true;
 	}
 };
