@@ -63,6 +63,15 @@ export default class Character {
 			this.currentTile.y <= Camera.endRow;
 	}
 
+	attacked = damage => {
+		if(this.currentHealth - damage < 0) {
+			this.currentHealth = 0;
+			//killed
+		} else {
+			this.currentHealth -= damage;
+		}
+	}
+
 	drawHealthBar = () => {
 		const healthBarHeight = 3;
 
@@ -83,7 +92,7 @@ export default class Character {
 		CONTEXT.fillRect(
 			this.position.x - Camera.x + widthHealth,
 			this.position.y - Camera.y - 5,
-			this.characterWidth - widthHealth,
+			widthMissingHealth,
 			healthBarHeight
 		);	
 	}

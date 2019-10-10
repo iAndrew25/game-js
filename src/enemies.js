@@ -31,7 +31,7 @@ export default new class Enemies {
 	}
 
 	atackEnemy = ({x, y}, map) => {
-		this.enemies[map][`${x}_${y}`].currentHealth -= 20;
+		this.enemies[map][`${x}_${y}`].attacked(20);
 	}
 
 	draw = () => {
