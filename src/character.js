@@ -62,6 +62,7 @@ export default class Character {
 			const healthLeft = this.currentHealth + armor - damage;
 
 			if(healthLeft <= 0) {
+				console.log('DIED')
 				this.currentHealth = 0;
 				this.isCharacterAlive = false;
 				//killed
@@ -101,10 +102,14 @@ export default class Character {
 	}
 
 	shouldBeDrawn = () => {
-		return !this.isCharacterAlive || (this.currentTile.x >= Camera.startColumn &&
-			this.currentTile.x <= Camera.endColumn &&
-			this.currentTile.y >= Camera.startRow &&
-			this.currentTile.y <= Camera.endRow);
+		if(!this.isCharacterAlive) {
+			return false;
+		} else {
+			return this.currentTile.x >= Camera.startColumn &&
+				this.currentTile.x <= Camera.endColumn &&
+				this.currentTile.y >= Camera.startRow &&
+				this.currentTile.y <= Camera.endRow;
+		}
 	}
 
 	drawHealthBar = () => {

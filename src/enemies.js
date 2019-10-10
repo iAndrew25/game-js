@@ -27,13 +27,13 @@ export default new class Enemies {
 		}, {});
 	}
 
-	isEnemyHere = ({x, y}, map) => {
-		return this.enemies[map][`${x}_${y}`];
+	isEnemyHere = ({x, y}) => {
+		return this.enemies[this.currentMap][`${x}_${y}`];
 	}
 
-	//atackEnemy = ({x, y}, map) => {
-	//	this.enemies[map][`${x}_${y}`].attacked(20);
-	//}
+	removeEnemy = ({x, y}) => {
+		delete this.enemies[this.currentMap][`${x}_${y}`]
+	}
 
 	draw = () => {
 		Object.values(this.enemies[this.currentMap]).forEach(enemy => enemy.draw());

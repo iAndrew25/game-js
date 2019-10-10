@@ -28,9 +28,6 @@ export default new class CombatSystem {
 		if((Date.now() - this.enemyCastAttack) >= this.enemyAttackDuration) {
 			this.enemyCastAttack = Date.now();
 			this.enemy.attack(Hero);
-			// console.log('Enemy attacked!!');
-		} else {
-			//console.log('not yet');
 		}
 	}
 
@@ -38,9 +35,6 @@ export default new class CombatSystem {
 		if((Date.now() - this.heroCastAttack) >= this.heroAttackDuration) {
 			this.heroCastAttack = Date.now();
 			Hero.attack(this.enemy);
-			// console.log('Hero attacked!!');
-		} else {
-			//console.log('not yet');
 		}
 	}
 
@@ -49,9 +43,7 @@ export default new class CombatSystem {
 		this.enemy = enemy;
 
 		this.enemyAttackDuration = this.getAttackDuration(enemy);
-		console.log("this.enemyAttackDuration", this.enemyAttackDuration);
 		this.heroAttackDuration = this.getAttackDuration(Hero);
-		console.log("this.heroAttackDuration", this.heroAttackDuration);
 
 		this.fight(enemy);
 	}

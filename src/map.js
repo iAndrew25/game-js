@@ -78,10 +78,10 @@ export default class Map {
 			});
 
 			if(Array.isArray(newPath)) {
-				const enemy = Enemies.isEnemyHere(destination, this.currentMapName);
+				const enemy = Enemies.isEnemyHere(destination);
 				if(enemy) {
 					CombatSystem.startFighting(enemy);
-					//Enemies.atackEnemy(destination, this.currentMapName)
+
 					newPath.pop();
 				}
 
