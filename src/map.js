@@ -68,63 +68,10 @@ export default class Map {
 				x: this.columnHovered,
 				y: this.rowHovered
 			});
-
-			// const startTile = Hero.isMoving ? Hero.nextTile : Hero.currentTile;
-
-			// const newPath = aStar({// refactor
-			// 	grid: GAME_MAPS[this.currentMap].layers[0],
-			// 	legend: LEGEND
-			// })(startTile, {
-			// 	x: this.columnHovered,
-			// 	y: this.rowHovered
-			// });
-
-			// if(Array.isArray(newPath)) {
-			// 	const enemy = Enemies.isEnemyHere(destination);
-			// 	if(enemy) {
-			// 		CombatSystem.startFighting(enemy);
-
-			// 		newPath.pop();
-			// 	}
-
-			// 	Hero.setPath([startTile, ...newPath]);
-			// }
 		} else {
 			//console.log('moving');
 		}
 	}
-
-	// handleTileClick = () => {
-	// 	if(Camera.hasNotMoved) {
-	// 		const destination = {
-	// 			x: this.columnHovered,
-	// 			y: this.rowHovered
-	// 		};
-
-	// 		const startTile = Hero.isMoving ? Hero.nextTile : Hero.currentTile;
-
-	// 		const newPath = aStar({// refactor
-	// 			grid: GAME_MAPS[this.currentMap].layers[0],
-	// 			legend: LEGEND
-	// 		})(startTile, {
-	// 			x: this.columnHovered,
-	// 			y: this.rowHovered
-	// 		});
-
-	// 		if(Array.isArray(newPath)) {
-	// 			const enemy = Enemies.isEnemyHere(destination);
-	// 			if(enemy) {
-	// 				CombatSystem.startFighting(enemy);
-
-	// 				newPath.pop();
-	// 			}
-
-	// 			Hero.setPath([startTile, ...newPath]);
-	// 		}
-	// 	} else {
-	// 		//console.log('moving');
-	// 	}
-	// }
 
 	checkDestination = ({x, y}) => {
 		const enemy = Enemies.isEnemyHere({x, y});

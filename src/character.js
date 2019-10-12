@@ -86,7 +86,7 @@ export default class Character {
 
 	setAction = (target, getPath, action) => {
 		switch(action) {
-			case 'ATTACK':
+			case 'ATTACK'://is movinghandler
 				CombatSystem.startFighting(this, target);
 				//this.walkTo(target.currentTile, getPath);
 				break;
