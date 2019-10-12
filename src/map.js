@@ -127,7 +127,7 @@ export default class Map {
 	// }
 
 	checkDestination = ({x, y}) => {
-		const enemy = Enemies.isEnemyHere(destination);
+		const enemy = Enemies.isEnemyHere({x, y});
 
 		if(enemy) {
 			Hero.setAction(enemy, this.getPath, 'ATTACK');
@@ -185,7 +185,6 @@ export default class Map {
 	}
 
 	draw = () => {
-		console.log('dw');
 		Camera.update();
 
 		this.drawMap();

@@ -1,4 +1,3 @@
-import Hero from './hero.js';
 import GAME_CONFIG from './game-config.js';
 
 const {GAME_SPEED} = GAME_CONFIG;
@@ -16,6 +15,7 @@ export default new class CombatSystem {
 		this.heroAttackDuration;
 
 		this.enemy;
+		this.hero;
 	}
 
 	getAttackDuration = character => {
@@ -27,29 +27,30 @@ export default new class CombatSystem {
 	enemyAttack = () => {
 		if((Date.now() - this.enemyCastAttack) >= this.enemyAttackDuration) {
 			this.enemyCastAttack = Date.now();
-			this.enemy.attack(Hero);
+			this.enemy.attack(this.hero);
 		}
 	}
 
 	heroAttack = enemy => {
 		if((Date.now() - this.heroCastAttack) >= this.heroAttackDuration) {
 			this.heroCastAttack = Date.now();
-			Hero.attack(this.enemy);
+			this.hero.attack(this.enemy);
 		}
 	}
 
-	startFighting = enemy => {
+	startFighting = (hero, enemy) => {
 		this.isFighting = true;
 		this.enemy = enemy;
+		this.hero = hero;
 
 		this.enemyAttackDuration = this.getAttackDuration(enemy);
-		this.heroAttackDuration = this.getAttackDuration(Hero);
+		this.heroAttackDuration = this.getAttackDuration(this.hero);
 
 		this.fight(enemy);
 	}
 
 	fight = enemy => {
-		if(!Hero.currentHealth || !enemy.currentHealth) {
+		if(!this.hero.currentHealth || !enemy.currentHealth) {
 			this.isFighting = false;
 		} else {
 			this.enemyAttack();

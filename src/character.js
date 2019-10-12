@@ -87,7 +87,7 @@ export default class Character {
 	setAction = (target, getPath, action) => {
 		switch(action) {
 			case 'ATTACK':
-				CombatSystem.startFighting(target);
+				CombatSystem.startFighting(this, target);
 				//this.walkTo(target.currentTile, getPath);
 				break;
 			case 'INTERACT':
