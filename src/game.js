@@ -31,6 +31,7 @@ export default class Game {
 			x: 1,
 			y: 1
 		});
+
 		this.map = new Map();
 
 		this.run();

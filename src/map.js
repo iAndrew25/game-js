@@ -13,8 +13,8 @@ const {CANVAS, CONTEXT, TILE_WIDTH, TILE_HEIGHT, GAME_MAPS, LEGEND} = GAME_CONFI
 
 export default class Map {
 	constructor() {
-		this.currentMapName;
 		this.currentMap;
+		this.getPath;
 
 		this.rowHovered = null;
 		this.columnHovered = null;
@@ -42,8 +42,8 @@ export default class Map {
 	}
 
 	setMap = mapName => {
-		this.currentMapName = mapName;
-		this.currentMap = aStar({
+		this.currentMap = mapName;
+		this.getPath = aStar({
 			grid: GAME_MAPS[mapName].layers[0],
 			legend: LEGEND
 		});
@@ -64,45 +64,80 @@ export default class Map {
 
 	handleTileClick = () => {
 		if(Camera.hasNotMoved) {
-			const destination = {
-				x: this.columnHovered,
-				y: this.rowHovered
-			};
-
-			const startTile = Hero.isMoving ? Hero.nextTile : Hero.currentTile;
-
-			const newPath = aStar({// refactor
-				grid: GAME_MAPS[this.currentMapName].layers[0],
-				legend: LEGEND
-			})(startTile, {
+			this.checkDestination({
 				x: this.columnHovered,
 				y: this.rowHovered
 			});
 
-			if(Array.isArray(newPath)) {
-				const enemy = Enemies.isEnemyHere(destination);
-				if(enemy) {
-					CombatSystem.startFighting(enemy);
+			// const startTile = Hero.isMoving ? Hero.nextTile : Hero.currentTile;
 
-					newPath.pop();
-				}
+			// const newPath = aStar({// refactor
+			// 	grid: GAME_MAPS[this.currentMap].layers[0],
+			// 	legend: LEGEND
+			// })(startTile, {
+			// 	x: this.columnHovered,
+			// 	y: this.rowHovered
+			// });
 
-				Hero.setPath([startTile, ...newPath]);
-			}
+			// if(Array.isArray(newPath)) {
+			// 	const enemy = Enemies.isEnemyHere(destination);
+			// 	if(enemy) {
+			// 		CombatSystem.startFighting(enemy);
+
+			// 		newPath.pop();
+			// 	}
+
+			// 	Hero.setPath([startTile, ...newPath]);
+			// }
 		} else {
 			//console.log('moving');
 		}
 	}
 
-	// checkDestination = ({x, y}) => {
-	// 	if(Enemies.isEnemyHere({x, y})) {
+	// handleTileClick = () => {
+	// 	if(Camera.hasNotMoved) {
+	// 		const destination = {
+	// 			x: this.columnHovered,
+	// 			y: this.rowHovered
+	// 		};
 
-	// 	} else if(NPCS.isNPCHere({x, y})) {
+	// 		const startTile = Hero.isMoving ? Hero.nextTile : Hero.currentTile;
 
+	// 		const newPath = aStar({// refactor
+	// 			grid: GAME_MAPS[this.currentMap].layers[0],
+	// 			legend: LEGEND
+	// 		})(startTile, {
+	// 			x: this.columnHovered,
+	// 			y: this.rowHovered
+	// 		});
+
+	// 		if(Array.isArray(newPath)) {
+	// 			const enemy = Enemies.isEnemyHere(destination);
+	// 			if(enemy) {
+	// 				CombatSystem.startFighting(enemy);
+
+	// 				newPath.pop();
+	// 			}
+
+	// 			Hero.setPath([startTile, ...newPath]);
+	// 		}
 	// 	} else {
-
+	// 		//console.log('moving');
 	// 	}
 	// }
+
+	checkDestination = ({x, y}) => {
+		const enemy = Enemies.isEnemyHere(destination);
+
+		if(enemy) {
+			Hero.setAction(enemy, this.getPath, 'ATTACK');
+		// } else if(NPCS.isNPCHere({x, y})) {
+		} else if(LEGEND[GAME_MAPS[this.currentMap].layers[0][y][x]].isWalkable) {
+			Hero.setAction({x, y}, this.getPath, 'WALK');
+		} else {
+			return false;
+		}
+	}
 
 	isTileHovered = ({xPosition, yPosition, row, column}) => {
 		if(this.xStart && 
@@ -144,12 +179,13 @@ export default class Map {
 				const xPosition = Math.round(((column - startColumn) * TILE_WIDTH) + offsetX);
 				const yPosition = Math.round(((row - startRow) * TILE_HEIGHT) + offsetY);
 			
-				GAME_MAPS[this.currentMapName].layers.forEach(layer => this.drawLayer(layer, row, column, xPosition, yPosition));
+				GAME_MAPS[this.currentMap].layers.forEach(layer => this.drawLayer(layer, row, column, xPosition, yPosition));
 			}
 		}
 	}
 
 	draw = () => {
+		console.log('dw');
 		Camera.update();
 
 		this.drawMap();

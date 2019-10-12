@@ -1,5 +1,6 @@
 import Assets from './assets-loader.js';
 import Camera from './camera.js';
+import CombatSystem from './combat-system.js';
 import GAME_CONFIG from './game-config.js';
 import {getCardinalPoint, getRandomNumber} from './util/helpers.js';
 
@@ -81,6 +82,32 @@ export default class Character {
 
 		this.spriteX = spriteX;
 		this.spriteY = spriteY;
+	}
+
+	setAction = (target, getPath, action) => {
+		switch(action) {
+			case 'ATTACK':
+				CombatSystem.startFighting(target);
+				//this.walkTo(target.currentTile, getPath);
+				break;
+			case 'INTERACT':
+
+				break;
+			case 'WALK':
+				this.walkTo(target, getPath);
+				break;
+			default:
+				return false;
+		}
+	}
+
+	walkTo = (destination, getPath) => {
+		const startTile = this.isMoving ? this.nextTile : this.currentTile;
+		const newPath = getPath(startTile, destination);
+
+		if(Array.isArray(newPath)) {
+			this.setPath([startTile, ...newPath]);
+		}
 	}
 
 	placeAt = ({x, y}) => {

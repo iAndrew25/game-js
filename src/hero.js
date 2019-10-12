@@ -18,7 +18,7 @@ export default new class Hero extends Character {
 
 	init = initialTile => {
 		const {tileWidth, tileHeight} = LEGEND.hero;
-
+console.log('init');
 		this.characterInit(initialTile, 'hero', Assets.getImage('playerTiles'), tileWidth, tileHeight)		
 	}
 };

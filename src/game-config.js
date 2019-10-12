@@ -29,7 +29,8 @@ const GAME_MAPS = {
 const LEGEND = {
 	0: {
 		spriteX: 0,
-		spriteY: 0
+		spriteY: 0,
+		isWalkable: true
 	},
 	1: {
 		spriteX: 60,

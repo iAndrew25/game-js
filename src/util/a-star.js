@@ -34,9 +34,9 @@ const findNodeInList = (list, node) => list.some(({x, y}) => x === node.x && y =
 const getHeuristicValue = ({x, y}, goal) => Math.abs(x - goal.x) + Math.abs(y - goal.y);
 
 export default ({grid, legend}) => {
-	const gridInit = cloneEmptyGrid({grid, legend});
-
 	return (start, goal) => {
+		const gridInit = cloneEmptyGrid({grid, legend});
+		
 		if(!gridInit[start.y] || !gridInit[start.y][start.x] || !gridInit[start.y][start.x].isWalkable) {
 			return 'Invalid start position.';
 		} else if(!gridInit[goal.y] || !gridInit[goal.y][goal.x] || !gridInit[goal.y][goal.x].isWalkable) {
