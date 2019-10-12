@@ -69,10 +69,12 @@ export default class Map {
 				y: this.rowHovered
 			};
 
+			const startTile = Hero.isMoving ? Hero.nextTile : Hero.currentTile;
+
 			const newPath = aStar({// refactor
 				grid: GAME_MAPS[this.currentMapName].layers[0],
 				legend: LEGEND
-			})(Hero.currentTile, {
+			})(startTile, {
 				x: this.columnHovered,
 				y: this.rowHovered
 			});
@@ -85,12 +87,22 @@ export default class Map {
 					newPath.pop();
 				}
 
-				Hero.setPath([Hero.currentTile, ...newPath]);
+				Hero.setPath([startTile, ...newPath]);
 			}
 		} else {
 			//console.log('moving');
 		}
 	}
+
+	// checkDestination = ({x, y}) => {
+	// 	if(Enemies.isEnemyHere({x, y})) {
+
+	// 	} else if(NPCS.isNPCHere({x, y})) {
+
+	// 	} else {
+
+	// 	}
+	// }
 
 	isTileHovered = ({xPosition, yPosition, row, column}) => {
 		if(this.xStart && 
