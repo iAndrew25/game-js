@@ -7,6 +7,8 @@ export const generatePositionForNewEnemies = ([startRow, endRow, startColumn, en
 	};
 };
 
+export const isFunction = fn => typeof fn === 'function';
+
 export const getCardinalPoint = (start, end) => {
 	if(!start || !end) return 'IDLE';
 

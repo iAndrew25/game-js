@@ -2,7 +2,7 @@ import Assets from './assets-loader.js';
 import Camera from './camera.js';
 import CombatSystem from './combat-system.js';
 import GAME_CONFIG from './game-config.js';
-import {getCardinalPoint, getRandomNumber} from './util/helpers.js';
+import {getCardinalPoint, getRandomNumber, isFunction} from './util/helpers.js';
 
 const {
 	CHARACTER_STATS,
@@ -84,28 +84,67 @@ export default class Character {
 		this.spriteY = spriteY;
 	}
 
-	setAction = (target, getPath, action) => {
-		switch(action) {
-			case 'ATTACK'://is movinghandler
-				CombatSystem.startFighting(this, target);
-				//this.walkTo(target.currentTile, getPath);
-				break;
-			case 'INTERACT':
+	initiateFight = (enemy, getPath) => {
+		this.walkTo({
+			destination: enemy.currentTile, 
+			getPath, 
+			willInteract: true
+		});
 
+		this.onArriveAction = () => {
+			this.setCharacterMode('IDLE');
+			CombatSystem.startFighting(this, enemy);
+		}
+	}
+
+	interact = (target, getPath) => {
+		this.walkTo({
+			destination: enemy.currentTile, 
+			getPath, 
+			willInteract: true
+		});
+
+		this.onArriveAction = () => {
+			//open popup
+			this.setCharacterMode('INTERACT');
+		//	CombatSystem.startFighting(this, enemy);
+		}
+	}
+
+// walk only on idle
+	setAction = (target, getPath, actionType) => {
+		switch(actionType) {
+			case 'ATTACK'://is movinghandler
+				this.initiateFight(target, getPath);
 				break;
+
+			case 'INTERACT':
+				this.interact(target, getPath);
+				break;
+
 			case 'WALK':
-				this.walkTo(target, getPath);
+				this.walkTo({
+					destination: target, 
+					getPath, 
+					willInteract: false
+				});
+
+				this.onArriveAction;
 				break;
+
 			default:
 				return false;
 		}
 	}
 
-	walkTo = (destination, getPath) => {
+	walkTo = ({destination, getPath, willInteract}) => {
 		const startTile = this.isMoving ? this.nextTile : this.currentTile;
 		const newPath = getPath(startTile, destination);
 
+
 		if(Array.isArray(newPath)) {
+			willInteract && newPath.pop();
+			
 			this.setPath([startTile, ...newPath]);
 		}
 	}
@@ -203,7 +242,9 @@ export default class Character {
 			this.timeMoved = Date.now();
 
 			if(!this.path.length) {
-				this.isMoving = false;				
+				this.isMoving = false;
+				this.nextTile = {};
+				isFunction(this.onArriveAction) && this.onArriveAction();
 			}
 		} else {
 
