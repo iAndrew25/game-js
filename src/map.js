@@ -2,14 +2,16 @@ import Enemies from './enemies.js';
 import Camera from './camera.js';
 import Character from './character.js';
 import Hero from './hero.js';
+import Inventar from './inventar.js';
 import GAME_CONFIG from './game-config.js';
 import Assets from './assets-loader.js';
 import CombatSystem from './combat-system.js';
+import GameButtons from './game-buttons.js';
 
 import aStar from './util/a-star.js';
 import {generatePositionForNewEnemies} from './util/helpers.js';
 
-const {CANVAS, CONTEXT, TILE_WIDTH, TILE_HEIGHT, GAME_MAPS, LEGEND} = GAME_CONFIG;
+const {CANVAS, CONTEXT, CANVAS_WIDTH, TILE_WIDTH, TILE_HEIGHT, GAME_MAPS, LEGEND} = GAME_CONFIG;
 
 export default class Map {
 	constructor() {
@@ -33,6 +35,7 @@ export default class Map {
 
 	init = () => {
 		this.setMap('MAP_1');
+		Inventar.setVisibility(true);
 
 		Enemies.generateEnemies('MAP_1');
 
@@ -51,7 +54,15 @@ export default class Map {
 
 	handleMouseMove = event => {
 		this.xStart = event.pageX - CANVAS.offsetLeft;
-		this.yStart = event.pageY - CANVAS.offsetTop;		
+		this.yStart = event.pageY - CANVAS.offsetTop;
+
+		if(Inventar.isVisible && this.xStart > CANVAS_WIDTH - 180) {
+			this.xStart = null;
+			this.yStart = null;
+
+			this.rowHovered = null;
+			this.columnHovered = null;
+		} 
 	}
 
 	handleMouseOut = event => {
@@ -63,7 +74,7 @@ export default class Map {
 	}
 
 	handleTileClick = () => {
-		if(Camera.hasNotMoved) {
+		if(Camera.hasNotMoved && this.columnHovered !== null && this.rowHovered !== null) {
 			this.checkDestination({
 				x: this.columnHovered,
 				y: this.rowHovered
@@ -137,5 +148,7 @@ export default class Map {
 		this.drawMap();
 		Hero.draw();
 		Enemies.draw();
+		Inventar.draw();
+		GameButtons.draw();
 	}
 }
