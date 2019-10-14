@@ -60,6 +60,10 @@ const LEGEND = {
 			SOUTH: {
 				spriteX: 90, //temp
 				spriteY: 45
+			},
+			ATTACK: {
+				spriteX: 0, //temp
+				spriteY: 60
 			}
 		},
 	},
@@ -70,7 +74,11 @@ const LEGEND = {
 			IDLE: {
 				spriteX: 0,
 				spriteY: 30,
-			}
+			},
+			ATTACK: {
+				spriteX: 0,
+				spriteY: 30,
+			}			
 		}
 	},
 	blue: {
@@ -78,6 +86,10 @@ const LEGEND = {
 		tileHeight: 15,
 		mode: {
 			IDLE: {
+				spriteX: 60,
+				spriteY: 30,
+			},
+			ATTACK: {
 				spriteX: 60,
 				spriteY: 30,
 			}
@@ -90,9 +102,37 @@ const LEGEND = {
 			IDLE: {
 				spriteX: 90,
 				spriteY: 30,
+			},
+			ATTACK: {
+				spriteX: 90,
+				spriteY: 30,
 			}
 		}
 	}
+};
+
+const ITEMS_STATS = {
+	swords: {
+		lightSword: {
+			damage: [2, 4],
+			attackSpeed: 0,
+			criticalChance: 0,
+			characterLevel: 1,
+
+		}
+	},
+	armors: {
+		lightArmor: {
+			armor: 0,
+			healthPoints: 10
+		}
+	}
+};
+
+const BONUS_STATS = {
+	lifeSteal: [20, 30],
+	loot: 0,
+	poison: 0
 };
 
 const CHARACTER_STATS = {

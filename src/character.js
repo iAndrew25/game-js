@@ -92,7 +92,7 @@ export default class Character {
 		});
 
 		this.onArriveAction = () => {
-			this.setCharacterMode('IDLE');
+			this.setCharacterMode('ATTACK');
 			CombatSystem.startFighting(this, enemy);
 		}
 	}
