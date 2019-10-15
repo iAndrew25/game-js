@@ -13,7 +13,7 @@ export default new class Inventar {
 
 	draw = () => {
 		if(this.isVisible) {
-			CONTEXT.globalAlpha = 0.5;
+			CONTEXT.globalAlpha = 0.8;
 			CONTEXT.fillRect(CANVAS_WIDTH - 180, 0, 180, CANVAS_HEIGHT);
 			CONTEXT.globalAlpha = 1.0;
 		}

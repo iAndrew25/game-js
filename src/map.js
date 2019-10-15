@@ -75,16 +75,24 @@ export default class Map {
 
 	handleTileClick = () => {
 		if(Camera.hasNotMoved && this.columnHovered !== null && this.rowHovered !== null) {
-			this.checkDestination({
-				x: this.columnHovered,
-				y: this.rowHovered
-			});
+			if(GameButtons.checkPosition({
+				x: this.xStart,
+				y: this.yStart
+			})) {
+				
+			} else {
+				this.checkPosition({
+					x: this.columnHovered,
+					y: this.rowHovered
+				});
+			}
+
 		} else {
 			//console.log('moving');
 		}
 	}
 
-	checkDestination = ({x, y}) => {
+	checkPosition = ({x, y}) => {
 		const enemy = Enemies.isEnemyHere({x, y});
 
 		if(enemy) {
