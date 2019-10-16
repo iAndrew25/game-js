@@ -16,6 +16,9 @@ const {
 export default class Character {
 
 	characterInit = (initialTile, characterType, characterSprite, characterWidth, characterHeight) => {
+		this.name = 'Mr. Burete';
+		this.level = 14;
+
 		this.characterLegend = LEGEND[characterType];
 		this.characterSprite = characterSprite;
 
@@ -203,6 +206,16 @@ export default class Character {
 		);	
 	}
 
+	drawCharacterName = () => {
+		CONTEXT.textAlign = 'center';
+		CONTEXT.fillStyle = '#FFFFFF';
+		CONTEXT.fillText(
+			`Lv. ${this.level} ${this.name}`, 
+			this.position.x - Camera.x + this.characterWidth / 2, 
+			this.position.y - Camera.y - 10
+		); 
+	}
+
 	draw = () => {
 		const currentFrameTime = Date.now();
 
@@ -227,6 +240,7 @@ export default class Character {
 		);
 		
 		this.shouldDisplayHealthBar && this.drawHealthBar();
+		this.drawCharacterName();
 	}
 
 	move = time => {

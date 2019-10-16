@@ -46,6 +46,8 @@ export default new class CombatSystem {
 		this.enemyAttackDuration = this.getAttackDuration(enemy);
 		this.heroAttackDuration = this.getAttackDuration(this.hero);
 
+		this.hero.setCharacterMode('ATTACK');
+
 		this.fight(enemy);
 	}
 
