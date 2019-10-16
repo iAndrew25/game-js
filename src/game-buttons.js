@@ -22,10 +22,7 @@ export default new class GameButtons {
 	}
 
 	handleClickOnPosition = ({positionX, positionY}) => {
-		console.log("positionY", positionY);
-		console.log("positionX", positionX);
 		const button = this.checkPosition({positionX, positionY});
-		console.log("button", button);
 
 		if(!button) return;
 

@@ -9,7 +9,7 @@ import CombatSystem from './combat-system.js';
 import GameButtons from './game-buttons.js';
 
 import aStar from './util/a-star.js';
-import {generatePositionForNewEnemies, isHovered} from './util/helpers.js';
+import {generatePositionForNewEnemies, isHovered, drawTile} from './util/helpers.js';
 
 const {CANVAS, CONTEXT, CANVAS_WIDTH, TILE_WIDTH, TILE_HEIGHT, GAME_MAPS, INVENTAR_WIDTH, LEGEND} = GAME_CONFIG;
 
@@ -126,16 +126,14 @@ export default class Map {
 	drawLayer = (layer, row, column, xPosition, yPosition) => {
 		const {sourceX, sourceY} = LEGEND[layer[row][column]];
 
-		CONTEXT.drawImage(
+		drawTile(
 			this.mapTiles,
 			this.isTileHovered({xPosition, yPosition, row, column}) ? 200 : sourceX,
 			this.isTileHovered({xPosition, yPosition, row, column}) ? 0 : sourceY,
 			TILE_WIDTH,
 			TILE_HEIGHT,
 			xPosition,
-			yPosition,
-			TILE_WIDTH,
-			TILE_HEIGHT
+			yPosition
 		);
 	}
 
