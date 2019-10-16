@@ -22,8 +22,8 @@ export default class Character {
 		this.timeMoved = 0;
 
 		this.mode;
-		this.spriteX;
-		this.spriteY;
+		this.sourceX;
+		this.sourceY;
 
 		this.characterWidth = characterWidth;
 		this.characterHeight = characterHeight;
@@ -76,12 +76,12 @@ export default class Character {
 	}
 
 	setCharacterMode = mode => {
-		const {spriteX, spriteY} = this.characterLegend.mode[mode];
+		const {sourceX, sourceY} = this.characterLegend.mode[mode];
 
 		this.mode = mode;
 
-		this.spriteX = spriteX;
-		this.spriteY = spriteY;
+		this.sourceX = sourceX;
+		this.sourceY = sourceY;
 	}
 
 	initiateFight = (enemy, getPath) => {
@@ -216,8 +216,8 @@ export default class Character {
 
 		CONTEXT.drawImage(
 			this.characterSprite,
-			this.spriteX,
-			this.spriteY,
+			this.sourceX,
+			this.sourceY,
 			this.characterWidth,
 			this.characterHeight,
 			this.position.x - Camera.x,

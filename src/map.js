@@ -9,9 +9,9 @@ import CombatSystem from './combat-system.js';
 import GameButtons from './game-buttons.js';
 
 import aStar from './util/a-star.js';
-import {generatePositionForNewEnemies} from './util/helpers.js';
+import {generatePositionForNewEnemies, isHovered} from './util/helpers.js';
 
-const {CANVAS, CONTEXT, CANVAS_WIDTH, TILE_WIDTH, TILE_HEIGHT, GAME_MAPS, LEGEND} = GAME_CONFIG;
+const {CANVAS, CONTEXT, CANVAS_WIDTH, TILE_WIDTH, TILE_HEIGHT, GAME_MAPS, INVENTAR_WIDTH, LEGEND} = GAME_CONFIG;
 
 export default class Map {
 	constructor() {
@@ -56,13 +56,24 @@ export default class Map {
 		this.xStart = event.pageX - CANVAS.offsetLeft;
 		this.yStart = event.pageY - CANVAS.offsetTop;
 
-		if(Inventar.isVisible && this.xStart > CANVAS_WIDTH - 180) {
+		if(Inventar.isVisible && this.xStart > CANVAS_WIDTH - INVENTAR_WIDTH) {
 			this.xStart = null;
 			this.yStart = null;
 
 			this.rowHovered = null;
 			this.columnHovered = null;
-		} 
+		}
+
+//		if(GameButtons.checkPosition({
+//			positionX: this.xStart,
+//			positionY: this.yStart
+//		})) {
+//			this.xStart = null;
+//			this.yStart = null;
+//
+//			this.rowHovered = null;
+//			this.columnHovered = null;		
+//		}
 	}
 
 	handleMouseOut = event => {
@@ -75,18 +86,15 @@ export default class Map {
 
 	handleTileClick = () => {
 		if(Camera.hasNotMoved && this.columnHovered !== null && this.rowHovered !== null) {
-			if(GameButtons.checkPosition({
-				x: this.xStart,
-				y: this.yStart
-			})) {
+			if(GameButtons.handleClickOnPosition({
+				positionX: this.xStart,
+				positionY: this.yStart
+			})) return;
 				
-			} else {
-				this.checkPosition({
-					x: this.columnHovered,
-					y: this.rowHovered
-				});
-			}
-
+			this.checkPosition({
+				x: this.columnHovered,
+				y: this.rowHovered
+			});
 		} else {
 			//console.log('moving');
 		}
@@ -106,13 +114,7 @@ export default class Map {
 	}
 
 	isTileHovered = ({xPosition, yPosition, row, column}) => {
-		if(this.xStart && 
-			this.yStart &&
-			this.xStart >= xPosition && 
-			this.xStart < xPosition + TILE_WIDTH &&
-			this.yStart >= yPosition &&
-			this.yStart < yPosition + TILE_HEIGHT) {
-
+		if(isHovered(this.xStart, this.yStart, TILE_WIDTH, TILE_HEIGHT, xPosition, yPosition)) {
 			this.rowHovered = row;
 			this.columnHovered = column;
 			return true;
@@ -122,12 +124,12 @@ export default class Map {
 	}
 
 	drawLayer = (layer, row, column, xPosition, yPosition) => {
-		const {spriteX, spriteY} = LEGEND[layer[row][column]];
+		const {sourceX, sourceY} = LEGEND[layer[row][column]];
 
 		CONTEXT.drawImage(
 			this.mapTiles,
-			this.isTileHovered({xPosition, yPosition, row, column}) ? 200 : spriteX,
-			this.isTileHovered({xPosition, yPosition, row, column}) ? 0 : spriteY,
+			this.isTileHovered({xPosition, yPosition, row, column}) ? 200 : sourceX,
+			this.isTileHovered({xPosition, yPosition, row, column}) ? 0 : sourceY,
 			TILE_WIDTH,
 			TILE_HEIGHT,
 			xPosition,

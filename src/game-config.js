@@ -28,13 +28,17 @@ const GAME_MAPS = {
 
 const LEGEND = {
 	0: {
-		spriteX: 0,
-		spriteY: 0,
+		tileWidth: 60,
+		tileHeight: 30,
+		sourceX: 0,
+		sourceY: 0,
 		isWalkable: true
 	},
 	1: {
-		spriteX: 60,
-		spriteY: 0,
+		tileWidth: 60,
+		tileHeight: 30,
+		sourceX: 60,
+		sourceY: 0,
 		isWalkable: false
 	},
 	hero: {
@@ -42,28 +46,28 @@ const LEGEND = {
 		tileHeight: 15,
 		mode: {
 			IDLE: {
-				spriteX: 0,
-				spriteY: 0,
+				sourceX: 0,
+				sourceY: 0,
 			},
 			EAST: {
-				spriteX: 90, //temp
-				spriteY: 0
+				sourceX: 90, //temp
+				sourceY: 0
 			},
 			WEST: {
-				spriteX: 90, //temp
-				spriteY: 15
+				sourceX: 90, //temp
+				sourceY: 15
 			},
 			NORTH: {
-				spriteX: 90, //temp
-				spriteY: 30
+				sourceX: 90, //temp
+				sourceY: 30
 			},
 			SOUTH: {
-				spriteX: 90, //temp
-				spriteY: 45
+				sourceX: 90, //temp
+				sourceY: 45
 			},
 			ATTACK: {
-				spriteX: 0, //temp
-				spriteY: 60
+				sourceX: 0, //temp
+				sourceY: 60
 			}
 		},
 	},
@@ -72,12 +76,12 @@ const LEGEND = {
 		tileHeight: 15,
 		mode: {
 			IDLE: {
-				spriteX: 0,
-				spriteY: 30,
+				sourceX: 0,
+				sourceY: 30,
 			},
 			ATTACK: {
-				spriteX: 0,
-				spriteY: 30,
+				sourceX: 0,
+				sourceY: 30,
 			}			
 		}
 	},
@@ -86,12 +90,12 @@ const LEGEND = {
 		tileHeight: 15,
 		mode: {
 			IDLE: {
-				spriteX: 60,
-				spriteY: 30,
+				sourceX: 60,
+				sourceY: 30,
 			},
 			ATTACK: {
-				spriteX: 60,
-				spriteY: 30,
+				sourceX: 60,
+				sourceY: 30,
 			}
 		}
 	},
@@ -100,12 +104,12 @@ const LEGEND = {
 		tileHeight: 15,
 		mode: {
 			IDLE: {
-				spriteX: 90,
-				spriteY: 30,
+				sourceX: 90,
+				sourceY: 30,
 			},
 			ATTACK: {
-				spriteX: 90,
-				spriteY: 30,
+				sourceX: 90,
+				sourceY: 30,
 			}
 		}
 	}
@@ -179,5 +183,6 @@ export default {
 	MAP_WIDTH: 20,
 	CANVAS_WIDTH: 600,
 	CANVAS_HEIGHT: 300,
+	INVENTAR_WIDTH: 180,
 	GAME_SPEED: 500
 };

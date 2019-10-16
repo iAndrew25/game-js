@@ -27,4 +27,13 @@ export const getCardinalPoint = (start, end) => {
 	} else {
 		return 'IDLE';
 	}
-}
+};
+
+export const isHovered = (positionX, positionY, width, height, sourceX, sourceY) => (
+	positionX && 
+	positionY && 
+	positionX >= sourceX &&
+	positionY >= sourceY &&
+	positionX < sourceX + width &&
+	positionY < sourceY + height
+);
