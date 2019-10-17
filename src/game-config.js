@@ -134,9 +134,20 @@ const ITEMS_STATS = {
 };
 
 const BONUS_STATS = {
-	lifeSteal: [20, 30],
+	lifeSteal: [0, 0],
 	loot: 0,
 	poison: 0
+};
+
+const LEVEL_UP_RATES = {
+	healthPoints: 1.04,
+	attackDamage: 1.07,
+	armor: 1.12
+}
+
+const GAME_RATES = {
+	dropRate: 0,
+	experienceRate: 0
 };
 
 const CHARACTER_STATS = {
