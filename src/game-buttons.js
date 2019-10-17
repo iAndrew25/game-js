@@ -3,7 +3,7 @@ import Inventar from './inventar.js';
 import {isHovered} from './util/helpers.js';
 import GAME_CONFIG from './game-config.js';
 
-const {CANVAS, CONTEXT, TILE_WIDTH, TILE_HEIGHT, CANVAS_WIDTH, CANVAS_HEIGHT, LEGEND} = GAME_CONFIG;
+const {CANVAS, CONTEXT, TILE_WIDTH, TILE_HEIGHT, CANVAS_WIDTH, CANVAS_HEIGHT, LEGEND, BUTTONS_SPRITE} = GAME_CONFIG;
 
 export default new class GameButtons {
 

@@ -1,4 +1,5 @@
 import Assets from './assets-loader.js';
+import SpriteSheet from './spritesheet.js';
 import Camera from './camera.js';
 import CombatSystem from './combat-system.js';
 import GAME_CONFIG from './game-config.js';
@@ -15,12 +16,13 @@ const {
 
 export default class Character {
 
-	characterInit = (initialTile, characterType, characterSprite, characterWidth, characterHeight) => {
+	characterInit = (initialTile, characterType, characterWidth, characterHeight) => {
 		this.name = 'Mr. Burete';
 		this.level = 14;
 
+
+		this.characterType = characterType;
 		this.characterLegend = LEGEND[characterType];
-		this.characterSprite = characterSprite;
 
 		this.timeMoved = 0;
 
@@ -79,12 +81,7 @@ export default class Character {
 	}
 
 	setCharacterMode = mode => {
-		const {sourceX, sourceY} = this.characterLegend.mode[mode];
-
 		this.mode = mode;
-
-		this.sourceX = sourceX;
-		this.sourceY = sourceY;
 	}
 
 	initiateFight = (enemy, getPath) => {
@@ -227,17 +224,11 @@ export default class Character {
 
 		if(!this.shouldBeDrawn()) return;
 
-		CONTEXT.drawImage(
-			this.characterSprite,
-			this.sourceX,
-			this.sourceY,
-			this.characterWidth,
-			this.characterHeight,
-			this.position.x - Camera.x,
-			this.position.y - Camera.y,
-			this.characterWidth,
-			this.characterHeight
-		);
+
+		SpriteSheet.drawCharacter(this.characterType, this.mode, {
+			positionX: this.position.x - Camera.x,
+			positionY: this.position.y - Camera.y
+		});
 		
 		this.shouldDisplayHealthBar && this.drawHealthBar();
 		this.drawCharacterName();
@@ -279,7 +270,7 @@ export default class Character {
 		
 			this.isMoving = true;
 		}
-
+		console.log('haaa');
 		this.setCharacterMode(getCardinalPoint(this.currentTile, this.nextTile));
 		return true;
 	}

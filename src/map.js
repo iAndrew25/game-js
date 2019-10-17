@@ -7,6 +7,7 @@ import GAME_CONFIG from './game-config.js';
 import Assets from './assets-loader.js';
 import CombatSystem from './combat-system.js';
 import GameButtons from './game-buttons.js';
+import SpriteSheet from './spritesheet.js';
 
 import aStar from './util/a-star.js';
 import {generatePositionForNewEnemies, isHovered, drawTile} from './util/helpers.js';
@@ -26,7 +27,7 @@ export default class Map {
 
 		Camera.follow(Hero);
 
-		this.mapTiles = Assets.getImage('mapTiles');
+		this.mapTiles = Assets.getImage('mapSprite');
 
 		this.enemies = [];
 
@@ -123,29 +124,29 @@ export default class Map {
 		}
 	}
 
-	drawLayer = (layer, row, column, xPosition, yPosition) => {
-		const {sourceX, sourceY} = LEGEND[layer[row][column]];
-
-		drawTile(
-			this.mapTiles,
-			this.isTileHovered({xPosition, yPosition, row, column}) ? 200 : sourceX,
-			this.isTileHovered({xPosition, yPosition, row, column}) ? 0 : sourceY,
-			TILE_WIDTH,
-			TILE_HEIGHT,
-			xPosition,
-			yPosition
-		);
-	}
+	//drawLayer = (layer, row, column, xPosition, yPosition) => {
+	//	const {sourceX, sourceY} = LEGEND[layer[row][column]];
+//
+	//	drawTile(
+	//		this.mapTiles,
+	//		this.isTileHovered({xPosition, yPosition, row, column}) ? 200 : sourceX,
+	//		this.isTileHovered({xPosition, yPosition, row, column}) ? 0 : sourceY,
+	//		TILE_WIDTH,
+	//		TILE_HEIGHT,
+	//		xPosition,
+	//		yPosition
+	//	);
+	//}
 
 	drawMap = () => {
 		const {startColumn, endColumn, startRow, endRow, offsetX, offsetY, x, y} = Camera;
 
 		for(let row = startRow; row < endRow; row++) {
 			for(let column = startColumn; column < endColumn; column++) {
-				const xPosition = Math.round(((column - startColumn) * TILE_WIDTH) + offsetX);
-				const yPosition = Math.round(((row - startRow) * TILE_HEIGHT) + offsetY);
-			
-				GAME_MAPS[this.currentMap].layers.forEach(layer => this.drawLayer(layer, row, column, xPosition, yPosition));
+				const positionX = Math.round(((column - startColumn) * TILE_WIDTH) + offsetX);
+				const positionY = Math.round(((row - startRow) * TILE_HEIGHT) + offsetY);
+				
+				GAME_MAPS[this.currentMap].layers.forEach(layer => SpriteSheet.drawTile(layer[row][column], {positionX, positionY}));
 			}
 		}
 	}

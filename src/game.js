@@ -18,6 +18,8 @@ export default class Game {
 		return [
 			Assets.setImage('mapTiles', './src/rpg-tiles.png'),
 			Assets.setImage('playerTiles', './src/player-tiles.png'),
+			Assets.setImage('charactersSprite', './src/characters-sprite.png'),
+			Assets.setImage('mapSprite', './src/map-sprite.png'),
 		];
 	}
 

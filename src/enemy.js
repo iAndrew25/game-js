@@ -16,6 +16,6 @@ export default class Enemy extends Character {
 		
 		const {tileWidth, tileHeight} = LEGEND[characterType];
 
-		this.characterInit(initialTile, characterType, Assets.getImage('mapTiles'), tileWidth, tileHeight);
+		this.characterInit(initialTile, characterType, tileWidth, tileHeight);
 	}
 };
