@@ -34,11 +34,18 @@ export default new class CombatSystem {
 		this.enemy = enemy;
 		this.hero = hero;
 
+		this.enemy.setCharacterMode('ATTACK');
+		this.hero.setCharacterMode('ATTACK');
+
 		this.fight();
 	}
 
 	endFight = () => {
 		this.isFighting = false;
+
+		this.enemy.setCharacterMode('IDLE');
+		this.hero.setCharacterMode('IDLE');
+
 
 		if(!this.enemy.currentHealth) {
 			// drop items

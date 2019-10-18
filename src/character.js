@@ -3,7 +3,7 @@ import SpriteSheet from './spritesheet.js';
 import Camera from './camera.js';
 import CombatSystem from './combat-system.js';
 import GAME_CONFIG from './game-config.js';
-import {getCardinalPoint, getRandomNumber, isFunction} from './util/helpers.js';
+import {getCardinalPoint, getRandomNumber, isFunction, addTimeBonus} from './util/helpers.js';
 
 const {
 	CHARACTER_STATS,
@@ -23,6 +23,7 @@ export default class Character {
 		this.characterType = characterType;
 
 		this.timeMoved = 0;
+		this.lastRegeneration = 0;
 
 		this.mode;
 		this.sourceX;
@@ -100,7 +101,7 @@ export default class Character {
 		});
 
 		this.onArriveAction = () => {
-			this.setCharacterMode('ATTACK');
+			// this.setCharacterMode('ATTACK');
 			CombatSystem.startFighting(this, enemy);
 
 			this.onArriveAction = null;
@@ -183,10 +184,12 @@ export default class Character {
 		if(!this.isCharacterAlive) {
 			return false;
 		} else {
-			return this.currentTile.x >= Camera.startColumn &&
+			return (
+				this.currentTile.x >= Camera.startColumn &&
 				this.currentTile.x <= Camera.endColumn &&
 				this.currentTile.y >= Camera.startRow &&
-				this.currentTile.y <= Camera.endRow;
+				this.currentTile.y <= Camera.endRow
+			);
 		}
 	}
 
@@ -225,6 +228,15 @@ export default class Character {
 		); 
 	}
 
+	regenerateHealth = time => {
+		if(this.currentHealth === this.stats.healthPoints || this.mode === 'ATTACK') return;
+
+		if(time - this.lastRegeneration >= addTimeBonus(GAME_SPEED, this.stats.healthPointsRegeneration)) {
+			this.currentHealth += 2;
+			this.lastRegeneration = new Date();
+		}
+	}
+
 	draw = () => {
 		const currentFrameTime = Date.now();
 
@@ -233,6 +245,8 @@ export default class Character {
 				this.timeMoved = currentFrameTime;
 			}
 		}
+
+		this.regenerateHealth(currentFrameTime);
 
 		if(!this.shouldBeDrawn()) return;
 
@@ -261,7 +275,6 @@ export default class Character {
 				this.isMoving = false;
 				this.nextTile = {};
 				isFunction(this.onArriveAction) && this.onArriveAction();
-				console.log('arrived');
 				return false;
 			}
 		} else {

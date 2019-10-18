@@ -166,7 +166,7 @@ const GAME_RATES = {
 const CHARACTER_STATS = {
 	hero: {
 		healthPoints: 200,
-		healthPointsRegenration: 3,
+		healthPointsRegeneration: 3,
 		attackDamage: [8, 12],
 		criticalChance: 0,
 		attackSpeed: 5,
@@ -174,6 +174,7 @@ const CHARACTER_STATS = {
 	},
 	green: {
 		healthPoints: 100,
+		healthPointsRegeneration: 30,
 		attackDamage: [9, 40],
 		criticalChance: 0,
 		attackSpeed: 0,
@@ -181,13 +182,15 @@ const CHARACTER_STATS = {
 	},
 	blue: {
 		healthPoints: 70,
-		attackDamage: [3, 6],
+		healthPointsRegeneration: 30,
+		attackDamage: [8, 12],
 		criticalChance: 0,
 		attackSpeed: 5,
 		armor: 2
 	},
 	black: {
-		healthPoints: 80,
+		healthPoints: 200,
+		healthPointsRegeneration: 30,
 		attackDamage: [4, 5],
 		criticalChance: 0,
 		attackSpeed: 20,

@@ -37,3 +37,5 @@ export const isHovered = (positionX, positionY, tileWidth, tileHeight, sourceX, 
 	positionX < sourceX + tileWidth &&
 	positionY < sourceY + tileHeight
 );
+
+export const addTimeBonus = (value, bonus) => value - (value * bonus / 100);
