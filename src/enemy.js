@@ -7,14 +7,14 @@ const {
 	TILE_WIDTH,
 	TILE_HEIGHT,
 	GAME_SPEED,
-	LEGEND,
+	CHARACTERS_SPRITE,
 } = GAME_CONFIG;
 
 export default class Enemy extends Character {
 	constructor(initialTile, characterType) {
 		super();
 		
-		const {tileWidth, tileHeight} = LEGEND[characterType];
+		const {tileWidth, tileHeight} = CHARACTERS_SPRITE[characterType];
 
 		this.characterInit(initialTile, characterType, tileWidth, tileHeight);
 	}

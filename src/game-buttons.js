@@ -3,22 +3,18 @@ import Inventar from './inventar.js';
 import {isHovered} from './util/helpers.js';
 import GAME_CONFIG from './game-config.js';
 
-const {CANVAS, CONTEXT, TILE_WIDTH, TILE_HEIGHT, CANVAS_WIDTH, CANVAS_HEIGHT, LEGEND, BUTTONS_SPRITE} = GAME_CONFIG;
+const {CANVAS, CONTEXT, TILE_WIDTH, TILE_HEIGHT, CANVAS_WIDTH, CANVAS_HEIGHT, BUTTONS_SPRITE} = GAME_CONFIG;
 
 export default new class GameButtons {
 
 	constructor() {
-		this.gameButtonsTiles = Assets.getImage('mapTiles');
+		const {inventar} = BUTTONS_SPRITE;
 
 		this.gameButtons = [{
-			type: 'INVENTAR',
-			width: TILE_WIDTH / 2,
-			height: TILE_HEIGHT / 2,
-			sourceX: 90,
-			sourceY: 45,
-			x: TILE_WIDTH / 2 - 15,
-			y: CANVAS_HEIGHT - TILE_HEIGHT / 2 - 15 / 2
-		}]
+			positionX: TILE_WIDTH / 2 - inventar.tileWidth / 2,
+			positionY: CANVAS_HEIGHT - TILE_HEIGHT / 2 - inventar.tileHeight / 2,
+			...inventar
+		}];
 	}
 
 	handleClickOnPosition = ({positionX, positionY}) => {
@@ -29,23 +25,25 @@ export default new class GameButtons {
 		if(button.type === 'INVENTAR') Inventar.setVisibility(!Inventar.isVisible);
 	}
 
-	checkPosition = ({positionX, positionY}) => {
-		return this.gameButtons.find(({width, height, x, y}) => isHovered(positionX, positionY, width, height, x, y));
+	checkPosition = mapPosition => {
+		return this.gameButtons.find(({tileWidth, tileHeight, positionX, positionY}) => 
+			isHovered(mapPosition.positionX, mapPosition.positionY, tileWidth, tileHeight, positionX, positionY)
+		);
 	}
 
 	draw = () => {
-		this.gameButtons.forEach(({width, height, sourceX, sourceY, x, y}) => {
+		this.gameButtons.forEach(({tileWidth, tileHeight, sourceX, sourceY, positionX, positionY}) => {
 			CONTEXT.drawImage(
-				Assets.getImage('mapTiles'),
+				Assets.getImage('buttonsSprite'),
 				sourceX,
 				sourceY,
-				width,
-				height,
-				x,
-				y,
-				width,
-				height
-			)
+				tileWidth,
+				tileHeight,
+				positionX,
+				positionY,
+				tileWidth,
+				tileHeight
+			);
 		});
 	}
 }

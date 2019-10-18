@@ -7,7 +7,7 @@ const {
 	TILE_WIDTH,
 	TILE_HEIGHT,
 	GAME_SPEED,
-	LEGEND,
+	CHARACTERS_SPRITE,
 } = GAME_CONFIG;
 
 export default new class Hero extends Character {
@@ -17,7 +17,7 @@ export default new class Hero extends Character {
 	}
 
 	init = initialTile => {
-		const {tileWidth, tileHeight} = LEGEND.hero;
+		const {tileWidth, tileHeight} = CHARACTERS_SPRITE.hero;
 
 		this.characterInit(initialTile, 'hero', tileWidth, tileHeight)		
 	}

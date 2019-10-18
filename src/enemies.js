@@ -6,7 +6,7 @@ import {generatePositionForNewEnemies} from './util/helpers.js';
 import GAME_CONFIG from './game-config.js';
 
 const {
-	GAME_MAPS
+	GAME_MAPS,
 } = GAME_CONFIG;
 
 export default new class Enemies {
@@ -23,7 +23,7 @@ export default new class Enemies {
 			return {
 				...enemies,
 				[`${x}_${y}`]: new Enemy({x, y}, enemy)
-			}
+			};
 		}, {});
 	}
 
@@ -32,7 +32,7 @@ export default new class Enemies {
 	}
 
 	removeEnemy = ({x, y}) => {
-		delete this.enemies[this.currentMap][`${x}_${y}`]
+		delete this.enemies[this.currentMap][`${x}_${y}`];
 	}
 
 	draw = () => {

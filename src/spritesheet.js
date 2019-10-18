@@ -1,17 +1,17 @@
 import Assets from './assets-loader.js';
 import GAME_CONFIG from './game-config.js';
 
-const {CANVAS, CONTEXT, CANVAS_WIDTH, CANVAS_HEIGHT, LEGEND, CHARACTERS_SPRITE, MAP_SPRITE} = GAME_CONFIG;
+const {CANVAS, CONTEXT, CANVAS_WIDTH, CANVAS_HEIGHT, CHARACTERS_SPRITE, MAP_SPRITE} = GAME_CONFIG;
 
 export default new class SpriteSheet {
 
-	drawTile = (tile, {positionX, positionY}) => {
+	drawTile = (tile, isTileHovered, {positionX, positionY}) => {
 		const {tileWidth, tileHeight, sourceX, sourceY} = MAP_SPRITE[tile];
 
 		CONTEXT.drawImage(
 			Assets.getImage('mapSprite'),
-			sourceX,
-			sourceY,
+			isTileHovered ? 200 : sourceX,
+			isTileHovered ? 0 : sourceY,
 			tileWidth,
 			tileHeight,
 			positionX,

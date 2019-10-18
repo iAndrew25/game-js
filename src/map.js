@@ -10,9 +10,9 @@ import GameButtons from './game-buttons.js';
 import SpriteSheet from './spritesheet.js';
 
 import aStar from './util/a-star.js';
-import {generatePositionForNewEnemies, isHovered, drawTile} from './util/helpers.js';
+import {generatePositionForNewEnemies, isHovered} from './util/helpers.js';
 
-const {CANVAS, CONTEXT, CANVAS_WIDTH, TILE_WIDTH, TILE_HEIGHT, GAME_MAPS, INVENTAR_WIDTH, LEGEND} = GAME_CONFIG;
+const {CANVAS, CONTEXT, CANVAS_WIDTH, TILE_WIDTH, TILE_HEIGHT, GAME_MAPS, INVENTAR_WIDTH, MAP_SPRITE} = GAME_CONFIG;
 
 export default class Map {
 	constructor() {
@@ -26,10 +26,6 @@ export default class Map {
 		this.yStart = null;
 
 		Camera.follow(Hero);
-
-		this.mapTiles = Assets.getImage('mapSprite');
-
-		this.enemies = [];
 
 		this.init();
 	}
@@ -49,13 +45,13 @@ export default class Map {
 		this.currentMap = mapName;
 		this.getPath = aStar({
 			grid: GAME_MAPS[mapName].layers[0],
-			legend: LEGEND
+			legend: MAP_SPRITE
 		});
 	}
 
-	handleMouseMove = event => {
-		this.xStart = event.pageX - CANVAS.offsetLeft;
-		this.yStart = event.pageY - CANVAS.offsetTop;
+	handleMouseMove = ({pageX, pageY}) => {
+		this.xStart = pageX - CANVAS.offsetLeft;
+		this.yStart = pageY - CANVAS.offsetTop;
 
 		if(Inventar.isVisible && this.xStart > CANVAS_WIDTH - INVENTAR_WIDTH) {
 			this.xStart = null;
@@ -107,15 +103,15 @@ export default class Map {
 		if(enemy) {
 			Hero.setAction(enemy, this.getPath, 'ATTACK');
 		// } else if(NPCS.isNPCHere({x, y})) {
-		} else if(LEGEND[GAME_MAPS[this.currentMap].layers[0][y][x]].isWalkable) {
+		} else if(MAP_SPRITE[GAME_MAPS[this.currentMap].layers[0][y][x]].isWalkable) {
 			Hero.setAction({x, y}, this.getPath, 'WALK');
 		} else {
 			return false;
 		}
 	}
 
-	isTileHovered = ({xPosition, yPosition, row, column}) => {
-		if(isHovered(this.xStart, this.yStart, TILE_WIDTH, TILE_HEIGHT, xPosition, yPosition)) {
+	isTileHovered = ({positionX, positionY, row, column}) => {
+		if(isHovered(this.xStart, this.yStart, TILE_WIDTH, TILE_HEIGHT, positionX, positionY)) {
 			this.rowHovered = row;
 			this.columnHovered = column;
 			return true;
@@ -124,20 +120,6 @@ export default class Map {
 		}
 	}
 
-	//drawLayer = (layer, row, column, xPosition, yPosition) => {
-	//	const {sourceX, sourceY} = LEGEND[layer[row][column]];
-//
-	//	drawTile(
-	//		this.mapTiles,
-	//		this.isTileHovered({xPosition, yPosition, row, column}) ? 200 : sourceX,
-	//		this.isTileHovered({xPosition, yPosition, row, column}) ? 0 : sourceY,
-	//		TILE_WIDTH,
-	//		TILE_HEIGHT,
-	//		xPosition,
-	//		yPosition
-	//	);
-	//}
-
 	drawMap = () => {
 		const {startColumn, endColumn, startRow, endRow, offsetX, offsetY, x, y} = Camera;
 
@@ -145,8 +127,11 @@ export default class Map {
 			for(let column = startColumn; column < endColumn; column++) {
 				const positionX = Math.round(((column - startColumn) * TILE_WIDTH) + offsetX);
 				const positionY = Math.round(((row - startRow) * TILE_HEIGHT) + offsetY);
-				
-				GAME_MAPS[this.currentMap].layers.forEach(layer => SpriteSheet.drawTile(layer[row][column], {positionX, positionY}));
+				const isTileHovered = this.isTileHovered({positionX, positionY, row, column});
+
+				GAME_MAPS[this.currentMap].layers.forEach(layer => 
+					SpriteSheet.drawTile(layer[row][column], isTileHovered, {positionX, positionY})
+				);
 			}
 		}
 	}

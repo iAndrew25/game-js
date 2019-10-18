@@ -10,8 +10,7 @@ const {
 	CONTEXT,
 	TILE_WIDTH,
 	TILE_HEIGHT,
-	GAME_SPEED,
-	LEGEND,
+	GAME_SPEED
 } = GAME_CONFIG;
 
 export default class Character {
@@ -20,9 +19,7 @@ export default class Character {
 		this.name = 'Mr. Burete';
 		this.level = 14;
 
-
 		this.characterType = characterType;
-		this.characterLegend = LEGEND[characterType];
 
 		this.timeMoved = 0;
 
@@ -270,7 +267,7 @@ export default class Character {
 		
 			this.isMoving = true;
 		}
-		console.log('haaa');
+
 		this.setCharacterMode(getCardinalPoint(this.currentTile, this.nextTile));
 		return true;
 	}

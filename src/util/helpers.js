@@ -1,7 +1,3 @@
-import GAME_CONFIG from '../game-config.js';
-
-const {CONTEXT} = GAME_CONFIG;
-
 export const getRandomNumber = ([min, max]) => Math.floor(Math.random() * (max - min + 1)) + min;
 
 export const generatePositionForNewEnemies = ([startRow, endRow, startColumn, endColumn]) => {
@@ -41,18 +37,3 @@ export const isHovered = (positionX, positionY, width, height, sourceX, sourceY)
 	positionX < sourceX + width &&
 	positionY < sourceY + height
 );
-
-
-export const drawTile = (image, sourceX, sourceY, tileWidth, tileHeight, positionX, positionY) => {
-	CONTEXT.drawImage(
-		image,
-		sourceX,
-		sourceY,
-		tileWidth,
-		tileHeight,
-		positionX,
-		positionY,
-		tileWidth,
-		tileHeight
-	);
-};

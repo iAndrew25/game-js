@@ -4,7 +4,7 @@ import Character from './character.js';
 import Map from './map.js';
 import Hero from './hero.js';
 
-const {CANVAS, CONTEXT, CANVAS_WIDTH, CANVAS_HEIGHT, LEGEND} = GAME_CONFIG;
+const {CANVAS, CONTEXT, CANVAS_WIDTH, CANVAS_HEIGHT} = GAME_CONFIG;
 
 // ROW - HEIGHT - Y
 // COLUMN - WIDTH - X
@@ -20,6 +20,7 @@ export default class Game {
 			Assets.setImage('playerTiles', './src/player-tiles.png'),
 			Assets.setImage('charactersSprite', './src/characters-sprite.png'),
 			Assets.setImage('mapSprite', './src/map-sprite.png'),
+			Assets.setImage('buttonsSprite', './src/buttons-sprite.png'),
 		];
 	}
 
@@ -37,38 +38,38 @@ export default class Game {
 		this.map = new Map();
 
 		this.run();
-		// temp
-		Hero.setPath([{
-			x: 1,
-			y: 2
-		}, {
-			x: 1,
-			y: 3
-		}, {
-			x: 2,
-			y: 3
-		}, {
-			x: 3,
-			y: 3
-		}, {
-			x: 3,
-			y: 4
-		}, {
-			x: 3,
-			y: 5
-		}, {
-			x: 3,
-			y: 6
-		}, {
-			x: 4,
-			y: 6
-		}, {
-			x: 5,
-			y: 6
-		}, {
-			x: 5,
-			y: 5
-		}]);
+		// // temp
+		// Hero.setPath([{
+		// 	x: 1,
+		// 	y: 2
+		// }, {
+		// 	x: 1,
+		// 	y: 3
+		// }, {
+		// 	x: 2,
+		// 	y: 3
+		// }, {
+		// 	x: 3,
+		// 	y: 3
+		// }, {
+		// 	x: 3,
+		// 	y: 4
+		// }, {
+		// 	x: 3,
+		// 	y: 5
+		// }, {
+		// 	x: 3,
+		// 	y: 6
+		// }, {
+		// 	x: 4,
+		// 	y: 6
+		// }, {
+		// 	x: 5,
+		// 	y: 6
+		// }, {
+		// 	x: 5,
+		// 	y: 5
+		// }]);
 	}
 
 	run = () => {

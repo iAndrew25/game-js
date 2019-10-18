@@ -45,6 +45,7 @@ const MAP_SPRITE = {
 
 const BUTTONS_SPRITE = {
 	inventar: {
+		type: 'INVENTAR',
 		tileWidth: 30,
 		tileHeight: 15,
 		sourceX: 0,
@@ -127,95 +128,6 @@ const CHARACTERS_SPRITE = {
 	}
 }
 
-const LEGEND = {
-	0: {
-		tileWidth: 60,
-		tileHeight: 30,
-		sourceX: 0,
-		sourceY: 0,
-		isWalkable: true
-	},
-	1: {
-		tileWidth: 60,
-		tileHeight: 30,
-		sourceX: 60,
-		sourceY: 0,
-		isWalkable: false
-	},
-	hero: {
-		tileWidth: 30,
-		tileHeight: 15,
-		mode: {
-			IDLE: {
-				sourceX: 0,
-				sourceY: 0,
-			},
-			EAST: {
-				sourceX: 90, //temp
-				sourceY: 0
-			},
-			WEST: {
-				sourceX: 90, //temp
-				sourceY: 15
-			},
-			NORTH: {
-				sourceX: 90, //temp
-				sourceY: 30
-			},
-			SOUTH: {
-				sourceX: 90, //temp
-				sourceY: 45
-			},
-			ATTACK: {
-				sourceX: 0, //temp
-				sourceY: 60
-			}
-		},
-	},
-	black: {
-		tileWidth: 30,
-		tileHeight: 15,
-		mode: {
-			IDLE: {
-				sourceX: 0,
-				sourceY: 30,
-			},
-			ATTACK: {
-				sourceX: 0,
-				sourceY: 30,
-			}			
-		}
-	},
-	blue: {
-		tileWidth: 30,
-		tileHeight: 15,
-		mode: {
-			IDLE: {
-				sourceX: 60,
-				sourceY: 30,
-			},
-			ATTACK: {
-				sourceX: 60,
-				sourceY: 30,
-			}
-		}
-	},
-	green: {
-		tileWidth: 30,
-		tileHeight: 15,
-		mode: {
-			IDLE: {
-				sourceX: 90,
-				sourceY: 30,
-			},
-			ATTACK: {
-				sourceX: 90,
-				sourceY: 30,
-			}
-		}
-	}
-};
-
 const ITEMS_STATS = {
 	swords: {
 		lightSword: {
@@ -285,11 +197,11 @@ const CHARACTER_STATS = {
 
 export default {
 	CHARACTERS_SPRITE,
+	BUTTONS_SPRITE,
 	MAP_SPRITE,
 	CANVAS,
 	CONTEXT,
 	GAME_MAPS,
-	LEGEND,
 	CHARACTER_STATS,
 	TILE_WIDTH: 60,
 	TILE_HEIGHT: 30,

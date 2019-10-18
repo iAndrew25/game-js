@@ -1,6 +1,6 @@
 import GAME_CONFIG from './game-config.js';
 
-const {CANVAS, CONTEXT, CANVAS_WIDTH, CANVAS_HEIGHT, LEGEND, INVENTAR_WIDTH} = GAME_CONFIG;
+const {CANVAS, CONTEXT, CANVAS_WIDTH, CANVAS_HEIGHT, INVENTAR_WIDTH} = GAME_CONFIG;
 
 export default new class Inventar {
 
