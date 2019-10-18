@@ -21,4 +21,14 @@ export default new class Hero extends Character {
 
 		this.characterInit(initialTile, 'hero', tileWidth, tileHeight)		
 	}
+
+	revive = () => {
+		this.currentHealth = this.stats.healthPoints;
+		this.isCharacterAlive = true;
+		this.setCharacterMode('IDLE');
+		this.placeAt({
+			x: 1,
+			y: 1
+		});
+	}
 };

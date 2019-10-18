@@ -10,7 +10,8 @@ const {
 	CONTEXT,
 	TILE_WIDTH,
 	TILE_HEIGHT,
-	GAME_SPEED
+	GAME_SPEED,
+	DEFAULT_ATTACK_SPEED
 } = GAME_CONFIG;
 
 export default class Character {
@@ -27,6 +28,9 @@ export default class Character {
 		this.sourceX;
 		this.sourceY;
 
+		this.stats;
+		this.attackDuration;
+
 		this.characterWidth = characterWidth;
 		this.characterHeight = characterHeight;
 
@@ -38,8 +42,9 @@ export default class Character {
 		this.shouldDisplayHealthBar = true;
 
 		this.placeAt(initialTile);
-		this.setCharacterMode('IDLE');		
+		this.setCharacterMode('IDLE');
 		this.setCharacterStats(CHARACTER_STATS[characterType]);
+		this.setAttackDuration();
 
 		this.currentHealth = this.stats.healthPoints;
 	}
@@ -48,13 +53,19 @@ export default class Character {
 		this.stats = stats;
 	}
 
-	attack = character => {
-		const attackDamage = getRandomNumber(this.stats.attackDamage);
+	setAttackDuration = () => {
+		this.attackDuration = DEFAULT_ATTACK_SPEED - (DEFAULT_ATTACK_SPEED * this.stats.attackSpeed) / 100;
+	}
 
-		if(this.stats.criticalChance >= getRandomNumber([this.stats.criticalChance, 100])) {
-			character.takeDamage(attackDamage * 2);
-		} else {
-			character.takeDamage(attackDamage);
+	attack = character => {
+		if(this.isCharacterAlive) {
+			const attackDamage = getRandomNumber(this.stats.attackDamage);
+
+			if(this.stats.criticalChance >= getRandomNumber([this.stats.criticalChance, 100])) {
+				character.takeDamage(attackDamage * 2);
+			} else {
+				character.takeDamage(attackDamage);
+			}
 		}
 	}
 
@@ -107,7 +118,7 @@ export default class Character {
 			//open popup
 			this.setCharacterMode('INTERACT');
 		//	CombatSystem.startFighting(this, enemy);
-			
+
 			this.onArriveAction = null;
 		}
 	}

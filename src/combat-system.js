@@ -11,28 +11,19 @@ export default new class CombatSystem {
 		this.heroCastAttack = 0;
 		this.enemyCastAttack = 0;
 
-		this.enemyAttackDuration;
-		this.heroAttackDuration;
-
 		this.enemy;
 		this.hero;
 	}
 
-	getAttackDuration = character => {
-		this.attackDuration = GAME_SPEED / 2;
-
-		return this.attackDuration - (this.attackDuration * character.stats.attackSpeed) / 100;
-	}
-
 	enemyAttack = () => {
-		if((Date.now() - this.enemyCastAttack) >= this.enemyAttackDuration) {
+		if((Date.now() - this.enemyCastAttack) >= this.enemy.attackDuration) {
 			this.enemyCastAttack = Date.now();
 			this.enemy.attack(this.hero);
 		}
 	}
 
 	heroAttack = enemy => {
-		if((Date.now() - this.heroCastAttack) >= this.heroAttackDuration) {
+		if((Date.now() - this.heroCastAttack) >= this.hero.attackDuration) {
 			this.heroCastAttack = Date.now();
 			this.hero.attack(this.enemy);
 		}
@@ -43,27 +34,30 @@ export default new class CombatSystem {
 		this.enemy = enemy;
 		this.hero = hero;
 
-		this.enemyAttackDuration = this.getAttackDuration(enemy);
-		this.heroAttackDuration = this.getAttackDuration(this.hero);
-
-		this.fight(enemy);
+		this.fight();
 	}
 
-	stopFighting = () => {
+	endFight = () => {
+		this.isFighting = false;
 
+		if(!this.enemy.currentHealth) {
+			// drop items
+		}
+
+		if(!this.hero.currentHealth) {
+			this.hero.revive();
+		}
 	}
 
-	fight = enemy => {
-		if(!this.hero.currentHealth || !enemy.currentHealth || this.hero.isMoving) {
-			this.isFighting = false;
-			this.hero.setCharacterMode('IDLE');
+	fight = () => {
+		if(!this.hero.currentHealth || !this.enemy.currentHealth || this.hero.isMoving) {
+			this.endFight();
 			return;
 		} else {
-			console.log('attack');
 			this.enemyAttack();
-			this.heroAttack(enemy);
+			this.heroAttack(this.enemy);
 
-			requestAnimationFrame(() => this.fight(enemy));			
+			requestAnimationFrame(() => this.fight(this.enemy));			
 		}
 	}
 };

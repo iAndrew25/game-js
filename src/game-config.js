@@ -174,7 +174,7 @@ const CHARACTER_STATS = {
 	},
 	green: {
 		healthPoints: 100,
-		attackDamage: [2, 4],
+		attackDamage: [9, 40],
 		criticalChance: 0,
 		attackSpeed: 0,
 		armor: 1
@@ -195,7 +195,12 @@ const CHARACTER_STATS = {
 	}
 };
 
+const GAME_SPEED = 500;
+const DEFAULT_ATTACK_SPEED = GAME_SPEED / 2;
+
 export default {
+	DEFAULT_ATTACK_SPEED,
+	GAME_SPEED,
 	CHARACTERS_SPRITE,
 	BUTTONS_SPRITE,
 	MAP_SPRITE,
@@ -209,6 +214,5 @@ export default {
 	MAP_WIDTH: 20,
 	CANVAS_WIDTH: 600,
 	CANVAS_HEIGHT: 300,
-	INVENTAR_WIDTH: 180,
-	GAME_SPEED: 500
+	INVENTAR_WIDTH: 180
 };
