@@ -49,10 +49,17 @@ export default new class CombatSystem {
 		this.fight(enemy);
 	}
 
+	stopFighting = () => {
+
+	}
+
 	fight = enemy => {
-		if(!this.hero.currentHealth || !enemy.currentHealth) {
+		if(!this.hero.currentHealth || !enemy.currentHealth || this.hero.isMoving) {
 			this.isFighting = false;
+			this.hero.setCharacterMode('IDLE');
+			return;
 		} else {
+			console.log('attack');
 			this.enemyAttack();
 			this.heroAttack(enemy);
 

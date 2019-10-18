@@ -91,6 +91,8 @@ export default class Character {
 		this.onArriveAction = () => {
 			this.setCharacterMode('ATTACK');
 			CombatSystem.startFighting(this, enemy);
+
+			this.onArriveAction = null;
 		}
 	}
 
@@ -105,6 +107,8 @@ export default class Character {
 			//open popup
 			this.setCharacterMode('INTERACT');
 		//	CombatSystem.startFighting(this, enemy);
+			
+			this.onArriveAction = null;
 		}
 	}
 
@@ -221,7 +225,6 @@ export default class Character {
 
 		if(!this.shouldBeDrawn()) return;
 
-
 		SpriteSheet.drawCharacter(this.characterType, this.mode, {
 			positionX: this.position.x - Camera.x,
 			positionY: this.position.y - Camera.y
@@ -247,6 +250,8 @@ export default class Character {
 				this.isMoving = false;
 				this.nextTile = {};
 				isFunction(this.onArriveAction) && this.onArriveAction();
+				console.log('arrived');
+				return false;
 			}
 		} else {
 
