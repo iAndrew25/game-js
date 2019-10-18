@@ -30,8 +30,8 @@ export const getCardinalPoint = (start, end) => {
 };
 
 export const isHovered = (positionX, positionY, tileWidth, tileHeight, sourceX, sourceY) => (
-	positionX && 
-	positionY && 
+	positionX &&
+	positionY &&
 	positionX >= sourceX &&
 	positionY >= sourceY &&
 	positionX < sourceX + tileWidth &&

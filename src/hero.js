@@ -1,5 +1,6 @@
 import Character from './character.js';
 import Assets from './assets-loader.js';
+import LevelingSystem from './leveling-system.js';
 import GAME_CONFIG from './game-config.js';
 
 const {
@@ -19,7 +20,10 @@ export default new class Hero extends Character {
 	init = initialTile => {
 		const {tileWidth, tileHeight} = CHARACTERS_SPRITE.hero;
 
-		this.characterInit(initialTile, 'hero', tileWidth, tileHeight)		
+		this.characterInit(initialTile, 'hero', tileWidth, tileHeight);
+		this.levelingSystem = new LevelingSystem();
+
+		this.level = this.levelingSystem.level;
 	}
 
 	revive = () => {

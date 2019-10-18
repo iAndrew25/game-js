@@ -26,6 +26,7 @@ export default new class CombatSystem {
 		if((Date.now() - this.heroCastAttack) >= this.hero.attackDuration) {
 			this.heroCastAttack = Date.now();
 			this.hero.attack(this.enemy);
+			this.hero.levelingSystem.setExperience(1);
 		}
 	}
 
