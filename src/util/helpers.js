@@ -39,3 +39,13 @@ export const isHovered = (positionX, positionY, tileWidth, tileHeight, sourceX, 
 );
 
 export const addTimeBonus = (value, bonus) => value - (value * bonus / 100);
+
+export const isBetween = (value, [min, max]) => value >= min && value < max;
+
+export const getLevelByExperience = (experience, experienceLevels) => experienceLevels.reduce((last, current, key) => {
+	if(isBetween(experience, [last, current])) {
+		return key + 1;
+	} else {
+		return false;
+	}
+}, 0);

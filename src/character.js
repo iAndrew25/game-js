@@ -3,7 +3,9 @@ import SpriteSheet from './spritesheet.js';
 import Camera from './camera.js';
 import CombatSystem from './combat-system.js';
 import GAME_CONFIG from './game-config.js';
-import {getCardinalPoint, getRandomNumber, isFunction, addTimeBonus} from './util/helpers.js';
+import {getCardinalPoint, getRandomNumber, isFunction, addTimeBonus, getLevelByExperience} from './util/helpers.js';
+
+const LEVELS_EXPERIENCE = [10, 20, 35, 50, 70, 100];
 
 const {
 	CHARACTER_STATS,
@@ -18,7 +20,10 @@ export default class Character {
 
 	characterInit = (initialTile, characterType, characterWidth, characterHeight) => {
 		this.name = 'Mr. Burete';
-		this.level = 14;
+
+		this.level = 1;
+		this.experience = 0;
+		this.experiencePercent = 0;
 
 		this.characterType = characterType;
 
@@ -49,6 +54,30 @@ export default class Character {
 
 		this.currentHealth = this.stats.healthPoints;
 	}
+
+	setExperience = newExp => {
+		this.experience += newExp;
+		console.log("this.experience", this.experience);
+
+		this.setLevel();
+		console.log("this.level", this.level);
+	};
+
+	setExperiencePercent = () => {
+
+	};
+
+	setLevel = () => {
+		Object.entries(LEVELS_EXPERIENCE).find(([key, value]) => {
+			if(isBetween(this.experience, value)) {
+				this.level = key;
+
+				return true;
+			} else {
+				return false;
+			}
+		});
+	};
 
 	setCharacterStats = stats => {
 		this.stats = stats;
