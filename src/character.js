@@ -3,7 +3,7 @@ import SpriteSheet from './spritesheet.js';
 import Camera from './camera.js';
 import CombatSystem from './combat-system.js';
 import GAME_CONFIG from './game-config.js';
-import {getCardinalPoint, getRandomNumber, isFunction, addTimeBonus, getLevelByExperience, getBarSizes} from './util/helpers.js';
+import {getCardinalPoint, getRandomNumber, isFunction, addTimeBonus, getExperienceData, getBarSizes} from './util/helpers.js';
 
 const {
 	CHARACTER_STATS,
@@ -24,6 +24,7 @@ export default class Character {
 		this.experience = 0;
 		this.experiencePercent = 0;
 		this.nextLevelExperience = 0;
+		this.currentLevelExperience = 0;
 
 		this.characterType = characterType;
 
@@ -64,11 +65,12 @@ export default class Character {
 	};
 
 	setLevel = () => {
-		const {level, experiencePercent, nextLevelExperience} = getLevelByExperience(this.experience, LEVELS_EXPERIENCE);
+		const {level, experiencePercent, nextLevelExperience, currentLevelExperience} = getExperienceData(this.level, this.experience, LEVELS_EXPERIENCE);
 
 		this.level = level;
 		this.experiencePercent = experiencePercent;
 		this.nextLevelExperience = nextLevelExperience;
+		this.currentLevelExperience = currentLevelExperience;
 	};
 
 	setCharacterStats = stats => {
@@ -236,7 +238,7 @@ export default class Character {
 	}
 
 	drawExperienceBar = () => {
-		const {valueWidth, leftValueWidth} = getBarSizes(this.experience, this.nextLevelExperience, this.characterWidth);
+		const {valueWidth, leftValueWidth} = getBarSizes(this.experience - this.currentLevelExperience, this.nextLevelExperience - this.currentLevelExperience, this.characterWidth);
 		const experienceBarHeight = 1;
 
 		CONTEXT.fillStyle = '#0288d1';

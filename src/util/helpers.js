@@ -46,43 +46,18 @@ export const getPercent = (value, fullValue) => value / fullValue * 100;
 
 export const isBetween = (value, [min, max]) => value >= min && value < max;
 
-export const getLevelByExperience = (experience, experienceLevels) => {
-	const currentLevelIndex = experienceLevels.findIndex((item, key, list) => {
-		const nextItem = list[key+1];
+export const getExperienceData = (currentLevel, experience, experienceLevels) => {
+	const nextLevelExperience = experienceLevels[currentLevel];
+	const currentLevelExperience = experienceLevels[currentLevel - 1] || 0;
+	const experiencePercent = getPercent(experience - currentLevelExperience, nextLevelExperience - currentLevelExperience);
+	const level = experience >= nextLevelExperience ? currentLevel + 1 : currentLevel;
 
-		if(nextItem && isBetween(experience, [item, nextItem])) {
-			return true;
-		} else {
-			return false;
-		}
-	});
-
-	if(currentLevelIndex !== -1) {
-		const nextLevelExperience = experienceLevels[currentLevelIndex + 1];
-		const currentLevelExperience = experienceLevels[currentLevelIndex];
-
-		if(nextLevelExperience !== undefined && currentLevelExperience !== undefined) {
-			return {
-				nextLevelExperience,
-				experiencePercent: getPercent(experience, nextLevelExperience),
-				level: currentLevelIndex + 1
-			}
-		} else {
-			console.log('fail 1')
-			return {
-				nextLevelExperience: 0,
-				experiencePercent: 0,
-				level: currentLevelIndex + 1
-			};
-		}
-	} else {
-			console.log('fail 2')
-		return {
-			nextLevelExperience: 0,
-			experiencePercent: 0,
-			level: 0
-		};
-	}
+	return {
+		currentLevelExperience,
+		nextLevelExperience,
+		experiencePercent,
+		level
+	};
 };
 
 export const getBarSizes = (value, fullValue, maxWidth) => {
