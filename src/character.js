@@ -3,9 +3,7 @@ import SpriteSheet from './spritesheet.js';
 import Camera from './camera.js';
 import CombatSystem from './combat-system.js';
 import GAME_CONFIG from './game-config.js';
-import {getCardinalPoint, getRandomNumber, isFunction, addTimeBonus, getLevelByExperience} from './util/helpers.js';
-
-const LEVELS_EXPERIENCE = [10, 20, 35, 50, 70, 100];
+import {getCardinalPoint, getRandomNumber, isFunction, addTimeBonus, getLevelByExperience, getBarSizes} from './util/helpers.js';
 
 const {
 	CHARACTER_STATS,
@@ -13,7 +11,8 @@ const {
 	TILE_WIDTH,
 	TILE_HEIGHT,
 	GAME_SPEED,
-	DEFAULT_ATTACK_SPEED
+	DEFAULT_ATTACK_SPEED,
+	LEVELS_EXPERIENCE
 } = GAME_CONFIG;
 
 export default class Character {
@@ -21,9 +20,10 @@ export default class Character {
 	characterInit = (initialTile, characterType, characterWidth, characterHeight) => {
 		this.name = 'Mr. Burete';
 
-		this.level = 1;
+		this.level = 0;
 		this.experience = 0;
 		this.experiencePercent = 0;
+		this.nextLevelExperience = 0;
 
 		this.characterType = characterType;
 
@@ -51,32 +51,24 @@ export default class Character {
 		this.setCharacterMode('IDLE');
 		this.setCharacterStats(CHARACTER_STATS[characterType]);
 		this.setAttackDuration();
+		this.setExperience(0);
 
 		this.currentHealth = this.stats.healthPoints;
 	}
 
 	setExperience = newExp => {
 		this.experience += newExp;
-		console.log("this.experience", this.experience);
 
 		this.setLevel();
 		console.log("this.level", this.level);
 	};
 
-	setExperiencePercent = () => {
-
-	};
-
 	setLevel = () => {
-		Object.entries(LEVELS_EXPERIENCE).find(([key, value]) => {
-			if(isBetween(this.experience, value)) {
-				this.level = key;
+		const {level, experiencePercent, nextLevelExperience} = getLevelByExperience(this.experience, LEVELS_EXPERIENCE);
 
-				return true;
-			} else {
-				return false;
-			}
-		});
+		this.level = level;
+		this.experiencePercent = experiencePercent;
+		this.nextLevelExperience = nextLevelExperience;
 	};
 
 	setCharacterStats = stats => {
@@ -223,28 +215,45 @@ export default class Character {
 	}
 
 	drawHealthBar = () => {
+		const {valueWidth, leftValueWidth} = getBarSizes(this.currentHealth, this.stats.healthPoints, this.characterWidth);
 		const healthBarHeight = 3;
-
-		const healthMissingPercent = (this.currentHealth / this.stats.healthPoints) * 100;
-
-		const widthHealth = (healthMissingPercent * this.characterWidth) / 100;
-		const widthMissingHealth = this.characterWidth - widthHealth;
 
 		CONTEXT.fillStyle = '#5BEC6E';
 		CONTEXT.fillRect(
 			this.position.x - Camera.x,
-			this.position.y - Camera.y - 5,
-			widthHealth,
+			this.position.y - Camera.y - 6,
+			valueWidth,
 			healthBarHeight
 		);
 
 		CONTEXT.fillStyle = '#FF5E62';
 		CONTEXT.fillRect(
-			this.position.x - Camera.x + widthHealth,
-			this.position.y - Camera.y - 5,
-			widthMissingHealth,
+			this.position.x - Camera.x + valueWidth,
+			this.position.y - Camera.y - 6,
+			leftValueWidth,
 			healthBarHeight
-		);	
+		);
+	}
+
+	drawExperienceBar = () => {
+		const {valueWidth, leftValueWidth} = getBarSizes(this.experience, this.nextLevelExperience, this.characterWidth);
+		const experienceBarHeight = 1;
+
+		CONTEXT.fillStyle = '#0288d1';
+		CONTEXT.fillRect(
+			this.position.x - Camera.x,
+			this.position.y - Camera.y - 3,
+			valueWidth,
+			experienceBarHeight
+		);
+
+		CONTEXT.fillStyle = '#b3e5fc';
+		CONTEXT.fillRect(
+			this.position.x - Camera.x + valueWidth,
+			this.position.y - Camera.y - 3,
+			leftValueWidth,
+			experienceBarHeight
+		);
 	}
 
 	drawCharacterName = () => {
@@ -253,15 +262,15 @@ export default class Character {
 		CONTEXT.fillText(
 			`Lv. ${this.level} ${this.name}`, 
 			this.position.x - Camera.x + this.characterWidth / 2, 
-			this.position.y - Camera.y - 10
-		); 
+			this.position.y - Camera.y - 13
+		);
 	}
 
 	regenerateHealth = time => {
-		if(this.currentHealth === this.stats.healthPoints || this.mode === 'ATTACK') return;
+		if(this.currentHealth >= this.stats.healthPoints || this.mode === 'ATTACK') return;
 
 		if(time - this.lastRegeneration >= addTimeBonus(GAME_SPEED, this.stats.healthPointsRegeneration)) {
-			this.currentHealth += 2;
+			this.currentHealth += 1;
 			this.lastRegeneration = new Date();
 		}
 	}
@@ -285,6 +294,7 @@ export default class Character {
 		});
 		
 		this.shouldDisplayHealthBar && this.drawHealthBar();
+		this.drawExperienceBar();
 		this.drawCharacterName();
 	}
 

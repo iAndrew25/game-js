@@ -160,7 +160,8 @@ const LEVEL_UP_RATES = {
 
 const GAME_RATES = {
 	dropRate: 0,
-	experienceRate: 0
+	experienceRate: 0,
+	defaultExperienceRate: 1.45
 };
 
 const CHARACTER_STATS = {
@@ -198,10 +199,13 @@ const CHARACTER_STATS = {
 	}
 };
 
+const LEVELS_EXPERIENCE = [0, 10, 15, 21, 30, 44, 64, 93, 135, 195, 283, 411, 596, 864, 1253, 1816, 2633, 3818, 5537, 8028, 11641, 16880, 24475, 35489, 51459, 74616, 108193, 156880, 227476, 329841];
+
 const GAME_SPEED = 500;
 const DEFAULT_ATTACK_SPEED = GAME_SPEED / 2;
 
 export default {
+	LEVELS_EXPERIENCE,
 	DEFAULT_ATTACK_SPEED,
 	GAME_SPEED,
 	CHARACTERS_SPRITE,
