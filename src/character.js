@@ -169,10 +169,7 @@ export default class Character {
 
 				this.actions = [{
 					type: 'WALK',
-					target: {
-						x: path.x
-						y: path.y
-					}
+					target: path[path.length - 1]
 				}, {
 					type: 'ATTACK',
 					target
