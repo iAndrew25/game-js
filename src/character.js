@@ -56,24 +56,13 @@ export default class Character {
 
 		this.currentHealth = this.stats.healthPoints;
 
-
-
-
-
 		this.actions = [];
-	}
-
-
-
-	setAction = action => {
-		this.actions.push(action);
 	}
 
 	setExperience = newExp => {
 		this.experience += newExp;
 
 		this.setLevel();
-		console.log("this.level", this.level);
 	};
 
 	setLevel = () => {
@@ -128,77 +117,47 @@ export default class Character {
 		this.mode = mode;
 	}
 
-	//initiateFight = (enemy, getPath) => {
-	//	this.walkTo({
-	//		destination: enemy.currentTile, 
-	//		getPath, 
-	//		willInteract: true
-	//	});
-//
-	//	this.onArriveAction = () => {
-	//		// this.setCharacterMode('ATTACK');
-	//		CombatSystem.startFighting(this, enemy);
-//
-	//		this.onArriveAction = null;
-	//	}
-	//}
-
-	//interact = (target, getPath) => {
-	//	this.walkTo({
-	//		destination: enemy.currentTile, 
-	//		getPath, 
-	//		willInteract: true
-	//	});
-//
-	//	this.onArriveAction = () => {
-	//		//open popup
-	//		this.setCharacterMode('INTERACT');
-	//	//	CombatSystem.startFighting(this, enemy);
-//
-	//		this.onArriveAction = null;
-	//	}
-	//}
-
-// walk only on idle
 	setAction = (target, getPath, actionType) => {
-		const {x, y} = target;
+		if(actionType === 'ATTACK') {//is movinghandler
+			const path = this.getWalkingPath(target.currentTile, getPath, true);
 
-		switch(actionType) {
-			case 'ATTACK'://is movinghandler
-				const path = getWalkingPath(target, getPath, true);
+			if(!Array.isArray(path)) return;
 
+			if(path.length > 1) {
 				this.actions = [{
 					type: 'WALK',
-					target: path[path.length - 1]
+					target: {currentTile: path[path.length - 1]}
 				}, {
 					type: 'ATTACK',
 					target
 				}];
 
 				this.setPath(path);
-				break;
+			} else {
+				console.log('this.isMoving setAction', this.isMoving);
+				CombatSystem.startFighting(this, target);
+			}
+			return;
+		}
 
-			//case 'INTERACT':
-			//	this.interact(target, getPath);
-			//	break;
+		//case 'INTERACT':
+		//	this.interact(target, getPath);
+		//	break;
 
-			case 'WALK':
-				const path = getWalkingPath(target, getPath, false);
+		if(actionType === 'WALK') {
+			const path = this.getWalkingPath(target.currentTile, getPath, false);
 
-				this.actions = [{
-					type: 'WALK',
-					target
-				}];
+			this.actions = [{
+				type: 'WALK',
+				target: target
+			}];
 
-				this.setPath(path);
-				break;
-
-			default:
-				return false;
+			this.setPath(path);
+			return;
 		}
 	}
 
-	getWalkingPath = ({destination, getPath, willInteract}) => {
+	getWalkingPath = (destination, getPath, willInteract) => {
 		const startTile = this.isMoving ? this.nextTile : this.currentTile;
 		const newPath = getPath(startTile, destination);
 
@@ -207,20 +166,9 @@ export default class Character {
 
 			return [startTile, ...newPath];
 		} else {
-			return [];
+			return;
 		}
 	}
-
-	//walkTo = ({destination, getPath, willInteract}) => {
-	//	const startTile = this.isMoving ? this.nextTile : this.currentTile;
-	//	const newPath = getPath(startTile, destination);
-//
-	//	if(Array.isArray(newPath)) {
-	//		willInteract && newPath.pop();
-	//		
-	//		this.setPath([startTile, ...newPath]);
-	//	}
-	//}
 
 	placeAt = ({x, y}) => {
 		this.currentTile = {x, y};
@@ -233,23 +181,29 @@ export default class Character {
 	}
 
 	checkActions = () => {
+		if(!Array.isArray(this.actions) || !this.actions.length) return;
+
 		const [{type, target}] = this.actions;
 
-		switch(type) {
-			case 'WALK':
-				if(target.x === this.currentTile.x && target.y === this.currentTile.y) {
-					this.actions.shift();
-				}
-				break;
-			case 'ATTACK':
-				if(!target.isCharacterAlive) {
-					this.actions.shift();
-				} else {
-					CombatSystem.startFighting(this, enemy);
-				}
-				break;
+		if(this.actions[0].type === 'WALK') {
+			const [{type, target} = {}] = this.actions;
+
+			if(target.currentTile.x === this.currentTile.x && target.currentTile.y === this.currentTile.y) {
+				this.actions.shift();
+			}			
 		}
 
+		if(!Array.isArray(this.actions) || !this.actions.length) return;
+		if(this.actions[0].type === 'ATTACK') {
+			const [{type, target} = {}] = this.actions;
+
+			if(!target.isCharacterAlive) {
+				this.actions.shift();
+			} else {
+				console.log('this.isMoving checkActions', this.isMoving);
+				CombatSystem.startFighting(this, target);
+			}
+		}
 	}
 
 	setPath = path => {
@@ -365,6 +319,11 @@ export default class Character {
 		}
 
 		if((time - this.timeMoved) >= GAME_SPEED) {
+			if(this.path.length === 1) {
+				this.setCharacterMode('IDLE');
+				this.isMoving = false;
+			}
+
 			this.placeAt(this.nextTile);
 			this.path.shift();
 
@@ -372,9 +331,8 @@ export default class Character {
 			this.timeMoved = Date.now();
 
 			if(!this.path.length) {
-				this.isMoving = false;
 				this.nextTile = {};
-				//isFunction(this.onArriveAction) && this.onArriveAction();
+				
 				return false;
 			}
 		} else {

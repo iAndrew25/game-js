@@ -171,10 +171,10 @@ const CHARACTER_STATS = {
 		attackDamage: [8, 12],
 		criticalChance: 0,
 		attackSpeed: 5,
-		armor: 20
+		armor: 1
 	},
 	green: {
-		healthPoints: 3000,
+		healthPoints: 300,
 		healthPointsRegeneration: 30,
 		attackDamage: [2, 5],
 		criticalChance: 0,
@@ -182,7 +182,7 @@ const CHARACTER_STATS = {
 		armor: 1
 	},
 	blue: {
-		healthPoints: 3000,
+		healthPoints: 300,
 		healthPointsRegeneration: 30,
 		attackDamage: [2, 5],
 		criticalChance: 0,
@@ -190,7 +190,7 @@ const CHARACTER_STATS = {
 		armor: 2
 	},
 	black: {
-		healthPoints: 30000,
+		healthPoints: 300,
 		healthPointsRegeneration: 30,
 		attackDamage: [2, 5],
 		criticalChance: 0,
@@ -201,7 +201,7 @@ const CHARACTER_STATS = {
 
 const LEVELS_EXPERIENCE = [0, 5, 15, 21, 30, 44, 64, 93, 135, 195, 283, 411, 596, 864, 1253, 1816, 2633, 3818, 5537, 8028, 11641, 16880, 24475, 35489, 51459, 74616, 108193, 156880, 227476, 329841];
 
-const GAME_SPEED = 10;
+const GAME_SPEED = 300;
 const DEFAULT_ATTACK_SPEED = GAME_SPEED / 2;
 
 export default {

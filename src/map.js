@@ -104,7 +104,7 @@ export default class Map {
 			Hero.setAction(enemy, this.getPath, 'ATTACK');
 		// } else if(NPCS.isNPCHere({x, y})) {
 		} else if(MAP_SPRITE[GAME_MAPS[this.currentMap].layers[0][y][x]].isWalkable) {
-			Hero.setAction({x, y}, this.getPath, 'WALK');
+			Hero.setAction({currentTile: {x, y}}, this.getPath, 'WALK');
 		} else {
 			return false;
 		}

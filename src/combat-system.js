@@ -62,6 +62,7 @@ export default new class CombatSystem {
 			this.endFight();
 			return;
 		} else {
+			console.log('aat')
 			this.enemyAttack();
 			this.heroAttack(this.enemy);
 
