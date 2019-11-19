@@ -134,7 +134,6 @@ export default class Character {
 
 				this.setPath(path);
 			} else {
-				console.log('this.isMoving setAction', this.isMoving);
 				CombatSystem.startFighting(this, target);
 			}
 			return;
@@ -200,7 +199,6 @@ export default class Character {
 			if(!target.isCharacterAlive) {
 				this.actions.shift();
 			} else {
-				console.log('this.isMoving checkActions', this.isMoving);
 				CombatSystem.startFighting(this, target);
 			}
 		}
