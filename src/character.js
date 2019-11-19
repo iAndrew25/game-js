@@ -55,6 +55,18 @@ export default class Character {
 		this.setExperience(0);
 
 		this.currentHealth = this.stats.healthPoints;
+
+
+
+
+
+		this.actions = [];
+	}
+
+
+
+	setAction = action => {
+		this.actions.push(action);
 	}
 
 	setExperience = newExp => {
@@ -116,56 +128,72 @@ export default class Character {
 		this.mode = mode;
 	}
 
-	initiateFight = (enemy, getPath) => {
-		this.walkTo({
-			destination: enemy.currentTile, 
-			getPath, 
-			willInteract: true
-		});
+	//initiateFight = (enemy, getPath) => {
+	//	this.walkTo({
+	//		destination: enemy.currentTile, 
+	//		getPath, 
+	//		willInteract: true
+	//	});
+//
+	//	this.onArriveAction = () => {
+	//		// this.setCharacterMode('ATTACK');
+	//		CombatSystem.startFighting(this, enemy);
+//
+	//		this.onArriveAction = null;
+	//	}
+	//}
 
-		this.onArriveAction = () => {
-			// this.setCharacterMode('ATTACK');
-			CombatSystem.startFighting(this, enemy);
-
-			this.onArriveAction = null;
-		}
-	}
-
-	interact = (target, getPath) => {
-		this.walkTo({
-			destination: enemy.currentTile, 
-			getPath, 
-			willInteract: true
-		});
-
-		this.onArriveAction = () => {
-			//open popup
-			this.setCharacterMode('INTERACT');
-		//	CombatSystem.startFighting(this, enemy);
-
-			this.onArriveAction = null;
-		}
-	}
+	//interact = (target, getPath) => {
+	//	this.walkTo({
+	//		destination: enemy.currentTile, 
+	//		getPath, 
+	//		willInteract: true
+	//	});
+//
+	//	this.onArriveAction = () => {
+	//		//open popup
+	//		this.setCharacterMode('INTERACT');
+	//	//	CombatSystem.startFighting(this, enemy);
+//
+	//		this.onArriveAction = null;
+	//	}
+	//}
 
 // walk only on idle
 	setAction = (target, getPath, actionType) => {
+		const {x, y} = target;
+
 		switch(actionType) {
 			case 'ATTACK'://is movinghandler
-				this.initiateFight(target, getPath);
+				const path = getWalkingPath(target, getPath, true);
+
+				this.actions = [{
+					type: 'WALK',
+					target: {
+						x: path.x
+						y: path.y
+					}
+				}, {
+					type: 'ATTACK',
+					target
+				}];
+
+				this.setPath(path);
 				break;
 
-			case 'INTERACT':
-				this.interact(target, getPath);
-				break;
+			//case 'INTERACT':
+			//	this.interact(target, getPath);
+			//	break;
 
 			case 'WALK':
-				this.walkTo({
-					destination: target, 
-					getPath, 
-					willInteract: false
-				});
+				const path = getWalkingPath(target, getPath, false);
 
-				this.onArriveAction;
+				this.actions = [{
+					type: 'WALK',
+					target
+				}];
+
+				this.setPath(path);
 				break;
 
 			default:
@@ -173,17 +201,29 @@ export default class Character {
 		}
 	}
 
-	walkTo = ({destination, getPath, willInteract}) => {
+	getWalkingPath = ({destination, getPath, willInteract}) => {
 		const startTile = this.isMoving ? this.nextTile : this.currentTile;
 		const newPath = getPath(startTile, destination);
 
-
 		if(Array.isArray(newPath)) {
 			willInteract && newPath.pop();
-			
-			this.setPath([startTile, ...newPath]);
+
+			return [startTile, ...newPath];
+		} else {
+			return [];
 		}
 	}
+
+	//walkTo = ({destination, getPath, willInteract}) => {
+	//	const startTile = this.isMoving ? this.nextTile : this.currentTile;
+	//	const newPath = getPath(startTile, destination);
+//
+	//	if(Array.isArray(newPath)) {
+	//		willInteract && newPath.pop();
+	//		
+	//		this.setPath([startTile, ...newPath]);
+	//	}
+	//}
 
 	placeAt = ({x, y}) => {
 		this.currentTile = {x, y};
@@ -191,6 +231,28 @@ export default class Character {
 			x: (TILE_WIDTH * x) + ((TILE_WIDTH - this.characterWidth) / 2),
 			y: (TILE_HEIGHT * y) + ((TILE_HEIGHT - this.characterHeight) / 2) // offset
 		};
+
+		this.checkActions();
+	}
+
+	checkActions = () => {
+		const [{type, target}] = this.actions;
+
+		switch(type) {
+			case 'WALK':
+				if(target.x === this.currentTile.x && target.y === this.currentTile.y) {
+					this.actions.shift();
+				}
+				break;
+			case 'ATTACK':
+				if(!target.isCharacterAlive) {
+					this.actions.shift();
+				} else {
+					CombatSystem.startFighting(this, enemy);
+				}
+				break;
+		}
+
 	}
 
 	setPath = path => {
@@ -315,7 +377,7 @@ export default class Character {
 			if(!this.path.length) {
 				this.isMoving = false;
 				this.nextTile = {};
-				isFunction(this.onArriveAction) && this.onArriveAction();
+				//isFunction(this.onArriveAction) && this.onArriveAction();
 				return false;
 			}
 		} else {

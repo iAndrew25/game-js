@@ -25,6 +25,7 @@ export default new class Hero extends Character {
 	revive = () => {
 		this.currentHealth = this.stats.healthPoints;
 		this.isCharacterAlive = true;
+		this.actions = [];
 		this.setCharacterMode('IDLE');
 		this.placeAt({
 			x: 1,
