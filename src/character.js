@@ -3,7 +3,7 @@ import SpriteSheet from './spritesheet.js';
 import Camera from './camera.js';
 import CombatSystem from './combat-system.js';
 import GAME_CONFIG from './game-config.js';
-import {getCardinalPoint, getRandomNumber, isFunction, addTimeBonus, getExperienceData, getBarSizes} from './util/helpers.js';
+import {getCardinalPoint, getRandomNumber, isFunction, addTimeBonus, getExperienceData, getBarSizes, getBonusWithRates} from './util/helpers.js';
 
 const {
 	CHARACTER_STATS,
@@ -12,7 +12,8 @@ const {
 	TILE_HEIGHT,
 	GAME_SPEED,
 	DEFAULT_ATTACK_SPEED,
-	LEVELS_EXPERIENCE
+	LEVELS_EXPERIENCE,
+	LEVEL_UP_RATES
 } = GAME_CONFIG;
 
 export default class Character {
@@ -20,7 +21,7 @@ export default class Character {
 	characterInit = (initialTile, characterType, characterWidth, characterHeight) => {
 		this.name = 'Mr. Burete';
 
-		this.level = 0;
+		this.level = 1;
 		this.experience = 0;
 		this.experiencePercent = 0;
 		this.nextLevelExperience = 0;
@@ -50,13 +51,17 @@ export default class Character {
 
 		this.placeAt(initialTile);
 		this.setCharacterMode('IDLE');
-		this.setCharacterStats(CHARACTER_STATS[characterType]);
+		this.setCharacterStats();
 		this.setAttackDuration();
 		this.setExperience(0);
 
-		this.currentHealth = this.stats.healthPoints;
+		this.setFullHealthPoints();
 
 		this.actions = [];
+	}
+
+	setFullHealthPoints = () => {
+		this.currentHealth = this.stats.healthPoints;
 	}
 
 	setExperience = newExp => {
@@ -68,14 +73,31 @@ export default class Character {
 	setLevel = () => {
 		const {level, experiencePercent, nextLevelExperience, currentLevelExperience} = getExperienceData(this.level, this.experience, LEVELS_EXPERIENCE);
 
-		this.level = level;
-		this.experiencePercent = experiencePercent;
+		if(this.level !== level) {
+			this.level = level;
+
+			this.setCharacterStats();
+			this.setFullHealthPoints();
+		}
+		
 		this.nextLevelExperience = nextLevelExperience;
+		this.experiencePercent = experiencePercent;
 		this.currentLevelExperience = currentLevelExperience;
 	};
 
-	setCharacterStats = stats => {
-		this.stats = stats;
+	setCharacterStats = () => {
+		const {healthPoints, attackDamage, armor, ...rest} = CHARACTER_STATS[this.characterType];
+		// items
+
+		this.stats = {
+			...rest,
+			armor: getBonusWithRates(armor, LEVEL_UP_RATES.armor, this.level),
+			healthPoints: getBonusWithRates(healthPoints, LEVEL_UP_RATES.healthPoints, this.level),
+			attackDamage: [
+				getBonusWithRates(attackDamage[0], LEVEL_UP_RATES.attackDamage, this.level), 
+				getBonusWithRates(attackDamage[1], LEVEL_UP_RATES.attackDamage, this.level)
+			]
+		};
 	}
 
 	setAttackDuration = () => {
@@ -97,6 +119,7 @@ export default class Character {
 	takeDamage = damage => {
 		const {armor} = this.stats;
 
+			console.log("damage", damage);
 		if(damage > armor) {
 			const healthLeft = this.currentHealth + armor - damage;
 

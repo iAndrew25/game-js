@@ -44,6 +44,8 @@ export const addBonus = (value, bonus) => value + (value * bonus / 100);
 
 export const getPercent = (value, fullValue) => value / fullValue * 100;
 
+export const getBonusWithRates = (value, bonus, level) => value + (value * bonus * level / 100);
+
 export const isBetween = (value, [min, max]) => value >= min && value < max;
 
 export const getExperienceData = (currentLevel, experience, experienceLevels) => {
