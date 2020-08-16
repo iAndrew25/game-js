@@ -1,7 +1,7 @@
-import Enemies from './enemies.js';
 import Camera from './camera.js';
 import Character from './character.js';
 import Hero from './hero.js';
+import Enemy from './enemy.js';
 import Inventar from './inventar.js';
 import GAME_CONFIG from './game-config.js';
 import CombatSystem from './combat-system.js';
@@ -14,10 +14,12 @@ import {generatePositionForNewEnemies, isHovered} from './util/helpers.js';
 
 const {CANVAS, CONTEXT, CANVAS_WIDTH, TILE_WIDTH, TILE_HEIGHT, GAME_MAPS, INVENTAR_WIDTH, MAP_SPRITE} = GAME_CONFIG;
 
-export default class Map {
+export default new class GameMap {
 	constructor() {
 		this.currentMap;
 		this.getPath;
+
+		this.enemies = {};
 
 		this.rowHovered = null;
 		this.columnHovered = null;
@@ -32,17 +34,39 @@ export default class Map {
 
 	init = () => {
 		this.setMap('MAP_1');
-		Inventar.setVisibility(true);
-
-		Enemies.generateEnemies('MAP_1');
+		Inventar.setVisibility(false);
 
 		CANVAS.addEventListener('mousemove', this.handleMouseMove);
 		CANVAS.addEventListener('mouseout', this.handleMouseOut);
 		CANVAS.addEventListener('click', this.handleTileClick);
 	}
 
+	generateEnemies = () => {
+		this.enemies = GAME_MAPS[this.currentMap].enemies.types.reduce((enemies, enemy) => {
+			const {x, y} = generatePositionForNewEnemies(GAME_MAPS[this.currentMap].enemies.spawnArea[enemy][0]);
+
+			return {
+				...enemies,
+				[`${x}_${y}`]: new Enemy({x, y}, enemy)
+			};
+		}, {});
+	}
+
+	isEnemyHere = ({x, y}) => {
+		return this.enemies[`${x}_${y}`];
+	}
+
+	removeEnemy = ({x, y}) => {
+		delete this.enemies[`${x}_${y}`];
+	}
+
+	drawEnemies = () => {
+		Object.values(this.enemies).forEach(enemy => enemy.draw());
+	}
+
 	setMap = mapName => {
 		this.currentMap = mapName;
+		this.generateEnemies();
 		this.getShortestPath = aStar({
 			grid: GAME_MAPS[mapName].layers[0],
 			legend: MAP_SPRITE
@@ -97,7 +121,7 @@ export default class Map {
 		}
 	}
 
-	getPath = (character, destination, willInteract) => {// <- object
+	getPath = ({character, destination, willInteract}) => {
 		const startTile = character.movement.isMoving ? character.movement.nextTile : character.currentTile;
 		const newPath = this.getShortestPath(startTile, destination);
 
@@ -110,31 +134,37 @@ export default class Map {
 		}
 	}
 
-	checkPosition = ({x, y}) => {// do not destructure it
-
-		if(MAP_SPRITE[GAME_MAPS[this.currentMap].layers[0][y][x]].isWalkable) {
-			Hero.setAction({
-				type: 'WALK',
-				target: {currentTile: {x, y}},
-				path: this.getPath(Hero, {x, y})
-			});
-
-			return false;
-		}
-
-		const enemy = Enemies.isEnemyHere({x, y});
+	checkPosition = position => {
+		const enemy = this.isEnemyHere(position);
 
 		if(enemy) {
 			Hero.setAction({
 				type: 'ATTACK',
 				target: enemy,
-				path: this.getPath(Hero, {x, y}, true) // make it an object
+				path: this.getPath({
+					character: Hero,
+					destination: position,
+					willInteract: true
+				})
 			});
 
 			return false;
 		}
 
-		//if(NPCS.isNPCHere({x, y}))
+		if(MAP_SPRITE[GAME_MAPS[this.currentMap].layers[0][position.y][position.x]].isWalkable) {
+			Hero.setAction({
+				type: 'WALK',
+				target: {currentTile: position},
+				path: this.getPath({
+					character: Hero,
+					destination: position
+				})
+			});
+
+			return false;
+		}
+
+		//if(NPCS.isNPCHere(position))
 		
 		return false;
 	}
@@ -169,8 +199,8 @@ export default class Map {
 		Camera.update();
 
 		this.drawMap();
+		this.drawEnemies();
 		Hero.draw();
-		// Enemies.draw();
 		Inventar.draw();
 		GameButtons.draw();
 	}

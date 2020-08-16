@@ -1,7 +1,7 @@
 import GAME_CONFIG from './game-config.js';
 import Assets from './util/assets-loader.js';
 import Character from './character.js';
-import Map from './map.js';
+import GameMap from './game-map.js';
 import Hero from './hero.js';
 
 const {CANVAS, CONTEXT, CANVAS_WIDTH, CANVAS_HEIGHT} = GAME_CONFIG;
@@ -34,8 +34,6 @@ export default class Game {
 			x: 1,
 			y: 1
 		});
-
-		this.map = new Map();
 
 		this.run();
 		// // temp
@@ -74,7 +72,7 @@ export default class Game {
 
 	run = timestamp => {
 		CONTEXT.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-		this.map.draw(timestamp || 0);
+		GameMap.draw(timestamp || 0);
 
 		requestAnimationFrame(this.run);
 	}
