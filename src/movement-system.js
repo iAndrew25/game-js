@@ -1,10 +1,23 @@
+import {getCardinalPoint} from './util/helpers.js';
+import GAME_CONFIG from './game-config.js';
+
+const {
+	GAME_SPEED,
+	TILE_WIDTH,
+	TILE_HEIGHT
+} = GAME_CONFIG;
+
 export default class MovementSystem {
-	timeMoved = 0;
-	path = [];
-	nextTile = {};
-	lastTile = {};
-	position = {};
-	isMoving = false;
+	constructor(character) {
+		this.character = character;
+
+		this.path = [];
+		this.timeMoved = 0;
+		this.nextTile = {};
+		this.lastTile = {};
+		this.position = {};
+		this.isMoving = false;
+	}
 
 	setPath = path => {
 		if(!Array.isArray(path)) {
@@ -17,48 +30,46 @@ export default class MovementSystem {
 	}
 
 	move = time => {
-		if(!this.isCharacterAlive || !this.path.length || (this.currentTile.x === this.lastTile.x && this.currentTile.y === this.lastTile.y)) {
+		if(!this.character.isCharacterAlive || 
+			!this.path.length || 
+			(this.character.currentTile.x === this.lastTile.x && this.character.currentTile.y === this.lastTile.y)
+		) {
 			return false;
 		}
 
 		if((time - this.timeMoved) >= GAME_SPEED) {
-			if(this.path.length === 1) {
-				this.setCharacterMode('IDLE');
-				this.isMoving = false;
-			}
-
-			this.placeAt(this.nextTile);
+			this.character.placeAt(this.nextTile);
 			this.path.shift();
 
 			this.nextTile = this.path[0];
 			this.timeMoved = Date.now();
+			this.character.setCharacterMode(getCardinalPoint(this.character.currentTile, this.nextTile));
 
 			if(!this.path.length) {
 				this.nextTile = {};
+				this.isMoving = false;
 				
 				return false;
 			}
 		} else {
-
-			this.position = {
-				x: (this.currentTile.x * TILE_WIDTH) + ((TILE_WIDTH - this.characterWidth) / 2),
-				y: (this.currentTile.y * TILE_HEIGHT) + ((TILE_HEIGHT - this.characterHeight) / 2) // offset
+			this.character.position = {
+				x: (this.character.currentTile.x * TILE_WIDTH) + ((TILE_WIDTH - this.character.characterWidth) / 2),
+				y: (this.character.currentTile.y * TILE_HEIGHT) + ((TILE_HEIGHT - this.character.characterHeight) / 2) // offset
 			};
 
-			if(this.nextTile.x !== this.currentTile.x) {
+			if(this.nextTile.x !== this.character.currentTile.x) {
 				const moved = (TILE_WIDTH / GAME_SPEED) * (time - this.timeMoved);
-				this.position.x += (this.nextTile.x < this.currentTile.x ? 0 - moved : moved);
+				this.character.position.x += (this.nextTile.x < this.character.currentTile.x ? 0 - moved : moved);
 			}
 
-			if(this.nextTile.y != this.currentTile.y) {
+			if(this.nextTile.y != this.character.currentTile.y) {
 				const moved = (TILE_HEIGHT / GAME_SPEED) * (time - this.timeMoved);
-				this.position.y += (this.nextTile.y < this.currentTile.y ? 0 - moved : moved);
+				this.character.position.y += (this.nextTile.y < this.character.currentTile.y ? 0 - moved : moved);
 			}
 		
 			this.isMoving = true;
 		}
 
-		this.setCharacterMode(getCardinalPoint(this.currentTile, this.nextTile));
 		return true;
 	}
 }

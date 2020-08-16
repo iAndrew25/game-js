@@ -43,7 +43,7 @@ export default class Map {
 
 	setMap = mapName => {
 		this.currentMap = mapName;
-		this.getPath = aStar({
+		this.getShortestPath = aStar({
 			grid: GAME_MAPS[mapName].layers[0],
 			legend: MAP_SPRITE
 		});
@@ -97,17 +97,46 @@ export default class Map {
 		}
 	}
 
-	checkPosition = ({x, y}) => {
+	getPath = (character, destination, willInteract) => {// <- object
+		const startTile = character.movement.isMoving ? character.movement.nextTile : character.currentTile;
+		const newPath = this.getShortestPath(startTile, destination);
+
+		if(Array.isArray(newPath)) {
+			willInteract && newPath.pop();
+
+			return [startTile, ...newPath];
+		} else {
+			return;
+		}
+	}
+
+	checkPosition = ({x, y}) => {// do not destructure it
+
+		if(MAP_SPRITE[GAME_MAPS[this.currentMap].layers[0][y][x]].isWalkable) {
+			Hero.setAction({
+				type: 'WALK',
+				target: {currentTile: {x, y}},
+				path: this.getPath(Hero, {x, y})
+			});
+
+			return false;
+		}
+
 		const enemy = Enemies.isEnemyHere({x, y});
 
 		if(enemy) {
-			Hero.setAction(enemy, this.getPath, 'ATTACK');
-		// } else if(NPCS.isNPCHere({x, y})) {
-		} else if(MAP_SPRITE[GAME_MAPS[this.currentMap].layers[0][y][x]].isWalkable) {
-			Hero.setAction({currentTile: {x, y}}, this.getPath, 'WALK');
-		} else {
+			Hero.setAction({
+				type: 'ATTACK',
+				target: enemy,
+				path: this.getPath(Hero, {x, y}, true) // make it an object
+			});
+
 			return false;
 		}
+
+		//if(NPCS.isNPCHere({x, y}))
+		
+		return false;
 	}
 
 	isTileHovered = ({positionX, positionY, row, column}) => {
@@ -141,7 +170,7 @@ export default class Map {
 
 		this.drawMap();
 		Hero.draw();
-		Enemies.draw();
+		// Enemies.draw();
 		Inventar.draw();
 		GameButtons.draw();
 	}

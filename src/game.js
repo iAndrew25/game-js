@@ -72,9 +72,9 @@ export default class Game {
 		// }]);
 	}
 
-	run = () => {
+	run = timestamp => {
 		CONTEXT.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-		this.map.draw();
+		this.map.draw(timestamp || 0);
 
 		requestAnimationFrame(this.run);
 	}

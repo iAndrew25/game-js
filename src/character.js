@@ -119,7 +119,6 @@ export default class Character {
 	takeDamage = damage => {
 		const {armor} = this.stats;
 
-			console.log("damage", damage);
 		if(damage > armor) {
 			const healthLeft = this.currentHealth + armor - damage;
 
@@ -137,59 +136,8 @@ export default class Character {
 	}
 
 	setCharacterMode = mode => {
+		console.log("mode", mode);
 		this.mode = mode;
-	}
-
-	setAction = (target, getPath, actionType) => {
-		if(actionType === 'ATTACK') {//is movinghandler
-			const path = this.getWalkingPath(target.currentTile, getPath, true);
-
-			if(!Array.isArray(path)) return;
-
-			if(path.length > 1) {
-				this.actions = [{
-					type: 'WALK',
-					target: {currentTile: path[path.length - 1]}
-				}, {
-					type: 'ATTACK',
-					target
-				}];
-
-				this.setPath(path);
-			} else {
-				CombatSystem.startFighting(this, target);
-			}
-			return;
-		}
-
-		//case 'INTERACT':
-		//	this.interact(target, getPath);
-		//	break;
-
-		if(actionType === 'WALK') {
-			const path = this.getWalkingPath(target.currentTile, getPath, false);
-
-			this.actions = [{
-				type: 'WALK',
-				target: target
-			}];
-
-			this.setPath(path);
-			return;
-		}
-	}
-
-	getWalkingPath = (destination, getPath, willInteract) => {
-		const startTile = this.isMoving ? this.nextTile : this.currentTile;
-		const newPath = getPath(startTile, destination);
-
-		if(Array.isArray(newPath)) {
-			willInteract && newPath.pop();
-
-			return [startTile, ...newPath];
-		} else {
-			return;
-		}
 	}
 
 	placeAt = ({x, y}) => {
@@ -225,16 +173,6 @@ export default class Character {
 				CombatSystem.startFighting(this, target);
 			}
 		}
-	}
-
-	setPath = path => {
-		if(!Array.isArray(path)) {
-			return false;
-		}
-
-		this.path = path;
-		this.nextTile = path[0];
-		this.lastTile = path[path.length - 1];
 	}
 
 	shouldBeDrawn = () => {
@@ -307,76 +245,7 @@ export default class Character {
 
 		if(time - this.lastRegeneration >= addTimeBonus(GAME_SPEED, this.stats.healthPointsRegeneration)) {
 			this.currentHealth += 1;
-			this.lastRegeneration = new Date();
+			this.lastRegeneration = Date.now();
 		}
-	}
-
-	draw = () => {
-		const currentFrameTime = Date.now();
-
-		if(!this.move(currentFrameTime)) {
-			if(this.currentTile.x !== this.lastTile.x || this.currentTile.y !== this.lastTile.y) {
-				this.timeMoved = currentFrameTime;
-			}
-		}
-
-		this.regenerateHealth(currentFrameTime);
-
-		if(!this.shouldBeDrawn()) return;
-
-		SpriteSheet.drawCharacter(this.characterType, this.mode, {
-			positionX: this.position.x - Camera.x,
-			positionY: this.position.y - Camera.y
-		});
-		
-		this.shouldDisplayHealthBar && this.drawHealthBar();
-		this.drawExperienceBar();
-		this.drawCharacterName();
-	}
-
-	move = time => {
-		if(!this.isCharacterAlive || !this.path.length || (this.currentTile.x === this.lastTile.x && this.currentTile.y === this.lastTile.y)) {
-			return false;
-		}
-
-		if((time - this.timeMoved) >= GAME_SPEED) {
-			if(this.path.length === 1) {
-				this.setCharacterMode('IDLE');
-				this.isMoving = false;
-			}
-
-			this.placeAt(this.nextTile);
-			this.path.shift();
-
-			this.nextTile = this.path[0];
-			this.timeMoved = Date.now();
-
-			if(!this.path.length) {
-				this.nextTile = {};
-				
-				return false;
-			}
-		} else {
-
-			this.position = {
-				x: (this.currentTile.x * TILE_WIDTH) + ((TILE_WIDTH - this.characterWidth) / 2),
-				y: (this.currentTile.y * TILE_HEIGHT) + ((TILE_HEIGHT - this.characterHeight) / 2) // offset
-			};
-
-			if(this.nextTile.x !== this.currentTile.x) {
-				const moved = (TILE_WIDTH / GAME_SPEED) * (time - this.timeMoved);
-				this.position.x += (this.nextTile.x < this.currentTile.x ? 0 - moved : moved);
-			}
-
-			if(this.nextTile.y != this.currentTile.y) {
-				const moved = (TILE_HEIGHT / GAME_SPEED) * (time - this.timeMoved);
-				this.position.y += (this.nextTile.y < this.currentTile.y ? 0 - moved : moved);
-			}
-		
-			this.isMoving = true;
-		}
-
-		this.setCharacterMode(getCardinalPoint(this.currentTile, this.nextTile));
-		return true;
 	}
 };
