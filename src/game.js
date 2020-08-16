@@ -1,5 +1,5 @@
 import GAME_CONFIG from './game-config.js';
-import Assets from './assets-loader.js';
+import Assets from './util/assets-loader.js';
 import Character from './character.js';
 import Map from './map.js';
 import Hero from './hero.js';
@@ -16,11 +16,11 @@ export default class Game {
 
 	load = () => {
 		return [
-			Assets.setImage('mapTiles', './src/rpg-tiles.png'),
-			Assets.setImage('playerTiles', './src/player-tiles.png'),
-			Assets.setImage('charactersSprite', './src/characters-sprite.png'),
-			Assets.setImage('mapSprite', './src/map-sprite.png'),
-			Assets.setImage('buttonsSprite', './src/buttons-sprite.png'),
+			Assets.setImage('mapTiles', './src/assets/rpg-tiles.png'),
+			Assets.setImage('playerTiles', './src/assets/player-tiles.png'),
+			Assets.setImage('charactersSprite', './src/assets/characters-sprite.png'),
+			Assets.setImage('mapSprite', './src/assets/map-sprite.png'),
+			Assets.setImage('buttonsSprite', './src/assets/buttons-sprite.png'),
 		];
 	}
 

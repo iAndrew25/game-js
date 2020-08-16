@@ -1,6 +1,6 @@
 import Map from './map.js';
 import Enemy from './enemy.js';
-import Assets from './assets-loader.js';
+import Assets from './util/assets-loader.js';
 
 import {generatePositionForNewEnemies} from './util/helpers.js';
 import GAME_CONFIG from './game-config.js';

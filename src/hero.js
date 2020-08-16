@@ -1,5 +1,5 @@
 import Character from './character.js';
-import Assets from './assets-loader.js';
+import Assets from './util/assets-loader.js';
 import GAME_CONFIG from './game-config.js';
 
 const {

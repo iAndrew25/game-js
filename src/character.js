@@ -1,4 +1,4 @@
-import Assets from './assets-loader.js';
+import Assets from './util/assets-loader.js';
 import SpriteSheet from './spritesheet.js';
 import Camera from './camera.js';
 import CombatSystem from './combat-system.js';

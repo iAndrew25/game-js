@@ -1,4 +1,4 @@
-import Assets from './assets-loader.js';
+import Assets from './util/assets-loader.js';
 import Inventar from './inventar.js';
 import {isHovered} from './util/helpers.js';
 import GAME_CONFIG from './game-config.js';

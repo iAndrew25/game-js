@@ -8,15 +8,15 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/iAndy3/game-js.git"
+		"url": "git+https://github.com/iAndrew3/game-js.git"
 	},
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
 	"bugs": {
-		"url": "https://github.com/iAndy3/game-js/issues"
+		"url": "https://github.com/iAndrew3/game-js/issues"
 	},
-	"homepage": "https://github.com/iAndy3/game-js#readme",
+	"homepage": "https://github.com/iAndrew3/game-js#readme",
 	"dependencies": {
 		"serve": "^11.2.0"
 	}

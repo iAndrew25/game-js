@@ -1,4 +1,4 @@
-import Assets from './assets-loader.js';
+import Assets from './util/assets-loader.js';
 import GAME_CONFIG from './game-config.js';
 
 const {CANVAS, CONTEXT, CANVAS_WIDTH, CANVAS_HEIGHT, CHARACTERS_SPRITE, MAP_SPRITE} = GAME_CONFIG;

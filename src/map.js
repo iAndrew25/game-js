@@ -4,12 +4,12 @@ import Character from './character.js';
 import Hero from './hero.js';
 import Inventar from './inventar.js';
 import GAME_CONFIG from './game-config.js';
-import Assets from './assets-loader.js';
 import CombatSystem from './combat-system.js';
 import GameButtons from './game-buttons.js';
 import SpriteSheet from './spritesheet.js';
 
 import aStar from './util/a-star.js';
+import Assets from './util/assets-loader.js';
 import {generatePositionForNewEnemies, isHovered} from './util/helpers.js';
 
 const {CANVAS, CONTEXT, CANVAS_WIDTH, TILE_WIDTH, TILE_HEIGHT, GAME_MAPS, INVENTAR_WIDTH, MAP_SPRITE} = GAME_CONFIG;
