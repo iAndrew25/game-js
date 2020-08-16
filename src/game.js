@@ -2,7 +2,6 @@ import GAME_CONFIG from './game-config.js';
 import Assets from './util/assets-loader.js';
 import Character from './character.js';
 import GameMap from './game-map.js';
-import Hero from './hero.js';
 
 const {CANVAS, CONTEXT, CANVAS_WIDTH, CANVAS_HEIGHT} = GAME_CONFIG;
 
@@ -30,44 +29,7 @@ export default class Game {
 
 		await Promise.all(this.load());
 
-		Hero.init({
-			x: 1,
-			y: 1
-		});
-
 		this.run();
-		// // temp
-		// Hero.setPath([{
-		// 	x: 1,
-		// 	y: 2
-		// }, {
-		// 	x: 1,
-		// 	y: 3
-		// }, {
-		// 	x: 2,
-		// 	y: 3
-		// }, {
-		// 	x: 3,
-		// 	y: 3
-		// }, {
-		// 	x: 3,
-		// 	y: 4
-		// }, {
-		// 	x: 3,
-		// 	y: 5
-		// }, {
-		// 	x: 3,
-		// 	y: 6
-		// }, {
-		// 	x: 4,
-		// 	y: 6
-		// }, {
-		// 	x: 5,
-		// 	y: 6
-		// }, {
-		// 	x: 5,
-		// 	y: 5
-		// }]);
 	}
 
 	run = timestamp => {

@@ -22,6 +22,12 @@ const GAME_MAPS = {
 				blue: [[1, 10, 3, 14]],
 				green: [[6, 1, 8, 3]],
 			}
+		},
+		hero: {
+			initialPosition: {
+				x: 1,
+				y: 1
+			}
 		}
 	}
 };

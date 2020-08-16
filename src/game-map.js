@@ -1,5 +1,4 @@
 import Camera from './camera.js';
-import Character from './character.js';
 import Hero from './hero.js';
 import Enemy from './enemy.js';
 import Inventar from './inventar.js';
@@ -29,10 +28,6 @@ export default new class GameMap {
 
 		Camera.follow(Hero);
 
-		this.init();
-	}
-
-	init = () => {
 		this.setMap('MAP_1');
 		Inventar.setVisibility(false);
 

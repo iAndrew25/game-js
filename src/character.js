@@ -19,6 +19,7 @@ const {
 export default class Character {
 
 	characterInit = (initialTile, characterType, characterWidth, characterHeight) => {
+		console.log("initialTile", initialTile);
 		this.name = 'Mr. Burete';
 
 		this.level = 1;
@@ -136,7 +137,6 @@ export default class Character {
 	}
 
 	setCharacterMode = mode => {
-		console.log("mode", mode);
 		this.mode = mode;
 	}
 

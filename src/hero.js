@@ -4,29 +4,32 @@ import GAME_CONFIG from './game-config.js';
 import SpriteSheet from './spritesheet.js';
 import Camera from './camera.js'
 import CombatSystem from './combat-system.js';
+import GameMap from './game-map.js';
 
 import MovementSystem from './movement-system.js';
 
 const {
 	CONTEXT,
+	GAME_MAPS,
+	GAME_SPEED,
 	TILE_WIDTH,
 	TILE_HEIGHT,
-	GAME_SPEED,
 	CHARACTERS_SPRITE,
 } = GAME_CONFIG;
 
 export default new class Hero extends Character {
-
 	constructor() {
 		super();
 
 		this.movement = new MovementSystem(this);
+
+		this.init();
 	}
 
-	init = initialTile => {
+	init = () => {
 		const {tileWidth, tileHeight} = CHARACTERS_SPRITE.hero;
 
-		this.characterInit(initialTile, 'hero', tileWidth, tileHeight);
+		this.characterInit(GAME_MAPS['MAP_1'].hero.initialPosition, 'hero', tileWidth, tileHeight);
 	}
 
 	revive = () => {
@@ -34,10 +37,7 @@ export default new class Hero extends Character {
 		this.isCharacterAlive = true;
 		this.actions = [];
 		this.setCharacterMode('IDLE');
-		this.placeAt({
-			x: 1,
-			y: 1
-		});
+		this.placeAt(GAME_MAPS[GameMap.currentMap].hero.initialPosition);
 	}
 
 	setAction = ({type, target, path}) => {
