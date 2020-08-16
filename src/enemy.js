@@ -14,11 +14,9 @@ const {
 
 export default class Enemy extends Character {
 	constructor(initialTile, characterType) {
-		super();
-		
 		const {tileWidth, tileHeight} = CHARACTERS_SPRITE[characterType];
-
-		this.characterInit(initialTile, characterType, tileWidth, tileHeight);
+		
+		super(initialTile, characterType, tileWidth, tileHeight);		
 	}
 
 	draw = () => {

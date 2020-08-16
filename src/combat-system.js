@@ -58,7 +58,8 @@ export default new class CombatSystem {
 	}
 
 	fight = () => {
-		if(!this.hero.currentHealth || !this.enemy.currentHealth || this.hero.isMoving) {
+		console.log('fight')
+		if(!this.hero.currentHealth || !this.enemy.currentHealth || this.hero.movement.isMoving) {
 			this.endFight();
 			return;
 		} else {

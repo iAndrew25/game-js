@@ -17,9 +17,7 @@ const {
 } = GAME_CONFIG;
 
 export default class Character {
-
-	characterInit = (initialTile, characterType, characterWidth, characterHeight) => {
-		console.log("initialTile", initialTile);
+	constructor(initialTile, characterType, characterWidth, characterHeight) {
 		this.name = 'Mr. Burete';
 
 		this.level = 1;
@@ -30,25 +28,17 @@ export default class Character {
 
 		this.characterType = characterType;
 
-		this.timeMoved = 0;
 		this.lastRegeneration = 0;
 
-		this.mode;
-		this.sourceX;
-		this.sourceY;
+		this.mode = 'IDLE';
 
-		this.stats;
-		this.attackDuration;
+		this.stats = {};
+		this.attackDuration = 0;
 
 		this.characterWidth = characterWidth;
 		this.characterHeight = characterHeight;
 
-		this.path = [];
-		this.lastTile = {};
-		this.isMoving = false;
 		this.isCharacterAlive = true;
-
-		this.shouldDisplayHealthBar = true;
 
 		this.placeAt(initialTile);
 		this.setCharacterMode('IDLE');

@@ -17,19 +17,13 @@ const {
 	CHARACTERS_SPRITE,
 } = GAME_CONFIG;
 
+const {tileWidth, tileHeight} = CHARACTERS_SPRITE.hero;
+
 export default new class Hero extends Character {
 	constructor() {
-		super();
+		super(GAME_MAPS['MAP_1'].hero.initialPosition, 'hero', tileWidth, tileHeight);
 
 		this.movement = new MovementSystem(this);
-
-		this.init();
-	}
-
-	init = () => {
-		const {tileWidth, tileHeight} = CHARACTERS_SPRITE.hero;
-
-		this.characterInit(GAME_MAPS['MAP_1'].hero.initialPosition, 'hero', tileWidth, tileHeight);
 	}
 
 	revive = () => {
@@ -79,7 +73,7 @@ export default new class Hero extends Character {
 		const currentFrameTime = Date.now();
 
 		if(!this.movement.move(currentFrameTime)) {
-			if(this.currentTile.x !== this.lastTile.x || this.currentTile.y !== this.lastTile.y) {
+			if(this.currentTile.x !== this.movement.lastTile.x || this.currentTile.y !== this.movement.lastTile.y) {
 				this.timeMoved = currentFrameTime;
 			}
 		}

@@ -9,14 +9,13 @@ const {
 
 export default class MovementSystem {
 	constructor(character) {
-		this.character = character;
-
 		this.path = [];
 		this.timeMoved = 0;
 		this.nextTile = {};
 		this.lastTile = {};
 		this.position = {};
 		this.isMoving = false;
+		this.character = character;
 	}
 
 	setPath = path => {
