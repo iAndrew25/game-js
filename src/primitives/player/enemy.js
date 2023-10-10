@@ -1,8 +1,6 @@
 import Character from './character.js';
-import Assets from './util/assets-loader.js';
-import SpriteSheet from './spritesheet.js';
-import Camera from './camera.js';
-import GAME_CONFIG from './game-config.js';
+import SpriteSheet from '../../spritesheet.js';
+import GAME_CONFIG from '../../game-config.js';
 
 const {
 	CONTEXT,
@@ -13,10 +11,12 @@ const {
 } = GAME_CONFIG;
 
 export default class Enemy extends Character {
-	constructor(initialTile, characterType) {
+	constructor(camera, initialTile, characterType) {
 		const {tileWidth, tileHeight} = CHARACTERS_SPRITE[characterType];
 		
-		super(initialTile, characterType, tileWidth, tileHeight);		
+		super(camera, initialTile, characterType, tileWidth, tileHeight);
+
+		this.camera = camera;
 	}
 
 	draw = () => {
@@ -27,8 +27,8 @@ export default class Enemy extends Character {
 		if(!this.shouldBeDrawn()) return;
 
 		SpriteSheet.drawCharacter(this.characterType, this.mode, {
-			positionX: this.position.x - Camera.x,
-			positionY: this.position.y - Camera.y
+			positionX: this.position.x - this.camera.x,
+			positionY: this.position.y - this.camera.y
 		});
 		
 		this.shouldDisplayHealthBar && this.drawHealthBar();

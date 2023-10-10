@@ -1,9 +1,8 @@
-import Assets from './util/assets-loader.js';
-import SpriteSheet from './spritesheet.js';
-import Camera from './camera.js';
-import CombatSystem from './combat-system.js';
-import GAME_CONFIG from './game-config.js';
-import {getCardinalPoint, getRandomNumber, isFunction, addTimeBonus, getExperienceData, getBarSizes, getBonusWithRates} from './util/helpers.js';
+import Assets from '../../util/assets-loader.js';
+import SpriteSheet from '../../spritesheet.js';
+import CombatSystem from '../../core/combat-system.js';
+import GAME_CONFIG from '../../game-config.js';
+import {getCardinalPoint, getRandomNumber, isFunction, addTimeBonus, getExperienceData, getBarSizes, getBonusWithRates} from '../../util/helpers.js';
 
 const {
 	CHARACTER_STATS,
@@ -17,7 +16,8 @@ const {
 } = GAME_CONFIG;
 
 export default class Character {
-	constructor(initialTile, characterType, characterWidth, characterHeight) {
+	constructor(camera, initialTile, characterType, characterWidth, characterHeight) {
+		this.camera = camera;
 		this.name = 'Mr. Burete';
 
 		this.level = 1;
@@ -27,6 +27,7 @@ export default class Character {
 		this.currentLevelExperience = 0;
 
 		this.characterType = characterType;
+		this.shouldDisplayHealthBar = true;
 
 		this.lastRegeneration = 0;
 
@@ -141,25 +142,26 @@ export default class Character {
 	}
 
 	checkActions = () => {
+		console.log("checkActions", this.actions);
 		if(!Array.isArray(this.actions) || !this.actions.length) return;
 
-		const [{type, target}] = this.actions;
+		const [{type, target} = {}] = this.actions;
 
-		if(this.actions[0].type === 'WALK') {
-			const [{type, target} = {}] = this.actions;
-
+		if(type === 'WALK') {
 			if(target.currentTile.x === this.currentTile.x && target.currentTile.y === this.currentTile.y) {
 				this.actions.shift();
-			}			
+
+				if(Boolean(this.actions.length)) {
+					this.checkActions();
+				}
+			}
 		}
 
-		if(!Array.isArray(this.actions) || !this.actions.length) return;
-		if(this.actions[0].type === 'ATTACK') {
-			const [{type, target} = {}] = this.actions;
-
+		if(type === 'ATTACK') {
 			if(!target.isCharacterAlive) {
 				this.actions.shift();
 			} else {
+				console.log('attack')
 				CombatSystem.startFighting(this, target);
 			}
 		}
@@ -170,10 +172,10 @@ export default class Character {
 			return false;
 		} else {
 			return (
-				this.currentTile.x >= Camera.startColumn &&
-				this.currentTile.x <= Camera.endColumn &&
-				this.currentTile.y >= Camera.startRow &&
-				this.currentTile.y <= Camera.endRow
+				this.currentTile.x >= this.camera.startColumn &&
+				this.currentTile.x <= this.camera.endColumn &&
+				this.currentTile.y >= this.camera.startRow &&
+				this.currentTile.y <= this.camera.endRow
 			);
 		}
 	}
@@ -184,16 +186,16 @@ export default class Character {
 
 		CONTEXT.fillStyle = '#5BEC6E';
 		CONTEXT.fillRect(
-			this.position.x - Camera.x,
-			this.position.y - Camera.y - 6,
+			this.position.x - this.camera.x,
+			this.position.y - this.camera.y - 6,
 			valueWidth,
 			healthBarHeight
 		);
 
 		CONTEXT.fillStyle = '#FF5E62';
 		CONTEXT.fillRect(
-			this.position.x - Camera.x + valueWidth,
-			this.position.y - Camera.y - 6,
+			this.position.x - this.camera.x + valueWidth,
+			this.position.y - this.camera.y - 6,
 			leftValueWidth,
 			healthBarHeight
 		);
@@ -205,16 +207,16 @@ export default class Character {
 
 		CONTEXT.fillStyle = '#0288d1';
 		CONTEXT.fillRect(
-			this.position.x - Camera.x,
-			this.position.y - Camera.y - 3,
+			this.position.x - this.camera.x,
+			this.position.y - this.camera.y - 3,
 			valueWidth,
 			experienceBarHeight
 		);
 
 		CONTEXT.fillStyle = '#b3e5fc';
 		CONTEXT.fillRect(
-			this.position.x - Camera.x + valueWidth,
-			this.position.y - Camera.y - 3,
+			this.position.x - this.camera.x + valueWidth,
+			this.position.y - this.camera.y - 3,
 			leftValueWidth,
 			experienceBarHeight
 		);
@@ -225,8 +227,8 @@ export default class Character {
 		CONTEXT.fillStyle = '#FFFFFF';
 		CONTEXT.fillText(
 			`Lv. ${this.level} ${this.name}`, 
-			this.position.x - Camera.x + this.characterWidth / 2, 
-			this.position.y - Camera.y - 13
+			this.position.x - this.camera.x + this.characterWidth / 2, 
+			this.position.y - this.camera.y - 13
 		);
 	}
 

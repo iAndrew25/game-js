@@ -1,5 +1,5 @@
-import {getCardinalPoint} from './util/helpers.js';
-import GAME_CONFIG from './game-config.js';
+import {getCardinalPoint} from '../util/helpers.js';
+import GAME_CONFIG from '../game-config.js';
 
 const {
 	GAME_SPEED,
@@ -37,19 +37,21 @@ export default class MovementSystem {
 		}
 
 		if((time - this.timeMoved) >= GAME_SPEED) {
-			this.character.placeAt(this.nextTile);
 			this.path.shift();
+
+			if(!this.path.length) {
+				this.isMoving = false;
+				this.character.placeAt(this.nextTile);
+				this.nextTile = {};
+				
+				return false;
+			}
+
+			this.character.placeAt(this.nextTile);
 
 			this.nextTile = this.path[0];
 			this.timeMoved = Date.now();
 			this.character.setCharacterMode(getCardinalPoint(this.character.currentTile, this.nextTile));
-
-			if(!this.path.length) {
-				this.nextTile = {};
-				this.isMoving = false;
-				
-				return false;
-			}
 		} else {
 			this.character.position = {
 				x: (this.character.currentTile.x * TILE_WIDTH) + ((TILE_WIDTH - this.character.characterWidth) / 2),

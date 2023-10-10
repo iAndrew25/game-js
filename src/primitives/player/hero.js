@@ -1,12 +1,10 @@
 import Character from './character.js';
-import Assets from './util/assets-loader.js';
-import GAME_CONFIG from './game-config.js';
-import SpriteSheet from './spritesheet.js';
-import Camera from './camera.js'
-import CombatSystem from './combat-system.js';
-import GameMap from './game-map.js';
+import GAME_CONFIG from '../../game-config.js';
+import SpriteSheet from '../../spritesheet.js';
+import CombatSystem from '../../core/combat-system.js';
+import GameMap from '../../game-map.js';
 
-import MovementSystem from './movement-system.js';
+import MovementSystem from '../../core/movement-system.js';
 
 const {
 	CONTEXT,
@@ -19,10 +17,11 @@ const {
 
 const {tileWidth, tileHeight} = CHARACTERS_SPRITE.hero;
 
-export default new class Hero extends Character {
-	constructor() {
-		super(GAME_MAPS['MAP_1'].hero.initialPosition, 'hero', tileWidth, tileHeight);
+export default class Hero extends Character {
+	constructor(camera) {
+		super(camera, GAME_MAPS['MAP_1'].hero.initialPosition, 'hero', tileWidth, tileHeight);
 
+		this.camera = camera;
 		this.movement = new MovementSystem(this);
 	}
 
@@ -39,6 +38,7 @@ export default new class Hero extends Character {
 			if(!Array.isArray(path)) return;
 
 			if(path.length > 1) {
+				console.log("path.length", path.length);
 				this.actions = [{
 					type: 'WALK',
 					target: {currentTile: path[path.length - 1]}
@@ -83,8 +83,8 @@ export default new class Hero extends Character {
 		if(!this.shouldBeDrawn()) return;
 
 		SpriteSheet.drawCharacter(this.characterType, this.mode, {
-			positionX: this.position.x - Camera.x,
-			positionY: this.position.y - Camera.y
+			positionX: this.position.x - this.camera.x,
+			positionY: this.position.y - this.camera.y
 		});
 		
 		this.shouldDisplayHealthBar && this.drawHealthBar();

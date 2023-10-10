@@ -1,4 +1,4 @@
-import GAME_CONFIG from './game-config.js';
+import GAME_CONFIG from '../game-config.js';
 
 const {GAME_SPEED} = GAME_CONFIG;
 
@@ -58,7 +58,6 @@ export default new class CombatSystem {
 	}
 
 	fight = () => {
-		console.log('fight')
 		if(!this.hero.currentHealth || !this.enemy.currentHealth || this.hero.movement.isMoving) {
 			this.endFight();
 			return;

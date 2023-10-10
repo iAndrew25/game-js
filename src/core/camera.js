@@ -1,4 +1,4 @@
-import GAME_CONFIG from './game-config.js';
+import GAME_CONFIG from '../game-config.js';
 
 const {
 	TILE_WIDTH,
@@ -10,7 +10,7 @@ const {
 	CANVAS
 } = GAME_CONFIG;
 
-export default new class Camera {
+export default class Camera {
 	constructor() {
 		this.isCameraFixed = false;
 		this.following;

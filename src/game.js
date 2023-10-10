@@ -1,15 +1,18 @@
 import GAME_CONFIG from './game-config.js';
 import Assets from './util/assets-loader.js';
-import Character from './character.js';
 import GameMap from './game-map.js';
 
-const {CANVAS, CONTEXT, CANVAS_WIDTH, CANVAS_HEIGHT} = GAME_CONFIG;
+const {CANVAS_WIDTH, CANVAS_HEIGHT} = GAME_CONFIG;
 
 // ROW - HEIGHT - Y
 // COLUMN - WIDTH - X
 
 export default class Game {
 	constructor() {
+		this.canvas = document.getElementById('rpworld');
+		this.context = this.canvas.getContext('2d');
+		this.gameMap = new GameMap(this.canvas, 'MAP_1')
+
 		this.init();
 	}
 
@@ -24,8 +27,8 @@ export default class Game {
 	}
 
 	init = async () => {
-		CANVAS.height = CANVAS_HEIGHT;
-		CANVAS.width = CANVAS_WIDTH;
+		this.canvas.height = CANVAS_HEIGHT;
+		this.canvas.width = CANVAS_WIDTH;
 
 		await Promise.all(this.load());
 
@@ -33,8 +36,8 @@ export default class Game {
 	}
 
 	run = timestamp => {
-		CONTEXT.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-		GameMap.draw(timestamp || 0);
+		this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+		this.gameMap.draw(timestamp || 0);
 
 		requestAnimationFrame(this.run);
 	}

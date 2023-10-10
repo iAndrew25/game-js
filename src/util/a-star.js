@@ -1,19 +1,3 @@
-const cloneEmptyGrid = ({grid, legend}) => new Array(grid.length).fill()
-	.map((_, y) => 
-		new Array(grid[y].length).fill()
-			.map((_, x) => ({
-				x,
-				y,
-				f: 0,
-				g: 0,
-				h: 0,
-				parent: null,
-				cost: 1,
-				isWalkable: true,
-				...legend[grid[y][x]]
-			}))
-	);
-
 const findSmallestNumber = list => list.reduce((lowestValue, currentValue) => lowestValue.f > currentValue.f ? currentValue : lowestValue, {f: Number.MAX_VALUE});
 
 const isGoal = (currentPosition, goal) => currentPosition.x === goal.x && currentPosition.y === goal.y;
@@ -33,20 +17,18 @@ const findNodeInList = (list, node) => list.some(({x, y}) => x === node.x && y =
 
 const getHeuristicValue = ({x, y}, goal) => Math.abs(x - goal.x) + Math.abs(y - goal.y);
 
-export default ({grid, legend}) => {
+export default grid => {
 	return (start, goal) => {
-		const gridInit = cloneEmptyGrid({grid, legend});
-		
-		if(!gridInit[start.y] || !gridInit[start.y][start.x] || !gridInit[start.y][start.x].isWalkable) {
+		if(!grid[start.y] || !grid[start.y][start.x] || !grid[start.y][start.x].isWalkable) {
 			return 'Invalid start position.';
-		} else if(!gridInit[goal.y] || !gridInit[goal.y][goal.x] || !gridInit[goal.y][goal.x].isWalkable) {
+		} else if(!grid[goal.y] || !grid[goal.y][goal.x] || !grid[goal.y][goal.x].isWalkable) {
 			return 'Invalid goal position.'
 		} else if(isGoal(start, goal)) {
 			return 'Start and goal positions are the same.';
 		}
 
 		const closedList = [];
-		let openList = [gridInit[start.y][start.x]];
+		let openList = [grid[start.y][start.x]];
 
 		while(openList.length) {
 			const currentNode = findSmallestNumber(openList);
@@ -67,7 +49,7 @@ export default ({grid, legend}) => {
 			openList = removeNodeFromList(openList, currentNode);
 			closedList.push(currentNode);
 
-			const neighbors = getNeighbors(gridInit, currentNode);
+			const neighbors = getNeighbors(grid, currentNode);
 
 			neighbors.forEach(neighbor => {
 				if(!findNodeInList(closedList, neighbor)) {
