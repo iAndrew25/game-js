@@ -44,6 +44,7 @@ export default class GameMap {
 	initMap = () => {
 		this.initPathFinder();
 		this.camera.follow(this.hero);
+
 		this.enemies = GAME_MAPS[this.currentMap].enemies.types.reduce((enemies, enemy) => {
 			const {x, y} = generatePositionForNewEnemies(GAME_MAPS[this.currentMap].enemies.spawnArea[enemy][0]);
 
@@ -52,28 +53,53 @@ export default class GameMap {
 				[`${x}_${y}`]: new Enemy(this.camera, {x, y}, enemy)
 			};
 		}, {});
+
+		// this.getShortestPath = aStar({
+		// 	grid: GAME_MAPS[this.currentMap].layers[0],
+		// 	legend: MAP_SPRITE
+		// });
 	}
+
 
 	initPathFinder = () => {
-		const [baseLayer, secondLayer] = GAME_MAPS[this.currentMap].layers;
+		// const [baseLayer, secondLayer] = GAME_MAPS[this.currentMap].layers;
 
-		const grid = new Array(baseLayer.length).fill()
-			.map((_, y) => 
-				new Array(baseLayer[y].length).fill()
-					.map((_, x) => ({
-						x,
-						y,
-						f: 0,
-						g: 0,
-						h: 0,
-						parent: null,
-						cost: 1,
-						isWalkable: MAP_SPRITE[baseLayer[y][x]].isWalkable && MAP_SPRITE[secondLayer[y][x]].isWalkable,
-					}))
-			);
+	// 	const grid = new Array(GAME_MAPS[this.currentMap].layers[0].length).fill()
+	// .map((_, y) => 
+	// 	new Array(GAME_MAPS[this.currentMap].layers[0][y].length).fill()
+	// 		.map((_, x) => ({
+	// 			x,
+	// 			y,
+	// 			f: 0,
+	// 			g: 0,
+	// 			h: 0,
+	// 			parent: null,
+	// 			cost: 1,
+	// 			isWalkable: true,
+	// 			// ...MAP_SPRITE[GAME_MAPS[this.currentMap].layers[0][y][x]]
+	// 		}))
+	// );
 
-		this.getShortestPath = aStar(grid);
+		// const grid = new Array(baseLayer.length).fill()
+		// 	.map((_, y) =>
+		// 		new Array(baseLayer[y].length).fill().map((_, x) => ({
+		// 			x,
+		// 			y,
+		// 			f: 0,
+		// 			g: 0,
+		// 			h: 0,
+		// 			parent: null,
+		// 			cost: 1,
+		// 			isWalkable: MAP_SPRITE[baseLayer[y][x]].isWalkable && MAP_SPRITE[secondLayer[y][x]].isWalkable,
+		// 		}))
+		// 	);
+
+		this.getShortestPath = aStar({
+			layers: GAME_MAPS[this.currentMap].layers,
+			legend: MAP_SPRITE
+		});
 	}
+
 
 	getEnemyFromCoords = ({x, y}) => {
 		return this.enemies[`${x}_${y}`];
@@ -142,10 +168,9 @@ export default class GameMap {
 	getPath = ({character, destination, willInteract}) => {
 		const startTile = character.movement.isMoving ? character.movement.nextTile : character.currentTile;
 		const newPath = this.getShortestPath(startTile, destination);
-		console.log("newPath", newPath);
 
 		if(Array.isArray(newPath)) {
-			willInteract && newPath.pop();
+			//willInteract && newPath.pop();
 
 			return [startTile, ...newPath];
 		} else {
@@ -161,6 +186,7 @@ export default class GameMap {
 			destination: position,
 			willInteract: Boolean(enemy)
 		});
+			console.log("this.path", this.path);
 
 		this.highlightedPath = this.path?.reduce((total, {x, y}) => ({
 			...total,
